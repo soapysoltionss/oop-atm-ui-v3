@@ -27,6 +27,7 @@ public class Bank {
     private MongoCollection<Document> accountsCollection;
     private MongoCollection<Document> transactionsCollection;
 
+
     public Bank(String name) {
         this.name = name;
         //this.accounts = new ArrayList<>();
@@ -42,7 +43,6 @@ public class Bank {
         this.transactionsCollection = database.getCollection("transactions");
         this.users = this.getUsers();
         this.accounts = new ArrayList<>();
-
     }
 
     public String getNewUserUUID() {

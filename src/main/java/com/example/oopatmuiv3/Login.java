@@ -18,8 +18,8 @@ public class Login extends Application {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setResizable(false);
-        stage.setTitle("ABC Bank");
-        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("icons/icon.png"))));
+        stage.setTitle("Kek Bank");
+        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("icons/kek.jpg"))));
         stage.show();
     }
 

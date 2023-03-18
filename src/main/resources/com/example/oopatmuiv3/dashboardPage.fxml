@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
@@ -20,9 +21,9 @@
     <left>
         <VBox minHeight="290.0" minWidth="120.0" prefHeight="510.0" prefWidth="156.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" BorderPane.alignment="CENTER">
             <children>
-                <Button fx:id="homeButton" alignment="TOP_CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="5.0" mnemonicParsing="false" onAction="#showHomePane" prefHeight="71.0" prefWidth="154.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Home" textAlignment="CENTER" textFill="WHITE">
+                <Button fx:id="homeButton" alignment="TOP_CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="5.0" mnemonicParsing="false" onAction="#showHomePane" prefHeight="71.0" prefWidth="154.0" stylesheets="@style.css" text="Home" textAlignment="CENTER" textFill="WHITE">
                     <VBox.margin>
-                        <Insets bottom="10.0" top="10.0" />
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                     </VBox.margin>
                     <graphic>
                         <ImageView fitHeight="58.0" fitWidth="59.0" pickOnBounds="true" preserveRatio="true">
@@ -31,19 +32,20 @@
                             </image>
                         </ImageView>
                     </graphic>
-                    <padding>
-                        <Insets top="10.0" />
-                    </padding>
                     <font>
                         <Font name="System Bold" size="14.0" />
                     </font>
                     <cursor>
                         <Cursor fx:constant="HAND" />
                     </cursor>
+               <styleClass>
+                  <String fx:value="dashboard-backgroundColor" />
+                  <String fx:value="note-border" />
+               </styleClass>
                 </Button>
-                <Button fx:id="depositButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="5.0" mnemonicParsing="false" onAction="#showDepositPane" prefHeight="67.0" prefWidth="154.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Deposit" textAlignment="CENTER" textFill="WHITE">
+                <Button fx:id="depositButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="5.0" mnemonicParsing="false" onAction="#showDepositPane" prefHeight="67.0" prefWidth="154.0" stylesheets="@style.css" text="Deposit" textAlignment="CENTER" textFill="WHITE">
                     <VBox.margin>
-                        <Insets bottom="10.0" top="10.0" />
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                     </VBox.margin>
                     <graphic>
                         <ImageView fitHeight="64.0" fitWidth="69.0" pickOnBounds="true" preserveRatio="true">
@@ -58,10 +60,14 @@
                     <cursor>
                         <Cursor fx:constant="HAND" />
                     </cursor>
+               <styleClass>
+                  <String fx:value="dashboard-backgroundColor" />
+                  <String fx:value="note-border" />
+               </styleClass>
                 </Button>
-                <Button fx:id="withdrawButton" contentDisplay="GRAPHIC_ONLY" graphicTextGap="5.0" mnemonicParsing="false" onAction="#showWithdrawPane" prefHeight="70.0" prefWidth="156.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Withdraw" textAlignment="CENTER" textFill="WHITE">
+                <Button fx:id="withdrawButton" contentDisplay="GRAPHIC_ONLY" graphicTextGap="5.0" mnemonicParsing="false" onAction="#showWithdrawPane" prefHeight="70.0" prefWidth="156.0" stylesheets="@style.css" text="Withdraw" textAlignment="CENTER" textFill="WHITE">
                     <VBox.margin>
-                        <Insets bottom="10.0" top="10.0" />
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                     </VBox.margin>
                     <graphic>
                         <ImageView fitHeight="56.0" fitWidth="66.0" pickOnBounds="true" preserveRatio="true">
@@ -76,10 +82,14 @@
                     <cursor>
                         <Cursor fx:constant="HAND" />
                     </cursor>
+               <styleClass>
+                  <String fx:value="dashboard-backgroundColor" />
+                  <String fx:value="note-border" />
+               </styleClass>
                 </Button>
-                <Button fx:id="transferButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="5.0" mnemonicParsing="false" onAction="#showTransferPane" prefHeight="75.0" prefWidth="155.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Transfer" textAlignment="CENTER" textFill="WHITE">
+                <Button fx:id="transferButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="5.0" mnemonicParsing="false" onAction="#showTransferPane" prefHeight="75.0" prefWidth="155.0" stylesheets="@style.css" text="Transfer" textAlignment="CENTER" textFill="WHITE">
                     <VBox.margin>
-                        <Insets bottom="10.0" top="10.0" />
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                     </VBox.margin>
                     <graphic>
                         <ImageView fitHeight="79.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
@@ -94,6 +104,10 @@
                     <cursor>
                         <Cursor fx:constant="HAND" />
                     </cursor>
+               <styleClass>
+                  <String fx:value="dashboard-backgroundColor" />
+                  <String fx:value="note-border" />
+               </styleClass>
                 </Button>
             </children>
             <BorderPane.margin>
@@ -105,7 +119,7 @@
         </VBox>
     </left>
     <top>
-        <HBox prefHeight="70.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
+        <HBox prefHeight="70.0" style="-fx-background-color: white;" styleClass="note-border" stylesheets="@style.css" BorderPane.alignment="CENTER">
             <children>
                 <ImageView fitHeight="53.0" fitWidth="141.0" pickOnBounds="true" preserveRatio="true">
                     <image>
@@ -139,27 +153,22 @@
             <children>
                 <Pane fx:id="homePane" layoutX="-1.0" layoutY="1.0" prefHeight="500.0" prefWidth="546.0" style="-fx-background-color: white;">
                     <children>
-                        <Label fx:id="balance" layoutX="19.0" layoutY="377.0" prefHeight="26.0" prefWidth="260.0" textAlignment="CENTER">
+                        <Label fx:id="balance" layoutX="14.0" layoutY="262.0" prefHeight="26.0" prefWidth="260.0" textAlignment="CENTER">
                             <font>
                                 <Font name="System Bold" size="18.0" />
                             </font>
                         </Label>
-                        <Label layoutX="19.0" layoutY="107.0" prefHeight="38.0" prefWidth="117.0" text="Overview" wrapText="true">
+                        <Label layoutX="15.0" layoutY="67.0" prefHeight="38.0" prefWidth="117.0" text="Overview" wrapText="true">
                             <font>
                                 <Font name="Gill Sans MT Bold" size="24.0" />
                             </font>
                         </Label>
-                        <Label layoutX="19.0" layoutY="229.0" text="Account Number : ">
+                        <Label layoutX="18.0" layoutY="124.0" text="Account Number : ">
                             <font>
                                 <Font name="Gill Sans MT" size="20.0" />
                             </font>
                         </Label>
-                        <Label layoutX="19.0" layoutY="280.0" text="Date of Birth : ">
-                            <font>
-                                <Font name="Gill Sans MT" size="20.0" />
-                            </font>
-                        </Label>
-                        <Label layoutX="19.0" layoutY="330.0" text="Current Balance" textFill="#ff9900">
+                        <Label layoutX="17.0" layoutY="209.0" text="Current Balance" textFill="#ff9900">
                             <font>
                                 <Font name="Gill Sans MT" size="24.0" />
                             </font>
@@ -168,11 +177,7 @@
                             <font>
                                 <Font name="System Bold Italic" size="18.0" />
                             </font></Label>
-                        <Label fx:id="accNumber" layoutX="177.0" layoutY="228.0" prefHeight="27.0" prefWidth="280.0">
-                            <font>
-                                <Font size="18.0" />
-                            </font></Label>
-                        <Label fx:id="dob" layoutX="141.0" layoutY="279.0" prefHeight="27.0" prefWidth="278.0">
+                        <Label fx:id="accNumber" layoutX="18.0" layoutY="165.0" prefHeight="27.0" prefWidth="280.0">
                             <font>
                                 <Font size="18.0" />
                             </font></Label>
@@ -181,12 +186,7 @@
                                 <Font name="System Bold Italic" size="18.0" />
                             </font>
                         </Label>
-                        <Label layoutX="19.0" layoutY="179.0" text="Email:">
-                            <font>
-                                <Font name="Gill Sans MT" size="20.0" />
-                            </font>
-                        </Label>
-                        <Label fx:id="emailLabel" layoutX="70.0" layoutY="178.0" prefHeight="27.0" prefWidth="285.0">
+                        <Label fx:id="emailLabel" layoutX="16.0" layoutY="421.0" prefHeight="27.0" prefWidth="285.0">
                             <font>
                                 <Font size="18.0" />
                             </font></Label>
