@@ -27,7 +27,7 @@
                     <graphic>
                         <ImageView fitHeight="58.0" fitWidth="59.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@icons/home.gif" />
+                                <Image url="@icons/home.png" />
                             </image>
                         </ImageView>
                     </graphic>
@@ -48,7 +48,7 @@
                     <graphic>
                         <ImageView fitHeight="64.0" fitWidth="69.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@icons/deposit.gif" />
+                                <Image url="@icons/deposit.png" />
                             </image>
                         </ImageView>
                     </graphic>
@@ -66,7 +66,7 @@
                     <graphic>
                         <ImageView fitHeight="56.0" fitWidth="66.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@icons/withdraw.gif" />
+                                <Image url="@icons/withdraw.png" />
                             </image>
                         </ImageView>
                     </graphic>
@@ -84,22 +84,7 @@
                     <graphic>
                         <ImageView fitHeight="79.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@icons/transfer.gif" />
-                            </image>
-                        </ImageView>
-                    </graphic>
-                    <font>
-                        <Font name="System Bold" size="14.0" />
-                    </font>
-                    <cursor>
-                        <Cursor fx:constant="HAND" />
-                    </cursor>
-                </Button>
-                <Button fx:id="converterButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="5.0" layoutX="10.0" layoutY="320.0" mnemonicParsing="false" onAction="#showConverterPane" prefHeight="75.0" prefWidth="155.0" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Converter" textAlignment="CENTER" textFill="WHITE">
-                    <graphic>
-                        <ImageView fitHeight="75.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@icons/convert.gif" />
+                                <Image url="@icons/transfer.png" />
                             </image>
                         </ImageView>
                     </graphic>
@@ -124,7 +109,7 @@
             <children>
                 <ImageView fitHeight="53.0" fitWidth="141.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@icons/logo_white.png" />
+                        <Image url="@icons/kek.jpg" />
                     </image>
                     <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -135,7 +120,7 @@
                     <graphic>
                         <ImageView fitHeight="64.0" fitWidth="69.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@icons/logout.gif" />
+                                <Image url="@icons/logout.png" />
                             </image>
                         </ImageView>
                     </graphic>

@@ -23,7 +23,7 @@
             <children>
                 <ImageView fitHeight="131.0" fitWidth="245.0" layoutX="53.0" layoutY="53.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@icons/logo.png" />
+                        <Image url="@icons/kek.jpg" />
                     </image>
                     <effect>
                         <ColorAdjust hue="-0.02" saturation="0.07" />
@@ -36,7 +36,7 @@
                 </Text>
                 <ImageView fitHeight="276.0" fitWidth="297.0" layoutX="39.0" layoutY="214.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@icons/bank.gif" />
+                        <Image url="@icons/bank.png" />
                     </image>
                 </ImageView>
             </children>
