@@ -14,7 +14,7 @@ public class LoginController {
     }
 
     @FXML
-    public void Login() {
+    public void userLogin() {
     }
 
     public void showSignUpPane(ActionEvent actionEvent) {
