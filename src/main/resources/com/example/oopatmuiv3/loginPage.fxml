@@ -86,7 +86,7 @@
                     <graphic>
                         <ImageView fitHeight="34.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@icons/view.gif" />
+                                <Image url="@icons/kek.jpg" />
                             </image>
                         </ImageView>
                     </graphic>
@@ -138,7 +138,7 @@
                     <graphic>
                         <ImageView fx:id="eyesImageView" fitHeight="32.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@icons/view.gif" />
+                                <Image url="@icons/kek.jpg" />
                             </image>
                             <cursor>
                                 <Cursor fx:constant="HAND" />
