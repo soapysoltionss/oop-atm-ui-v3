@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -92,6 +93,9 @@ public class DashboardController {
 
     @FXML
     private Pane withdrawPane;
+
+    @FXML
+    private ListView listView;
 
     @FXML
     private TextField transferToLocalAcc; //NEED TO SET IN FXML PAGE
@@ -212,5 +216,10 @@ public class DashboardController {
         stage.show();
         Stage stage2 = (Stage) balance.getScene().getWindow();
         stage2.close();
+    }
+
+    @FXML
+    public void selectAccount(MouseEvent mouseEvent) {
+        listView.getSelectionModel().getSelectedItems();
     }
 }

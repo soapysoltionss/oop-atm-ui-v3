@@ -22,7 +22,6 @@ public class Login extends Application {
         stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("icons/kek.jpg"))));
         stage.show();
     }
-
     public static void main(String[] args) {
         launch(args);
     }
