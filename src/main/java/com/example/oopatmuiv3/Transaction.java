@@ -41,12 +41,19 @@ public class Transaction {
         return holder;
     }
 
-    public String getSummaryLine(){
-
-        if(this.amount >= 0){
-            return String.format("%s : $%.2f : %s", this.timestamp.toString(), this.amount, this.memo);
-        }else{
-            return String.format("%s : $%.2f : %s", this.timestamp.toString(), -this.amount, this.memo);
+    public String getSummaryLine() throws Exception{
+        try {
+            if (this.amount >= 0) {
+                return String.format("%s : $%.02f : %s", this.timestamp.toString(), this.amount, this.memo);
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
         }
+        // if(this.amount >= 0){
+        //     return String.format("%s : $%.2f : %s", this.timestamp.toString(), this.amount, this.memo);
+        // }else{
+        //     return String.format("%s : $%.2f : %s", this.timestamp.toString(), -this.amount, this.memo);
+        // }
+        return String.format("%s : $%.02f : %s", this.timestamp.toString(), this.amount, this.memo);
     }
 }

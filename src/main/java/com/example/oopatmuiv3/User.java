@@ -16,7 +16,7 @@ public class User {
     private ArrayList<Account> accounts;
     private Bank bank;
     private String country;
-    
+
     public User(String firstName, String lastName, String pinHash, Bank bank, String country) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -32,6 +32,7 @@ public class User {
         byte[] pinBytes = String.valueOf(pin).getBytes();
         return toHex(md.digest(pinBytes));
     }
+
 
     public void setUUID(String newUUID) {
         this.uuid = newUUID;
@@ -77,7 +78,11 @@ public class User {
         Document accountDocument = new Document("_id", account.getUUID())
         .append("name", name)
         .append("holderUUID", account.getHolder())
-        .append("balance", (double)0);
+        .append("balance", (double)0)
+        .append("localTransferLimit", account.getLocalTransferLimit())
+        .append("overseasTransferLimit", account.getOverseasTransferLimit())
+        .append("localWithdrawLimit", account.getLocalWithdrawLimit())
+        .append("overseasWithdrawLimit", account.getOverseasWithdrawLimit());
         accountCollection.insertOne(accountDocument);
         this.accounts.add(account);
         MongoCollection<Document> uuidsCollection = this.bank.database.getCollection("uuids");
@@ -95,7 +100,7 @@ public class User {
         return this.accounts.get(index);
     }
 
-    public void printAccountSummary() {
+    public void printAccountSummary() throws Exception {
         System.out.printf("\n\n%s 's Accounts Summary", this.firstName);
         for (int a = 0;a<this.accounts.size();a++) {
             System.out.printf("\n%d) %s", a+1, this.getAccount(a).getSummaryLine());
