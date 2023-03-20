@@ -269,7 +269,7 @@
                                 <Font name="Constantia Italic" size="24.0" />
                             </font>
                         </Label>
-                  <ListView layoutX="170.0" layoutY="80.0" prefHeight="200.0" prefWidth="200.0" />
+                  <ListView layoutX="170.0" layoutY="80.0" prefHeight="200.0" prefWidth="200.0" onMouseClicked="#selectAccount" />
                   <Label layoutX="178.0" layoutY="50.0" text="Select Account to use:">
                      <font>
                         <Font name="System Bold" size="18.0" />
@@ -316,7 +316,7 @@
                                 <Font name="Constantia Italic" size="24.0" />
                             </font>
                         </Label>
-                  <ListView layoutX="20.0" layoutY="100.0" prefHeight="200.0" prefWidth="200.0" />
+                  <ListView layoutX="20.0" layoutY="100.0" prefHeight="200.0" prefWidth="200.0" onMouseClicked="#selectAccount"/>
                   <Label layoutX="20.0" layoutY="60.0" text="Select Account to use:">
                      <font>
                         <Font name="System Bold" size="18.0" />

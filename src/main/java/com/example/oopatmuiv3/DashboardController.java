@@ -1,10 +1,14 @@
 package com.example.oopatmuiv3;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.Objects;
 
 
-
+import javafx.collections.FXCollections;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -109,6 +113,7 @@ public class DashboardController {
 
     String bank_name = "kek";
     protected User currentUser;
+    DecimalFormat df = new DecimalFormat("0.00");
 
     // tbd many accounts to 1 user to do pane
     public void setLabels() {
@@ -130,7 +135,7 @@ public class DashboardController {
             depositConfirmationText.setText("Successfully Deposited: "+String.valueOf(amount)+"!");
             Alert a = new Alert(Alert.AlertType.INFORMATION);
             a.setTitle("Confirm Deposit");
-            a.setContentText("Successfully Deposited: "+ " $" + String.valueOf(amount)+"\nCurrent Bal: "+ "$" + String.valueOf(currentUser.getAccount(0).getBalance()));
+            a.setContentText("Successfully Deposited: "+ " $" + df.format(amount)+"\nCurrent Bal: "+ "$" + df.format(currentUser.getAccount(0).getBalance()));
             a.showAndWait();
             showHomePane();
         }
@@ -139,6 +144,8 @@ public class DashboardController {
             depositConfirmationText.setText("Please Enter a Numeric Value");
             depositConfirmationText.setStyle(errorStyle);
             depositAmountTextField.setText("");
+        } catch (InvalidAmountException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -149,7 +156,7 @@ public class DashboardController {
             withdrawConfirmationText.setText("Successfully Withdrawn: "+String.valueOf(amount)+"!");
             Alert a = new Alert(Alert.AlertType.INFORMATION);
             a.setTitle("Confirm Withdraw");
-            a.setContentText("Successfully Withdrawn: " + "$" +String.valueOf(amount)+"\nCurrent Bal: " + "$" + String.valueOf(currentUser.getAccount(0).getBalance()));
+            a.setContentText("Successfully Withdrawn: " + "$" +df.format(amount)+"\nCurrent Bal: " + "$" + df.format(currentUser.getAccount(0).getBalance()));
             a.showAndWait();
             showHomePane();
         }
@@ -220,6 +227,12 @@ public class DashboardController {
 
     @FXML
     public void selectAccount(MouseEvent mouseEvent) {
-        listView.getSelectionModel().getSelectedItems();
+        final ListView lv = new ListView(FXCollections.observableList(Arrays.asList("1","2", "3")));
+        lv.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                lv.getSelectionModel().getSelectedItems();
+            }
+        });
     }
 }
