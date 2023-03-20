@@ -1,21 +1,20 @@
 package com.example.oopatmuiv3;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
+import java.net.URL;
 import java.text.DecimalFormat;
-import java.util.Arrays;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 
 import javafx.collections.FXCollections;
-import javafx.event.EventHandler;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -99,7 +98,10 @@ public class DashboardController {
     private Pane withdrawPane;
 
     @FXML
-    private ListView listView;
+    private ListView<Account> list;
+
+    @FXML
+    private ListView<Account> withdrawList;
 
     @FXML
     private TextField transferToLocalAcc; //NEED TO SET IN FXML PAGE
@@ -114,6 +116,7 @@ public class DashboardController {
     String bank_name = "kek";
     protected User currentUser;
     DecimalFormat df = new DecimalFormat("0.00");
+
 
     // tbd many accounts to 1 user to do pane
     public void setLabels() {
@@ -226,13 +229,9 @@ public class DashboardController {
     }
 
     @FXML
-    public void selectAccount(MouseEvent mouseEvent) {
-        final ListView lv = new ListView(FXCollections.observableList(Arrays.asList("1","2", "3")));
-        lv.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                lv.getSelectionModel().getSelectedItems();
-            }
-        });
+    public void selectAccount(URL url, ResourceBundle rb) {
+        ObservableList<Account> items = FXCollections.observableArrayList(currentUser.getAllAccounts());
+        list.setItems(items);
+
     }
 }
