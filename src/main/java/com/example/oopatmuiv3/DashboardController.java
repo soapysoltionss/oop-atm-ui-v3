@@ -1,10 +1,9 @@
 package com.example.oopatmuiv3;
 
 import java.io.IOException;
-import java.net.URL;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Objects;
-import java.util.ResourceBundle;
 
 
 import javafx.collections.FXCollections;
@@ -23,6 +22,8 @@ public class DashboardController {
 
     @FXML
     private Label accNumber;
+    @FXML
+    private Label usrID;
 
     @FXML
     private Label balance;
@@ -97,11 +98,18 @@ public class DashboardController {
     @FXML
     private Pane withdrawPane;
 
-    @FXML
-    private ListView<Account> list;
 
     @FXML
-    private ListView<Account> withdrawList;
+    private ListView<String> transactionLs;
+    @FXML
+    private ListView<String> accLsOverview;
+    @FXML
+    private ListView<String> accLsDeposit;
+    @FXML
+    private ListView<String> accLsWithdraw;
+    @FXML
+    private ListView<String> accLsTransfer;
+
 
     @FXML
     private TextField transferToLocalAcc; //NEED TO SET IN FXML PAGE
@@ -115,14 +123,19 @@ public class DashboardController {
 
     String bank_name = "kek";
     protected User currentUser;
+    private Integer selectedAcc = 0;
     DecimalFormat df = new DecimalFormat("0.00");
+
 
 
     // tbd many accounts to 1 user to do pane
     public void setLabels() {
         name.setText(currentUser.getFirstName() + " " + currentUser.getLastName());
-        accNumber.setText(currentUser.getUUID());
-        balance.setText(String.format("$" + "%.2f",currentUser.getAccount(0).getBalance()));
+        usrID.setText(currentUser.getUUID());
+        accNumber.setText(currentUser.getAccount(selectedAcc).getUUID());
+        balance.setText(String.format("$" + "%.2f",currentUser.getAccount(selectedAcc).getBalance()));
+        ObservableList<String> transactions = FXCollections.observableArrayList(currentUser.getAccount(selectedAcc).getTransactionHistory());
+        transactionLs.setItems(transactions);
     }
     public void showTransferPane() {
         homePane.setVisible(false);
@@ -134,13 +147,16 @@ public class DashboardController {
     public void confirmDeposit() {
         try{
             double amount = Double.parseDouble(depositAmountTextField.getText());
-            currentUser.getAccount(0).deposit(amount);
-            depositConfirmationText.setText("Successfully Deposited: "+String.valueOf(amount)+"!");
+            currentUser.getAccount(selectedAcc).deposit(amount);
+            depositConfirmationText.setText("Successfully Deposited: "+ " $" + df.format(amount)+"\nCurrent Bal: "+ "$" + df.format(currentUser.getAccount(selectedAcc).getBalance()));
+
+            /*
             Alert a = new Alert(Alert.AlertType.INFORMATION);
             a.setTitle("Confirm Deposit");
-            a.setContentText("Successfully Deposited: "+ " $" + df.format(amount)+"\nCurrent Bal: "+ "$" + df.format(currentUser.getAccount(0).getBalance()));
+            a.setContentText("Successfully Deposited: "+ " $" + df.format(amount)+"\nCurrent Bal: "+ "$" + df.format(currentUser.getAccount(selectedAcc).getBalance()));
             a.showAndWait();
-            showHomePane();
+            */
+            //showHomePane();
         }
         //set our own exception cases & set alert to the e.getMessage()
         catch(NumberFormatException e){
@@ -155,13 +171,16 @@ public class DashboardController {
     public void confirmWithdraw() {
         try {
             double amount = Double.parseDouble(withdrawAmountTextField.getText());
-            currentUser.getAccount(0).withdraw(amount);
-            withdrawConfirmationText.setText("Successfully Withdrawn: "+String.valueOf(amount)+"!");
+            currentUser.getAccount(selectedAcc).withdraw(amount);
+            withdrawConfirmationText.setText("Successfully Withdrawn: " + "$" +df.format(amount)+"\nCurrent Bal: " + "$" + df.format(currentUser.getAccount(selectedAcc).getBalance()));
+
+            /*
             Alert a = new Alert(Alert.AlertType.INFORMATION);
             a.setTitle("Confirm Withdraw");
-            a.setContentText("Successfully Withdrawn: " + "$" +df.format(amount)+"\nCurrent Bal: " + "$" + df.format(currentUser.getAccount(0).getBalance()));
+            a.setContentText("Successfully Withdrawn: " + "$" +df.format(amount)+"\nCurrent Bal: " + "$" + df.format(currentUser.getAccount(selectedAcc).getBalance()));
             a.showAndWait();
-            showHomePane();
+            */
+            //showHomePane();
         }
         //set our own exception cases & set alert to the e.getMessage()
         catch(Exception e){
@@ -182,7 +201,7 @@ public class DashboardController {
             double amount = Double.parseDouble(transferAmountTextField.getText());
             int transferToLocalAccVar = Integer.parseInt(transferToLocalAcc.getText());
             String memo = transferLocalMemo.getText();
-            currentUser.getAccount(0).transfer(currentUser.getAccount(transferToLocalAccVar), memo, amount);}
+            currentUser.getAccount(selectedAcc).transfer(currentUser.getAccount(transferToLocalAccVar), memo, amount);}
         catch(Exception e){
             transferConfirmationText.setText("Transfer Failed!");
             transferConfirmationText.setStyle(errorStyle);
@@ -194,6 +213,7 @@ public class DashboardController {
 
 
     public void showHomePane() {
+        populateAcc();
         setLabels();
         homePane.setVisible(true);
         depositPane.setVisible(false);
@@ -228,10 +248,57 @@ public class DashboardController {
         stage2.close();
     }
 
-    @FXML
-    public void selectAccount(URL url, ResourceBundle rb) {
-        ObservableList<Account> items = FXCollections.observableArrayList(currentUser.getAllAccounts());
-        list.setItems(items);
 
+    public void populateAcc() {
+        //System.out.println(currentUser.getAllAccountsUUID());
+        ObservableList<String> items = FXCollections.observableArrayList(currentUser.getAllAccountsUUID());
+        accLsOverview.setItems(items);
+        accLsDeposit.setItems(items);
+        accLsWithdraw.setItems(items);
+        accLsTransfer.setItems(items);
+
+    }
+
+    public void handleAccClick(){
+        accLsOverview.setOnMouseClicked(mouseEvent -> {String selectItem = accLsOverview.getSelectionModel().getSelectedItem().toString();
+            selectedAcc = currentUser.getAllAccountsUUID().indexOf(selectItem);
+
+            //update labels
+            setLabels();
+            /*
+            Dialog d = new Alert(Alert.AlertType.INFORMATION,selectItem);
+            d.show();
+             */
+        });
+        accLsDeposit.setOnMouseClicked(mouseEvent -> {String selectItem = accLsDeposit.getSelectionModel().getSelectedItem().toString();
+            selectedAcc = currentUser.getAllAccountsUUID().indexOf(selectItem);
+
+            //update labels
+            setLabels();
+            /*
+            Dialog d = new Alert(Alert.AlertType.INFORMATION,selectItem);
+            d.show();
+             */
+        });
+        accLsWithdraw.setOnMouseClicked(mouseEvent -> {String selectItem = accLsWithdraw.getSelectionModel().getSelectedItem().toString();
+            selectedAcc = currentUser.getAllAccountsUUID().indexOf(selectItem);
+
+            //update labels
+            setLabels();
+            /*
+            Dialog d = new Alert(Alert.AlertType.INFORMATION,selectItem);
+            d.show();
+             */
+        });
+        accLsTransfer.setOnMouseClicked(mouseEvent -> {String selectItem = accLsTransfer.getSelectionModel().getSelectedItem().toString();
+            selectedAcc = currentUser.getAllAccountsUUID().indexOf(selectItem);
+
+            //update labels
+            setLabels();
+            /*
+            Dialog d = new Alert(Alert.AlertType.INFORMATION,selectItem);
+            d.show();
+             */
+        });
     }
 }

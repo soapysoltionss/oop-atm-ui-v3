@@ -185,6 +185,17 @@ public class Account {
             }
             System.out.println();
     }
+    public ArrayList<String> getTransactionHistory() {
+        ArrayList<String> transactionLs = new ArrayList<>();
+        for (int t = this.transactions.size()-1; t>0;t--) {
+            try {
+                transactionLs.add(this.transactions.get(t).getSummaryLine());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return transactionLs;
+    }
 
     public boolean modifyBalance(double balance) {
         try {

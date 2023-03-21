@@ -154,7 +154,7 @@
             <children>
                 <Pane fx:id="homePane" layoutX="-1.0" layoutY="1.0" prefHeight="500.0" prefWidth="546.0" style="-fx-background-color: white;">
                     <children>
-                        <Label fx:id="balance" layoutX="14.0" layoutY="262.0" prefHeight="26.0" prefWidth="260.0" textAlignment="CENTER">
+                        <Label fx:id="balance" layoutX="14.0" layoutY="415.0" prefHeight="26.0" prefWidth="260.0" textAlignment="CENTER">
                             <font>
                                 <Font name="System Bold" size="18.0" />
                             </font>
@@ -164,12 +164,12 @@
                                 <Font name="Gill Sans MT Bold" size="24.0" />
                             </font>
                         </Label>
-                        <Label layoutX="18.0" layoutY="124.0" text="Account Number : ">
+                        <Label layoutX="18.0" layoutY="277.0" text="Account Number : ">
                             <font>
                                 <Font name="Gill Sans MT" size="20.0" />
                             </font>
                         </Label>
-                        <Label layoutX="17.0" layoutY="209.0" text="Current Balance" textFill="#ff9900">
+                        <Label layoutX="17.0" layoutY="362.0" text="Current Balance" textFill="#ff9900">
                             <font>
                                 <Font name="Gill Sans MT" size="24.0" />
                             </font>
@@ -178,7 +178,7 @@
                             <font>
                                 <Font name="System Bold Italic" size="18.0" />
                             </font></Label>
-                        <Label fx:id="accNumber" layoutX="18.0" layoutY="165.0" prefHeight="27.0" prefWidth="280.0">
+                        <Label fx:id="accNumber" layoutX="18.0" layoutY="318.0" prefHeight="27.0" prefWidth="280.0">
                             <font>
                                 <Font size="18.0" />
                             </font></Label>
@@ -191,6 +191,18 @@
                             <font>
                                 <Font size="18.0" />
                             </font></Label>
+                  <ListView fx:id="accLsOverview" layoutX="21.0" layoutY="171.0" onMouseClicked="#handleAccClick" prefHeight="94.0" prefWidth="154.0" />
+                  <Label layoutX="18.0" layoutY="105.0" text="User ID : ">
+                     <font>
+                        <Font name="Gill Sans MT" size="20.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="usrID" layoutX="101.0" layoutY="107.0" prefHeight="27.0" prefWidth="280.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <ListView fx:id="transactionLs" layoutX="273.0" layoutY="71.0" prefHeight="403.0" prefWidth="267.0" />
                     </children>
                 </Pane>
                 <Pane fx:id="depositPane" prefHeight="500.0" prefWidth="544.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -228,7 +240,7 @@
                                 <Font name="Constantia Italic" size="24.0" />
                             </font>
                         </Label>
-                  <ListView fx:id="list" layoutX="170.0" layoutY="80.0"  prefHeight="200.0" prefWidth="200.0" />
+                  <ListView fx:id="accLsDeposit" layoutX="170.0" layoutY="80.0" onMouseClicked="#handleAccClick" prefHeight="115.0" prefWidth="200.0" />
                   <Label layoutX="178.0" layoutY="50.0" text="Select Account to use:">
                      <font>
                         <Font name="System Bold" size="18.0" />
@@ -269,7 +281,7 @@
                                 <Font name="Constantia Italic" size="24.0" />
                             </font>
                         </Label>
-                  <ListView layoutX="170.0" layoutY="80.0" prefHeight="200.0" prefWidth="200.0" />
+                  <ListView fx:id="accLsWithdraw" layoutX="170.0" layoutY="80.0" onMouseClicked="#handleAccClick" prefHeight="115.0" prefWidth="200.0" />
                   <Label layoutX="178.0" layoutY="50.0" text="Select Account to use:">
                      <font>
                         <Font name="System Bold" size="18.0" />
@@ -316,7 +328,7 @@
                                 <Font name="Constantia Italic" size="24.0" />
                             </font>
                         </Label>
-                  <ListView layoutX="20.0" layoutY="100.0" prefHeight="200.0" prefWidth="200.0"/>
+                  <ListView fx:id="accLsTransfer" layoutX="20.0" layoutY="100.0" onMouseClicked="#handleAccClick" prefHeight="115.0" prefWidth="200.0" />
                   <Label layoutX="20.0" layoutY="60.0" text="Select Account to use:">
                      <font>
                         <Font name="System Bold" size="18.0" />

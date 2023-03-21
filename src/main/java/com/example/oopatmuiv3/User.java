@@ -131,6 +131,13 @@ public class User {
         return this.accounts;
         
     }
+    public ArrayList<String> getAllAccountsUUID(){
+        ArrayList<String> ls = new ArrayList<>();
+        for(int i = 0; i<accounts.size(); i++){
+            ls.add(accounts.get(i).getUUID());
+        }
+        return ls;
+    }
 
 
 
