@@ -291,7 +291,7 @@ public class Account {
                 try {
                     MongoCollection<Document> transactionCollection = this.bank.database.getCollection("transactions");
                     //Transaction transaction = new Transaction(amount, "Transfer from OTHER " + accountNumber + " - "+memo, this.uuid);
-                    Transaction transaction = new Transaction(amount, "Transfer from " + accountNumber + " - "+memo, this.uuid);
+                    Transaction transaction = new Transaction(amount, "Transfer from " + this.getUUID() + " - "+memo, this.uuid);
                     Document transactionDocument = new Document()
                     .append("amount", transaction.getAmount())
                     .append("memo", transaction.getMemo())

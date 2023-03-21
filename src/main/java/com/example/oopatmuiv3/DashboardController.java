@@ -115,12 +115,8 @@ public class DashboardController {
     @FXML
     private ListView<String> accLsTransfer;
 
-
-    @FXML
-    private TextField transferToLocalAcc; //NEED TO SET IN FXML PAGE
     @FXML
     private  TextField transferMemoField;
-    //NEED TO SET FOR NON-LOCAL TRANSFERS TOO
 
 
     String errorStyle = "-fx-text-fill: RED;";
@@ -133,7 +129,6 @@ public class DashboardController {
 
 
 
-    // tbd many accounts to 1 user to do pane
     public void setLabels() {
         name.setText(currentUser.getFirstName() + " " + currentUser.getLastName());
         usrID.setText(currentUser.getUUID());
@@ -145,6 +140,12 @@ public class DashboardController {
         accNumberDeposit.setText(currentUser.getAccount(selectedAcc).getUUID());
         accNumberWithdraw.setText(currentUser.getAccount(selectedAcc).getUUID());
         accNumberTransfer.setText(currentUser.getAccount(selectedAcc).getUUID());
+
+        ObservableList<String> items = FXCollections.observableArrayList(currentUser.getAllAccountsUUID());
+        accLsOverview.setItems(items);
+        accLsDeposit.setItems(items);
+        accLsWithdraw.setItems(items);
+        accLsTransfer.setItems(items);
     }
 
 
@@ -240,7 +241,6 @@ public class DashboardController {
 
 
     public void showHomePane() {
-        populateAcc();
         setLabels();
         homePane.setVisible(true);
         depositPane.setVisible(false);
@@ -282,16 +282,6 @@ public class DashboardController {
         stage2.close();
     }
 
-
-    public void populateAcc() {
-        //System.out.println(currentUser.getAllAccountsUUID());
-        ObservableList<String> items = FXCollections.observableArrayList(currentUser.getAllAccountsUUID());
-        accLsOverview.setItems(items);
-        accLsDeposit.setItems(items);
-        accLsWithdraw.setItems(items);
-        accLsTransfer.setItems(items);
-
-    }
 
     public void handleAccClick(){
         accLsOverview.setOnMouseClicked(mouseEvent -> {String selectItem = accLsOverview.getSelectionModel().getSelectedItem().toString();
