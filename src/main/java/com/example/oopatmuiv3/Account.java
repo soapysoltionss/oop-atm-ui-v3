@@ -276,7 +276,8 @@ public class Account {
         } else {
             balance -= amount;
             this.modifyBalance(balance);
-            addTransaction(this, new Transaction(amount, "Transfer to OTHER " + accountNumber + " - "+memo, this.getUUID()));
+            //addTransaction(this, new Transaction(amount, "Transfer to OTHER " + accountNumber + " - "+memo, this.getUUID()));
+            addTransaction(this, new Transaction(amount, "Transfer to " + accountNumber + " - "+memo, this.getUUID()));
             try {
                 MongoCollection<Document> accountCollection = this.bank.database.getCollection("accounts");
                 Bson filter = Filters.eq("_id", accountNumber);
@@ -294,7 +295,8 @@ public class Account {
                     accountCollection.updateOne(filter, updateOperation);
                     try {
                         MongoCollection<Document> transactionCollection = this.bank.database.getCollection("transactions");
-                        Transaction transaction = new Transaction(amount, "Transfer from OTHER " + accountNumber + " - "+memo, this.uuid);
+                        //Transaction transaction = new Transaction(amount, "Transfer from OTHER " + accountNumber + " - "+memo, this.uuid);
+                        Transaction transaction = new Transaction(amount, "Transfer from " + accountNumber + " - "+memo, this.uuid);
                         Document transactionDocument = new Document()
                         .append("amount", transaction.getAmount())
                         .append("memo", transaction.getMemo())

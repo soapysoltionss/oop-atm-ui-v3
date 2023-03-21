@@ -23,6 +23,10 @@ public class DashboardController {
     @FXML
     private Label accNumber;
     @FXML
+    private Label accNumberDeposit;
+    @FXML
+    private Label accNumberWithdraw;
+    @FXML
     private Label usrID;
 
     @FXML
@@ -114,7 +118,7 @@ public class DashboardController {
     @FXML
     private TextField transferToLocalAcc; //NEED TO SET IN FXML PAGE
     @FXML
-    private  TextField transferLocalMemo;
+    private  TextField transferMemoField;
     //NEED TO SET FOR NON-LOCAL TRANSFERS TOO
 
 
@@ -136,13 +140,11 @@ public class DashboardController {
         balance.setText(String.format("$" + "%.2f",currentUser.getAccount(selectedAcc).getBalance()));
         ObservableList<String> transactions = FXCollections.observableArrayList(currentUser.getAccount(selectedAcc).getTransactionHistory());
         transactionLs.setItems(transactions);
+
+        accNumberDeposit.setText(currentUser.getAccount(selectedAcc).getUUID());
+        accNumberWithdraw.setText(currentUser.getAccount(selectedAcc).getUUID());
     }
-    public void showTransferPane() {
-        homePane.setVisible(false);
-        depositPane.setVisible(false);
-        withdrawPane.setVisible(false);
-        transferPane.setVisible(true);
-    }
+
 
     public void confirmDeposit() {
         try{
@@ -150,6 +152,8 @@ public class DashboardController {
             currentUser.getAccount(selectedAcc).deposit(amount);
             depositConfirmationText.setText("Successfully Deposited: "+ " $" + df.format(amount)+"\nCurrent Bal: "+ "$" + df.format(currentUser.getAccount(selectedAcc).getBalance()));
 
+
+            depositAmountTextField.setText("");
             /*
             Alert a = new Alert(Alert.AlertType.INFORMATION);
             a.setTitle("Confirm Deposit");
@@ -174,6 +178,8 @@ public class DashboardController {
             currentUser.getAccount(selectedAcc).withdraw(amount);
             withdrawConfirmationText.setText("Successfully Withdrawn: " + "$" +df.format(amount)+"\nCurrent Bal: " + "$" + df.format(currentUser.getAccount(selectedAcc).getBalance()));
 
+
+            withdrawAmountTextField.setText("");
             /*
             Alert a = new Alert(Alert.AlertType.INFORMATION);
             a.setTitle("Confirm Withdraw");
@@ -196,6 +202,7 @@ public class DashboardController {
     }
 
     public void confirmTransfer() {
+        /*
         //Local transfer
         try{
             double amount = Double.parseDouble(transferAmountTextField.getText());
@@ -203,6 +210,22 @@ public class DashboardController {
             String memo = transferLocalMemo.getText();
             currentUser.getAccount(selectedAcc).transfer(currentUser.getAccount(transferToLocalAccVar), memo, amount);}
         catch(Exception e){
+            transferConfirmationText.setText("Transfer Failed!");
+            transferConfirmationText.setStyle(errorStyle);
+        }
+         */
+        try{
+            double amount = Double.parseDouble(transferAmountTextField.getText());
+            String toAcc = recieverTextField.getText();
+            String memo = transferMemoField.getText();
+            currentUser.getAccount(selectedAcc).otherTransfer(toAcc,memo,amount);
+            transferConfirmationText.setText("Successful transfer from "+currentUser.getAccount(selectedAcc).getUUID()+" to "+toAcc);
+
+
+            transferAmountTextField.setText("");
+            recieverTextField.setText("");
+            transferMemoField.setText("");
+        } catch (Exception e){
             transferConfirmationText.setText("Transfer Failed!");
             transferConfirmationText.setStyle(errorStyle);
         }
@@ -233,6 +256,13 @@ public class DashboardController {
         depositPane.setVisible(false);
         withdrawPane.setVisible(true);
         transferPane.setVisible(false);
+    }
+
+    public void showTransferPane() {
+        homePane.setVisible(false);
+        depositPane.setVisible(false);
+        withdrawPane.setVisible(false);
+        transferPane.setVisible(true);
     }
 
     public void logout() throws IOException {

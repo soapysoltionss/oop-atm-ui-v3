@@ -152,7 +152,7 @@
     <center>
         <AnchorPane minHeight="500.0" prefWidth="545.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
             <children>
-                <Pane fx:id="homePane" layoutX="-1.0" layoutY="1.0" prefHeight="500.0" prefWidth="546.0" style="-fx-background-color: white;">
+                <Pane fx:id="homePane" layoutX="-1.0" layoutY="1.0" prefHeight="500.0" prefWidth="546.0" style="-fx-background-color: white;" visible="false">
                     <children>
                         <Label fx:id="balance" layoutX="14.0" layoutY="415.0" prefHeight="26.0" prefWidth="260.0" textAlignment="CENTER">
                             <font>
@@ -169,7 +169,7 @@
                                 <Font name="Gill Sans MT" size="20.0" />
                             </font>
                         </Label>
-                        <Label layoutX="17.0" layoutY="362.0" text="Current Balance" textFill="#ff9900">
+                        <Label layoutX="13.0" layoutY="362.0" text="Current Balance" textFill="#ff9900">
                             <font>
                                 <Font name="Gill Sans MT" size="24.0" />
                             </font>
@@ -202,12 +202,12 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <ListView fx:id="transactionLs" layoutX="273.0" layoutY="71.0" prefHeight="403.0" prefWidth="267.0" />
+                  <ListView fx:id="transactionLs" layoutX="240.0" layoutY="71.0" prefHeight="403.0" prefWidth="300.0" />
                     </children>
                 </Pane>
                 <Pane fx:id="depositPane" prefHeight="500.0" prefWidth="544.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <children>
-                        <Label layoutX="70.0" layoutY="290.0" text="Please Enter The Deposited Amount Below : ">
+                        <Label layoutX="70.0" layoutY="290.0" text="Please Enter The Deposit Amount Below : ">
                             <font>
                                 <Font name="System Bold" size="18.0" />
                             </font>
@@ -246,11 +246,21 @@
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Label>
+                  <Label layoutX="24.0" layoutY="90.0" text="Account:">
+                     <font>
+                        <Font name="Gill Sans MT" size="20.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="accNumberDeposit" layoutX="24.0" layoutY="134.0" prefHeight="27.0" prefWidth="280.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
                     </children>
                 </Pane>
                 <Pane fx:id="withdrawPane" layoutX="119.0" layoutY="93.0" prefHeight="500.0" prefWidth="544.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <children>
-                        <Label layoutX="70.0" layoutY="290.0" text="Please Enter The Withdrawed Amount Below : ">
+                        <Label layoutX="70.0" layoutY="290.0" text="Please Enter The Withdraw Amount Below : ">
                             <font>
                                 <Font name="System Bold" size="18.0" />
                             </font>
@@ -287,9 +297,19 @@
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Label>
+                  <Label layoutX="24.0" layoutY="90.0" text="Account:">
+                     <font>
+                        <Font name="Gill Sans MT" size="20.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="accNumberWithdraw" layoutX="24.0" layoutY="134.0" prefHeight="27.0" prefWidth="280.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
                     </children>
                 </Pane>
-                <Pane fx:id="transferPane" prefHeight="500.0" prefWidth="544.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <Pane fx:id="transferPane" prefHeight="500.0" prefWidth="544.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <children>
                         <Label layoutX="250.0" layoutY="60.0" text="Amount to transfer:">
                             <font>
@@ -312,12 +332,12 @@
                                     </color>
                                 </DropShadow>
                             </effect></Button>
-                        <Label layoutX="250.0" layoutY="220.0" text="Receiver Account Number:">
+                        <Label layoutX="250.0" layoutY="175.0" text="Receiver Account Number:">
                             <font>
                                 <Font name="System Bold" size="18.0" />
                             </font>
                         </Label>
-                        <TextField fx:id="recieverTextField" layoutX="250.0" layoutY="260.0" prefHeight="60.0" prefWidth="280.0" promptText="Account Number">
+                        <TextField fx:id="recieverTextField" layoutX="250.0" layoutY="215.0" prefHeight="60.0" prefWidth="280.0" promptText="Account Number">
                             <font>
                                 <Font size="18.0" />
                             </font>
@@ -328,12 +348,17 @@
                                 <Font name="Constantia Italic" size="24.0" />
                             </font>
                         </Label>
-                  <ListView fx:id="accLsTransfer" layoutX="20.0" layoutY="100.0" onMouseClicked="#handleAccClick" prefHeight="115.0" prefWidth="200.0" />
-                  <Label layoutX="20.0" layoutY="60.0" text="Select Account to use:">
+                  <ListView fx:id="accLsTransfer" layoutX="25.0" layoutY="83.0" onMouseClicked="#handleAccClick" prefHeight="185.0" prefWidth="200.0" />
+                  <Label layoutX="25.0" layoutY="43.0" text="From:">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Label>
+                  <TextField fx:id="transferMemoField" layoutX="110.0" layoutY="292.0" prefHeight="60.0" prefWidth="280.0" promptText="Memo">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </TextField>
                     </children>
                 </Pane>
             </children>
