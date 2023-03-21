@@ -2,7 +2,6 @@ package com.example.oopatmuiv3;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Objects;
 
 
@@ -150,7 +149,7 @@ public class DashboardController {
         try{
             double amount = Double.parseDouble(depositAmountTextField.getText());
             currentUser.getAccount(selectedAcc).deposit(amount);
-            depositConfirmationText.setText("Successfully Deposited: "+ " $" + df.format(amount)+"\nCurrent Bal: "+ "$" + df.format(currentUser.getAccount(selectedAcc).getBalance()));
+            depositConfirmationText.setText("Successfully Deposited: " + " $" + df.format(amount) + "\nCurrent Bal: " + "$" + df.format(currentUser.getAccount(selectedAcc).getBalance()));
 
 
             depositAmountTextField.setText("");
@@ -168,7 +167,9 @@ public class DashboardController {
             depositConfirmationText.setStyle(errorStyle);
             depositAmountTextField.setText("");
         } catch (InvalidAmountException e) {
-            throw new RuntimeException(e);
+            depositConfirmationText.setText(e.getMessage());
+            depositConfirmationText.setStyle(errorStyle);
+            depositAmountTextField.setText("");
         }
     }
 
@@ -189,13 +190,13 @@ public class DashboardController {
             //showHomePane();
         }
         //set our own exception cases & set alert to the e.getMessage()
-        catch(Exception e){
-            if(e instanceof IllegalArgumentException){
-                withdrawConfirmationText.setText("Sorry Your Balance is Too Low");
-            }
-            else{
-                withdrawConfirmationText.setText("Please Enter a Numeric Value");
-            }
+        catch (NumberFormatException e){
+            withdrawConfirmationText.setText("Please Enter a Numeric Value");
+            withdrawConfirmationText.setStyle(errorStyle);
+            withdrawAmountTextField.setText("");
+        }
+        catch(InvalidWithdrawAndTransferAmountException e){
+            withdrawConfirmationText.setText(e.getMessage());
             withdrawConfirmationText.setStyle(errorStyle);
             withdrawAmountTextField.setText("");
         }
@@ -225,12 +226,20 @@ public class DashboardController {
             transferAmountTextField.setText("");
             recieverTextField.setText("");
             transferMemoField.setText("");
-        } catch (Exception e){
-            transferConfirmationText.setText("Transfer Failed!");
+        }
+        catch (NumberFormatException e){
+            System.out.println("Testing");
+            transferConfirmationText.setText("Please Enter a Numeric Value");
             transferConfirmationText.setStyle(errorStyle);
+            transferConfirmationText.setText("");
+        }
+        catch(InvalidWithdrawAndTransferAmountException e){
+            System.out.println("Testing2");
+            transferConfirmationText.setText(e.getMessage());
+            transferConfirmationText.setStyle(errorStyle);
+            transferConfirmationText.setText("");
         }
     }
-    //NEED TO DO NON-LOCAL TRANSFER
 
 
 

@@ -3,9 +3,11 @@ package com.example.oopatmuiv3;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
+import javafx.scene.control.Alert;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class Account {
@@ -122,13 +124,10 @@ public class Account {
     }
 
     public void deposit(double amount) throws InvalidAmountException {
-        try {
-            if (amount <= 0) {
-                throw new InvalidAmountException(amount);
-            }
-        } catch (InvalidAmountException e) {
-            System.out.println("Error: Amount is negative" + e);
+        if (amount <= 0 || amount == -0 || (BigDecimal.valueOf(amount).scale() > 2)) {
+            throw new InvalidAmountException(amount);
         }
+
         balance += amount;
         this.modifyBalance(balance);
         addTransaction(this, new Transaction(amount, "Deposit", this.getUUID()));
@@ -221,16 +220,11 @@ public class Account {
         }
     }
 
-    public boolean withdraw(double amount) throws InvalidWithdrawAmountException{
-        try {
-            if (balance < amount) {
-                throw new InvalidWithdrawAmountException(amount, balance);
-            } else if (amount <= 0) {
-                throw new InvalidWithdrawAmountException(amount, balance);
-            }
-        } catch (Exception e) {
-            System.out.println("Error: Amount is negative" + e);
+    public boolean withdraw(double amount) throws InvalidWithdrawAndTransferAmountException {
+        if (amount <= 0 || amount == -0 || (BigDecimal.valueOf(amount).scale() > 2) || amount > balance) {
+            throw new InvalidWithdrawAndTransferAmountException(amount, balance);
         }
+
         balance -= amount;
         this.modifyBalance(balance);
         addTransaction(this, new Transaction(amount, "Withdrawal", this.getUUID()));
@@ -269,49 +263,50 @@ public class Account {
         return -1;
     }
 
-    public boolean otherTransfer(String accountNumber, String memo, double amount)
+    public boolean otherTransfer(String accountNumber, String memo, double amount) throws InvalidWithdrawAndTransferAmountException
     {
-        if (balance < amount) {
-            return false;
-        } else {
-            balance -= amount;
-            this.modifyBalance(balance);
-            //addTransaction(this, new Transaction(amount, "Transfer to OTHER " + accountNumber + " - "+memo, this.getUUID()));
-            addTransaction(this, new Transaction(amount, "Transfer to " + accountNumber + " - "+memo, this.getUUID()));
-            try {
-                MongoCollection<Document> accountCollection = this.bank.database.getCollection("accounts");
-                Bson filter = Filters.eq("_id", accountNumber);
-                double oldInfo = getOtherBal(accountNumber);
-                boolean done = false;
-                if (oldInfo == -1) {
-                    return false;
-                } else {
-                    done = true;
-                }
-                if (done == false) {
-                    return false;
-                } else {
-                    Bson updateOperation = new Document("$set", new Document("balance", amount+oldInfo));
-                    accountCollection.updateOne(filter, updateOperation);
-                    try {
-                        MongoCollection<Document> transactionCollection = this.bank.database.getCollection("transactions");
-                        //Transaction transaction = new Transaction(amount, "Transfer from OTHER " + accountNumber + " - "+memo, this.uuid);
-                        Transaction transaction = new Transaction(amount, "Transfer from " + accountNumber + " - "+memo, this.uuid);
-                        Document transactionDocument = new Document()
-                        .append("amount", transaction.getAmount())
-                        .append("memo", transaction.getMemo())
-                        .append("timestamp", transaction.getTimeStamp())
-                        .append("holder", accountNumber);
-                        transactionCollection.insertOne(transactionDocument);
-                        return true;
-                    } catch(Exception e) {
-                        return false;
-                    }
-                }
-            } catch (MongoException e) {
-                return false;
-            }            
+        if (amount <= 0 || amount == -0 || (BigDecimal.valueOf(amount).scale() > 2) || amount > balance){
+            throw new InvalidWithdrawAndTransferAmountException(amount, balance);
         }
+
+        balance -= amount;
+        this.modifyBalance(balance);
+        //addTransaction(this, new Transaction(amount, "Transfer to OTHER " + accountNumber + " - "+memo, this.getUUID()));
+        addTransaction(this, new Transaction(amount, "Transfer to " + accountNumber + " - "+memo, this.getUUID()));
+        try {
+            MongoCollection<Document> accountCollection = this.bank.database.getCollection("accounts");
+            Bson filter = Filters.eq("_id", accountNumber);
+            double oldInfo = getOtherBal(accountNumber);
+            boolean done = false;
+            if (oldInfo == -1) {
+                return false;
+            } else {
+                done = true;
+            }
+            if (done == false) {
+                return false;
+            } else {
+                Bson updateOperation = new Document("$set", new Document("balance", amount+oldInfo));
+                accountCollection.updateOne(filter, updateOperation);
+                try {
+                    MongoCollection<Document> transactionCollection = this.bank.database.getCollection("transactions");
+                    //Transaction transaction = new Transaction(amount, "Transfer from OTHER " + accountNumber + " - "+memo, this.uuid);
+                    Transaction transaction = new Transaction(amount, "Transfer from " + accountNumber + " - "+memo, this.uuid);
+                    Document transactionDocument = new Document()
+                    .append("amount", transaction.getAmount())
+                    .append("memo", transaction.getMemo())
+                    .append("timestamp", transaction.getTimeStamp())
+                    .append("holder", accountNumber);
+                    transactionCollection.insertOne(transactionDocument);
+                    return true;
+                } catch(Exception e) {
+                    return false;
+                }
+            }
+        } catch (MongoException e) {
+            return false;
+        }
+
     }
 
     public boolean transfer(Account destination, String memo, double amount) {
