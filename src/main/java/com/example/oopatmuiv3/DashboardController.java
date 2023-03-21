@@ -165,11 +165,9 @@ public class DashboardController {
         catch(NumberFormatException e){
             depositConfirmationText.setText("Please Enter a Numeric Value");
             depositConfirmationText.setStyle(errorStyle);
-            depositAmountTextField.setText("");
         } catch (InvalidAmountException e) {
             depositConfirmationText.setText(e.getMessage());
             depositConfirmationText.setStyle(errorStyle);
-            depositAmountTextField.setText("");
         }
     }
 
@@ -193,12 +191,10 @@ public class DashboardController {
         catch (NumberFormatException e){
             withdrawConfirmationText.setText("Please Enter a Numeric Value");
             withdrawConfirmationText.setStyle(errorStyle);
-            withdrawAmountTextField.setText("");
         }
         catch(InvalidWithdrawAndTransferAmountException e){
             withdrawConfirmationText.setText(e.getMessage());
             withdrawConfirmationText.setStyle(errorStyle);
-            withdrawAmountTextField.setText("");
         }
     }
 
@@ -231,13 +227,11 @@ public class DashboardController {
             System.out.println("Testing");
             transferConfirmationText.setText("Please Enter a Numeric Value");
             transferConfirmationText.setStyle(errorStyle);
-            transferConfirmationText.setText("");
         }
         catch(InvalidWithdrawAndTransferAmountException e){
             System.out.println("Testing2");
             transferConfirmationText.setText(e.getMessage());
             transferConfirmationText.setStyle(errorStyle);
-            transferConfirmationText.setText("");
         }
     }
 
