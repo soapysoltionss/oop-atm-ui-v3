@@ -202,7 +202,7 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <ListView fx:id="transactionLs" layoutX="240.0" layoutY="71.0" prefHeight="403.0" prefWidth="300.0" />
+                  <ListView fx:id="transactionLs" layoutX="200.0" layoutY="71.0" prefHeight="403.0" prefWidth="340.0" />
                     </children>
                 </Pane>
                 <Pane fx:id="depositPane" prefHeight="500.0" prefWidth="544.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -348,7 +348,7 @@
                                 <Font name="Constantia Italic" size="24.0" />
                             </font>
                         </Label>
-                  <ListView fx:id="accLsTransfer" layoutX="25.0" layoutY="83.0" onMouseClicked="#handleAccClick" prefHeight="185.0" prefWidth="200.0" />
+                  <ListView fx:id="accLsTransfer" layoutX="25.0" layoutY="83.0" onMouseClicked="#handleAccClick" prefHeight="115.0" prefWidth="200.0" />
                   <Label layoutX="25.0" layoutY="43.0" text="From:">
                      <font>
                         <Font name="System Bold" size="18.0" />
@@ -359,6 +359,16 @@
                         <Font size="18.0" />
                      </font>
                   </TextField>
+                  <Label layoutX="25.0" layoutY="200.0" text="Account:">
+                     <font>
+                        <Font name="Gill Sans MT" size="20.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="accNumberTransfer" layoutX="110.0" layoutY="202.0" prefHeight="27.0" prefWidth="118.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
                     </children>
                 </Pane>
             </children>

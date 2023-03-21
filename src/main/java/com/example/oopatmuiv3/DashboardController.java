@@ -26,6 +26,8 @@ public class DashboardController {
     @FXML
     private Label accNumberWithdraw;
     @FXML
+    private Label accNumberTransfer;
+    @FXML
     private Label usrID;
 
     @FXML
@@ -142,6 +144,7 @@ public class DashboardController {
 
         accNumberDeposit.setText(currentUser.getAccount(selectedAcc).getUUID());
         accNumberWithdraw.setText(currentUser.getAccount(selectedAcc).getUUID());
+        accNumberTransfer.setText(currentUser.getAccount(selectedAcc).getUUID());
     }
 
 
@@ -224,12 +227,10 @@ public class DashboardController {
             transferMemoField.setText("");
         }
         catch (NumberFormatException e){
-            System.out.println("Testing");
             transferConfirmationText.setText("Please Enter a Numeric Value");
             transferConfirmationText.setStyle(errorStyle);
         }
         catch(InvalidWithdrawAndTransferAmountException e){
-            System.out.println("Testing2");
             transferConfirmationText.setText(e.getMessage());
             transferConfirmationText.setStyle(errorStyle);
         }
