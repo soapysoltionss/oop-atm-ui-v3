@@ -398,7 +398,7 @@
                 </Pane>
             <Pane fx:id="settingsPane" layoutX="-1.0" layoutY="1.0" prefHeight="500.0" prefWidth="544.0" style="-fx-background-color: white;">
                <children>
-                  <Button fx:id="confirmTransferButton1" layoutX="224.0" layoutY="393.0" mnemonicParsing="false" onAction="#confirmTransfer" prefHeight="38.0" prefWidth="95.0" style="-fx-background-radius: 15px;" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Confirm" textAlignment="CENTER" textFill="WHITE">
+                  <Button fx:id="confirmSettingButton" layoutX="224.0" layoutY="393.0" mnemonicParsing="false" onAction="#confirmSettings" prefHeight="38.0" prefWidth="95.0" style="-fx-background-radius: 15px;" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Confirm" textAlignment="CENTER" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
@@ -410,13 +410,13 @@
                         </DropShadow>
                      </effect>
                   </Button>
-                  <Label fx:id="transferConfirmationText1" alignment="CENTER" layoutX="112.0" layoutY="362.0" prefHeight="31.0" prefWidth="322.0" textAlignment="CENTER" />
+                  <Label fx:id="settingConfirmationText" alignment="CENTER" layoutX="112.0" layoutY="362.0" prefHeight="31.0" prefWidth="322.0" textAlignment="CENTER" />
                   <Label layoutX="208.0" layoutY="14.0" text="Settings">
                      <font>
                         <Font name="Constantia Italic" size="24.0" />
                      </font>
                   </Label>
-                  <ListView fx:id="accLsTransfer1" layoutX="25.0" layoutY="90.0" onMouseClicked="#handleAccClick" prefHeight="115.0" prefWidth="200.0" />
+                  <ListView fx:id="accLsSetting" layoutX="25.0" layoutY="90.0" onMouseClicked="#handleAccClick" prefHeight="115.0" prefWidth="200.0" />
                   <Label layoutX="25.0" layoutY="60.0" text="Choose Account:">
                      <font>
                         <Font name="System Bold" size="18.0" />
@@ -427,7 +427,7 @@
                         <Font name="Gill Sans MT" size="20.0" />
                      </font>
                   </Label>
-                  <Label fx:id="accNumberTransfer1" layoutX="110.0" layoutY="202.0" prefHeight="27.0" prefWidth="118.0">
+                  <Label fx:id="accNumberSetting" layoutX="110.0" layoutY="202.0" prefHeight="27.0" prefWidth="118.0">
                      <font>
                         <Font size="18.0" />
                      </font>

@@ -30,6 +30,8 @@ public class DashboardController {
     @FXML
     private Label accNumberTransfer;
     @FXML
+    private Label accNumberSetting;
+    @FXML
     private Label usrID;
     @FXML
     private Label balance;
@@ -91,7 +93,7 @@ public class DashboardController {
     @FXML
     private ListView<String> accLsTransfer;
     @FXML
-    private ListView<String> accLsChangeSetting;
+    private ListView<String> accLsSetting;
     @FXML
     private TextField transferMemoField;
     @FXML
@@ -127,12 +129,14 @@ public class DashboardController {
         accNumberDeposit.setText(currentUser.getAccount(selectedAcc).getUUID());
         accNumberWithdraw.setText(currentUser.getAccount(selectedAcc).getUUID());
         accNumberTransfer.setText(currentUser.getAccount(selectedAcc).getUUID());
+        accNumberSetting.setText(currentUser.getAccount(selectedAcc).getUUID());
 
         ObservableList<String> items = FXCollections.observableArrayList(currentUser.getAllAccountsUUID());
         accLsOverview.setItems(items);
         accLsDeposit.setItems(items);
         accLsWithdraw.setItems(items);
         accLsTransfer.setItems(items);
+        accLsSetting.setItems(items);
         //accLsChangeSetting.setItems(items);
     }
 
@@ -224,6 +228,12 @@ public class DashboardController {
             transferConfirmationText.setStyle(errorStyle);
         }
     }
+
+    public void confirmSettings(){
+
+    }
+
+
 
 
 
@@ -334,6 +344,16 @@ public class DashboardController {
             d.show();
              */
         //});
+        accLsSetting.setOnMouseClicked(mouseEvent -> {String selectItem = accLsSetting.getSelectionModel().getSelectedItem().toString();
+            selectedAcc = currentUser.getAllAccountsUUID().indexOf(selectItem);
+
+            //update labels
+            setLabels();
+            /*
+            Dialog d = new Alert(Alert.AlertType.INFORMATION,selectItem);
+            d.show();
+             */
+        });
     }
 
     public void settings(){
