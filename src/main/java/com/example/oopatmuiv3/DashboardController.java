@@ -146,7 +146,6 @@ public class DashboardController {
         accLsWithdraw.setItems(items);
         accLsTransfer.setItems(items);
         accLsSetting.setItems(items);
-        //accLsChangeSetting.setItems(items);
     }
 
 
@@ -388,16 +387,7 @@ public class DashboardController {
             d.show();
              */
         });
-        //accLsChangeSetting.setOnMouseClicked(mouseEvent -> {String selectItem = accLsChangeSetting.getSelectionModel().getSelectedItem().toString();
-            //selectedAcc = currentUser.getAllAccountsUUID().indexOf(selectItem);
 
-            //update labels
-            //setLabels();
-            /*
-            Dialog d = new Alert(Alert.AlertType.INFORMATION,selectItem);
-            d.show();
-             */
-        //});
         accLsSetting.setOnMouseClicked(mouseEvent -> {String selectItem = accLsSetting.getSelectionModel().getSelectedItem().toString();
             selectedAcc = currentUser.getAllAccountsUUID().indexOf(selectItem);
 
