@@ -91,6 +91,15 @@ public class LoginController {
         }
     }
 
+    public void setDemoAcc1(){
+        userID.setText("5044891741");
+        loginPIN.setText("1111");
+    }
+    public void setDemoAcc2(){
+        userID.setText("8133389705");
+        loginPIN.setText("6969");
+    }
+
 
 
 

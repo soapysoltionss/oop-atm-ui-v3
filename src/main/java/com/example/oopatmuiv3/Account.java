@@ -143,9 +143,12 @@ public class Account {
 
     }
 
-    public void deposit(double amount) throws InvalidAmountException {
+    public void deposit(double amount) throws InvalidAmountException, InvalidNoteDepositException {
         if (amount <= 0 || amount == -0 || (BigDecimal.valueOf(amount).scale() > 2)) {
             throw new InvalidAmountException(amount);
+        }
+        else if (!(amount%2 == 0 || amount%5 == 0)){
+            throw new InvalidNoteDepositException();
         }
 
         balance += amount;
@@ -243,9 +246,15 @@ public class Account {
         }
     }
 
-    public boolean withdraw(double amount) throws InvalidWithdrawAndTransferAmountException {
+    public boolean withdraw(double amount) throws InvalidWithdrawAndTransferAmountException, WithdrawLimitException, InvalidNoteWithdrawalException {
         if (amount <= 0 || amount == -0 || (BigDecimal.valueOf(amount).scale() > 2) || amount > balance) {
             throw new InvalidWithdrawAndTransferAmountException(amount, balance);
+        }
+        else if (amount%10 != 0){
+            throw new InvalidNoteWithdrawalException();
+        }
+        else if (amount > this.getLocalWithdrawLimit()){
+            throw new WithdrawLimitException(amount, this.getLocalWithdrawLimit());
         }
 
         balance -= amount;
@@ -286,13 +295,16 @@ public class Account {
         return -1;
     }
 
-    public boolean otherTransfer(String accountNumber, String memo, double amount) throws InvalidWithdrawAndTransferAmountException
+    public boolean otherTransfer(String accountNumber, String memo, double amount) throws InvalidWithdrawAndTransferAmountException, TransferLimitException
     {
-        if (amount <= 0 || amount == -0 || (BigDecimal.valueOf(amount).scale() > 2) || amount > balance){
-            throw new InvalidWithdrawAndTransferAmountException(amount, balance);
+        if (amount <= 0 || amount == -0 || (BigDecimal.valueOf(amount).scale() > 2) || amount > this.balance){
+            throw new InvalidWithdrawAndTransferAmountException(amount, this.balance);
         }
-        balance -= amount;
-        this.modifyBalance(balance);
+        else if (amount > this.getLocalTransferLimit()){
+            throw new TransferLimitException(amount, this.getLocalTransferLimit());
+        }
+        this.balance -= amount;
+        this.modifyBalance(this.balance);
         //addTransaction(this, new Transaction(amount, "Transfer to OTHER " + accountNumber + " - "+memo, this.getUUID()));
         if (this.user.getAllAccountsUUID().contains(accountNumber)){
             addTransaction(this, new Transaction(amount, "Transfer to LOCAL " + accountNumber + " - "+memo, this.getUUID()));

@@ -373,8 +373,8 @@
                                 <Font name="Constantia Italic" size="24.0" />
                             </font>
                         </Label>
-                  <ListView fx:id="accLsTransfer" layoutX="25.0" layoutY="83.0" onMouseClicked="#handleAccClick" prefHeight="115.0" prefWidth="200.0" />
-                  <Label layoutX="25.0" layoutY="43.0" text="From:">
+                  <ListView fx:id="accLsTransfer" layoutX="25.0" layoutY="90.0" onMouseClicked="#handleAccClick" prefHeight="115.0" prefWidth="200.0" />
+                  <Label layoutX="25.0" layoutY="60.0" text="From:">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
@@ -384,19 +384,19 @@
                         <Font size="18.0" />
                      </font>
                   </TextField>
-                  <Label layoutX="25.0" layoutY="200.0" text="Account:">
+                  <Label layoutX="25.0" layoutY="210.0" text="Account:">
                      <font>
                         <Font name="Gill Sans MT" size="20.0" />
                      </font>
                   </Label>
-                  <Label fx:id="accNumberTransfer" layoutX="110.0" layoutY="202.0" prefHeight="27.0" prefWidth="118.0">
+                  <Label fx:id="accNumberTransfer" layoutX="107.0" layoutY="212.0" prefHeight="27.0" prefWidth="118.0">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
                     </children>
                 </Pane>
-            <Pane fx:id="settingsPane" layoutX="-1.0" layoutY="1.0" prefHeight="500.0" prefWidth="544.0" style="-fx-background-color: white;">
+            <Pane fx:id="settingsPane" layoutX="-1.0" layoutY="1.0" prefHeight="500.0" prefWidth="544.0" style="-fx-background-color: white;" visible="false">
                <children>
                   <Button fx:id="confirmSettingButton" layoutX="224.0" layoutY="393.0" mnemonicParsing="false" onAction="#confirmSettings" prefHeight="38.0" prefWidth="95.0" style="-fx-background-radius: 15px;" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Confirm" textAlignment="CENTER" textFill="WHITE">
                      <font>
@@ -422,12 +422,12 @@
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="25.0" layoutY="238.0" text="Account:">
+                  <Label layoutX="25.0" layoutY="210.0" text="Account:">
                      <font>
                         <Font name="Gill Sans MT" size="20.0" />
                      </font>
                   </Label>
-                  <Label fx:id="accNumberSetting" layoutX="110.0" layoutY="202.0" prefHeight="27.0" prefWidth="118.0">
+                  <Label fx:id="accNumberSetting" layoutX="107.0" layoutY="212.0" prefHeight="27.0" prefWidth="118.0">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -436,9 +436,9 @@
                    <items>
                        <FXCollections fx:factory="observableArrayList">
                         <String fx:value="changeLocalWithdrawalLimit" />
-                        <String fx:value="changeLocalDepositLimit" />
+                        <String fx:value="changeLocalTransferLimit" />
                         <String fx:value="changeOverseasWithdrawalLimit" />
-                        <String fx:value="changeOverseasDepositLimit" />
+                        <String fx:value="changeOverseasTransferLimit" />
                         <String fx:value="currencySetting" />
                        </FXCollections>
                    </items>
@@ -460,14 +460,14 @@
                                        </font>
                                     </TextField>
                                  </children></Pane>
-                              <Pane fx:id="changeLocalDepositLimit" prefHeight="200.0" prefWidth="200.0" visible="false">
+                              <Pane fx:id="changeLocalTransferLimit" prefHeight="200.0" prefWidth="200.0" visible="false">
                                  <children>
-                                    <Label layoutX="10.0" layoutY="14.0" text="Change Local Deposit Limit:">
+                                    <Label layoutX="10.0" layoutY="14.0" text="Change Local Transfer Limit:">
                                        <font>
                                           <Font name="System Bold" size="18.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="localDepositLimitText" layoutX="10.0" layoutY="41.0" prefHeight="60.0" prefWidth="280.0" promptText="Enter limit">
+                                    <TextField fx:id="localTransferLimitText" layoutX="10.0" layoutY="41.0" prefHeight="60.0" prefWidth="280.0" promptText="Enter limit">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
@@ -480,20 +480,20 @@
                                           <Font name="System Bold" size="18.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="localWithdrawalLimitText" layoutX="10.0" layoutY="41.0" prefHeight="60.0" prefWidth="280.0" promptText="Enter limit">
+                                    <TextField fx:id="overseasWithdrawalLimitText" layoutX="10.0" layoutY="41.0" prefHeight="60.0" prefWidth="280.0" promptText="Enter limit">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
                                     </TextField>
                                  </children></Pane>
-                              <Pane fx:id="changeOverseasDepositLimit" prefHeight="200.0" prefWidth="200.0">
+                              <Pane fx:id="changeOverseasTransferLimit" prefHeight="200.0" prefWidth="200.0">
                                  <children>
-                                    <Label layoutX="10.0" layoutY="14.0" text="Change Overseas Deposit Limit:">
+                                    <Label layoutX="10.0" layoutY="14.0" text="Change Overseas Transfer Limit:">
                                        <font>
                                           <Font name="System Bold" size="18.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="overseasDepositLimitText" layoutX="10.0" layoutY="41.0" prefHeight="60.0" prefWidth="280.0" promptText="Enter limit">
+                                    <TextField fx:id="overseasTransferLimitText" layoutX="10.0" layoutY="41.0" prefHeight="60.0" prefWidth="280.0" promptText="Enter limit">
                                        <font>
                                           <Font size="18.0" />
                                        </font>

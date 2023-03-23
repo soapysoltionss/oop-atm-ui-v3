@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -7,6 +8,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.ColorAdjust?>
 <?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.Shadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -64,6 +66,41 @@
                     </effect>
                 </Button>
             <Label fx:id="loginLabel" layoutX="70.0" layoutY="276.0" prefHeight="17.0" prefWidth="210.0" />
+            <ImageView accessibleRole="BUTTON" fitHeight="44.0" fitWidth="48.0" layoutX="262.0" layoutY="434.0">
+               <image>
+                  <Image url="@icons/card.png" />
+               </image>
+            </ImageView>
+            <ImageView accessibleRole="BUTTON" fitHeight="44.0" fitWidth="48.0" layoutX="207.0" layoutY="434.0">
+               <image>
+                  <Image url="@icons/card.png" />
+               </image>
+            </ImageView>
+            <Button fx:id="demoAcc1" layoutX="205.0" layoutY="444.0" mnemonicParsing="false" onMouseClicked="#setDemoAcc1" text="Button">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <effect>
+                  <Shadow>
+                     <color>
+                        <Color opacity="0.48473283648490906" />
+                     </color>
+                  </Shadow>
+               </effect>
+            </Button>
+            <Label fx:id="loginLabel1" layoutX="207.0" layoutY="426.0" prefHeight="17.0" prefWidth="210.0" text="Demo Account:" />
+            <Button fx:id="demoAcc2" layoutX="262.0" layoutY="444.0" mnemonicParsing="false" onMouseClicked="#setDemoAcc2" text="Button">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <effect>
+                  <Shadow>
+                     <color>
+                        <Color opacity="0.48473283648490906" />
+                     </color>
+                  </Shadow>
+               </effect>
+            </Button>
             </children>
         </Pane>
     </children>

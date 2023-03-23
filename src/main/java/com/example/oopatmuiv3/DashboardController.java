@@ -5,8 +5,6 @@ import java.text.DecimalFormat;
 import java.util.Objects;
 
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -101,13 +99,24 @@ public class DashboardController {
     @FXML
     private Pane changeLocalWithdrawalLimit;
     @FXML
-    private Pane changeLocalDepositLimit;
+    private Pane changeLocalTransferLimit;
     @FXML
-    private Pane changeOverseasDepositLimit;
+    private Pane changeOverseasTransferLimit;
     @FXML
     private Pane changeOverseasWithdrawalLimit;
     @FXML
     private Pane currencySetting;
+    @FXML
+    private TextField localWithdrawLimitText;
+    @FXML
+    private TextField localTransferLimitText;
+    @FXML
+    private TextField overseasWithdrawalLimitText;
+    @FXML
+    private TextField overseasTransferLimitText;
+    @FXML
+    private Label settingConfirmationText;
+
     String errorStyle = "-fx-text-fill: RED;";
     String successStyle = "-fx-text-fill: GREEN;";
 
@@ -146,9 +155,9 @@ public class DashboardController {
             double amount = Double.parseDouble(depositAmountTextField.getText());
             currentUser.getAccount(selectedAcc).deposit(amount);
             depositConfirmationText.setText("Successfully Deposited: " + " $" + df.format(amount) + "\nCurrent Bal: " + "$" + df.format(currentUser.getAccount(selectedAcc).getBalance()));
+            depositConfirmationText.setStyle(successStyle);
 
 
-            depositAmountTextField.setText("");
             /*
             Alert a = new Alert(Alert.AlertType.INFORMATION);
             a.setTitle("Confirm Deposit");
@@ -165,6 +174,10 @@ public class DashboardController {
             depositConfirmationText.setText(e.getMessage());
             depositConfirmationText.setStyle(errorStyle);
         }
+        catch (InvalidNoteDepositException e){
+            depositConfirmationText.setText(e.getMessage());
+            depositConfirmationText.setStyle(errorStyle);
+        }
     }
 
     public void confirmWithdraw() {
@@ -172,9 +185,9 @@ public class DashboardController {
             double amount = Double.parseDouble(withdrawAmountTextField.getText());
             currentUser.getAccount(selectedAcc).withdraw(amount);
             withdrawConfirmationText.setText("Successfully Withdrawn: " + "$" +df.format(amount)+"\nCurrent Bal: " + "$" + df.format(currentUser.getAccount(selectedAcc).getBalance()));
+            withdrawConfirmationText.setStyle(successStyle);
 
 
-            withdrawAmountTextField.setText("");
             /*
             Alert a = new Alert(Alert.AlertType.INFORMATION);
             a.setTitle("Confirm Withdraw");
@@ -189,6 +202,14 @@ public class DashboardController {
             withdrawConfirmationText.setStyle(errorStyle);
         }
         catch(InvalidWithdrawAndTransferAmountException e){
+            withdrawConfirmationText.setText(e.getMessage());
+            withdrawConfirmationText.setStyle(errorStyle);
+        }
+        catch (WithdrawLimitException e){
+            withdrawConfirmationText.setText(e.getMessage());
+            withdrawConfirmationText.setStyle(errorStyle);
+        }
+        catch (InvalidNoteWithdrawalException e){
             withdrawConfirmationText.setText(e.getMessage());
             withdrawConfirmationText.setStyle(errorStyle);
         }
@@ -213,23 +234,56 @@ public class DashboardController {
             String memo = transferMemoField.getText();
             currentUser.getAccount(selectedAcc).otherTransfer(toAcc,memo,amount);
             transferConfirmationText.setText("Successful transfer from "+currentUser.getAccount(selectedAcc).getUUID()+" to "+toAcc);
+            transferConfirmationText.setStyle(successStyle);
 
 
-            transferAmountTextField.setText("");
-            recieverTextField.setText("");
-            transferMemoField.setText("");
         }
         catch (NumberFormatException e){
             transferConfirmationText.setText("Please Enter a Numeric Value");
             transferConfirmationText.setStyle(errorStyle);
         }
-        catch(InvalidWithdrawAndTransferAmountException e){
+        catch (InvalidWithdrawAndTransferAmountException e){
+            transferConfirmationText.setText(e.getMessage());
+            transferConfirmationText.setStyle(errorStyle);
+        }
+        catch (TransferLimitException e){
             transferConfirmationText.setText(e.getMessage());
             transferConfirmationText.setStyle(errorStyle);
         }
     }
 
     public void confirmSettings(){
+        try{
+            double oldLimit;
+            if (changeLocalWithdrawalLimit.isVisible()){
+                oldLimit = currentUser.getAccount(selectedAcc).getLocalWithdrawLimit();
+                double newLimit = Double.parseDouble(localWithdrawLimitText.getText());
+                currentUser.getAccount(selectedAcc).changeTransferLimit("localWithdrawLimit", newLimit);
+                settingConfirmationText.setText("Successful change of Withdraw Limit from "+oldLimit+" to "+currentUser.getAccount(selectedAcc).getLocalWithdrawLimit());
+                settingConfirmationText.setStyle(successStyle);
+            }
+            else if (changeOverseasWithdrawalLimit.isVisible()){
+
+            }
+            else if (changeLocalTransferLimit.isVisible()){
+                oldLimit = currentUser.getAccount(selectedAcc).getLocalTransferLimit();
+                double newLimit = Double.parseDouble(localTransferLimitText.getText());
+                currentUser.getAccount(selectedAcc).changeTransferLimit("localTransferLimit", newLimit);
+                settingConfirmationText.setText("Successful change of Transfer Limit from "+oldLimit+" to "+currentUser.getAccount(selectedAcc).getLocalTransferLimit());
+            }
+            else if (changeOverseasTransferLimit.isVisible()){
+
+            }
+            else if (currencySetting.isVisible()){
+
+
+            }
+        }
+        catch (NumberFormatException e){
+            settingConfirmationText.setText("Please Enter a Numeric Value");
+            settingConfirmationText.setStyle(errorStyle);
+        }
+
 
     }
 
@@ -359,20 +413,20 @@ public class DashboardController {
     public void settings(){
         settingsCombo.getSelectionModel().selectedItemProperty().addListener((selected, oldSetting, newSetting) -> {
             changeLocalWithdrawalLimit.setVisible(false);
-            changeOverseasDepositLimit.setVisible(false);
+            changeOverseasTransferLimit.setVisible(false);
             changeOverseasWithdrawalLimit.setVisible(false);
-            changeLocalDepositLimit.setVisible(false);
+            changeLocalTransferLimit.setVisible(false);
             currencySetting.setVisible(false);
             if (oldSetting != null){
                 switch (oldSetting){
                     case "changeLocalWithdrawalLimit":
                         changeLocalWithdrawalLimit.setVisible(false);
                         break;
-                    case "changeLocalDepositLimit":
-                        changeLocalDepositLimit.setVisible(false);
+                    case "changeLocalTransferLimit":
+                        changeLocalTransferLimit.setVisible(false);
                         break;
                     case "changeOverseasWithdrawalLimit":
-                        changeOverseasDepositLimit.setVisible(false);
+                        changeOverseasTransferLimit.setVisible(false);
                         break;
                     case "changeOverseasDepositLimit":
                         changeOverseasWithdrawalLimit.setVisible(false);
@@ -388,11 +442,11 @@ public class DashboardController {
                     case "changeLocalWithdrawalLimit":
                         changeLocalWithdrawalLimit.setVisible(true);
                         break;
-                    case "changeLocalDepositLimit":
-                        changeLocalDepositLimit.setVisible(true);
+                    case "changeLocalTransferLimit":
+                        changeLocalTransferLimit.setVisible(true);
                         break;
                     case "changeOverseasWithdrawalLimit":
-                        changeOverseasDepositLimit.setVisible(true);
+                        changeOverseasTransferLimit.setVisible(true);
                         break;
                     case "changeOverseasDepositLimit":
                         changeOverseasWithdrawalLimit.setVisible(true);
