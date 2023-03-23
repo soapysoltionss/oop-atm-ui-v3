@@ -33,9 +33,9 @@ public class Bank {
         //this.accounts = new ArrayList<>();
         ConnectionString connectionString = new ConnectionString("mongodb+srv://admin:admin@oop.ulsonro.mongodb.net/?retryWrites=true&w=majority");
         MongoClientSettings settings = MongoClientSettings
-            .builder().applyConnectionString(connectionString)
-            .serverApi(ServerApi.builder().version(ServerApiVersion.V1).build())
-            .build();
+                .builder().applyConnectionString(connectionString)
+                .serverApi(ServerApi.builder().version(ServerApiVersion.V1).build())
+                .build();
         this.mongoClient = MongoClients.create(settings);
         this.database = mongoClient.getDatabase("bank");
         this.usersCollection = database.getCollection("users");
@@ -45,7 +45,7 @@ public class Bank {
         this.currencies = this.getCurrencies();
         this.users = this.getUsers();
         this.accounts = new ArrayList<>();
-        
+
 
     }
 
@@ -104,7 +104,7 @@ public class Bank {
     public void refreshUsers() {
         this.users = this.getUsers();
     }
-    
+
     public void addUser(User user) {
         users.add(user);
     }
@@ -123,26 +123,26 @@ public class Bank {
         }
     }
 
-    public User userLogin(String uuid, String pin) {
+    public User userLogin(String uuid, String pin) throws InvalidLoginException {
         for (User u:this.users) {
             if (u.getUUID().compareTo(uuid) == 0 && u.validatePin(pin)) {
                 return u;
             }
         }
-        return null;
+        throw new InvalidLoginException();
     }
 
 
     public User addUser(String firstName, String lastName, String pin, String country) throws NoSuchAlgorithmException {
         User newUser = new User(firstName, lastName, User.hashPin(pin), this, country);
         this.users.add(newUser);
-        
+
         MongoCollection<Document> usersCollection = this.database.getCollection("users");
         Document userDocument = new Document("_id", newUser.getUUID())
-        .append("firstName", newUser.getFirstName())
-        .append("lastName", newUser.getLastName())
-        .append("pinHash", newUser.getPinHash().toString())
-        .append("country", newUser.getCountry());
+                .append("firstName", newUser.getFirstName())
+                .append("lastName", newUser.getLastName())
+                .append("pinHash", newUser.getPinHash().toString())
+                .append("country", newUser.getCountry());
         usersCollection.insertOne(userDocument);
         MongoCollection<Document> uuidsCollection = this.database.getCollection("uuids");
         Document newDoc = new Document().append("uuid", newUser.getUUID());
@@ -194,7 +194,7 @@ public class Bank {
                     transaction.setTimestamp(transactionTimestamp);
                     transactions.add(transaction);
                 }
-                Account account = new Account(accountName, UserUuid, accountUUID, transactions, this, accountBalance);
+                Account account = new Account(accountName, UserUuid, accountUUID, transactions, this, accountBalance, user);
                 for (Currency currency: currencies) {
                     if (country.equalsIgnoreCase(currency.getCountry())) {
                         account.setCurrency(currency);
@@ -211,7 +211,7 @@ public class Bank {
             //System.out.println(user.getPinHash());
             userList.add(user);
         }
-        
+
         return userList;
     }
 }

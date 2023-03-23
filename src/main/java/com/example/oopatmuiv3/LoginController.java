@@ -75,19 +75,19 @@ public class LoginController {
 
     @FXML
     public void userLogin() {
-        User c = kekBank.userLogin(userID.getText(), loginPIN.getText());
-        if (c != null){
-            try {
-                launchDashboard(c);
-                closeWindow();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+        try{
+            User c = kekBank.userLogin(userID.getText(), loginPIN.getText());
+            launchDashboard(c);
+            closeWindow();
         }
-        else{
+        catch (InvalidLoginException e) {
             userID.setStyle(errorStyle);
             loginPIN.setStyle(errorStyle);
-            loginLabel.setText("Incorrect User ID or PIN!");
+            loginLabel.setText(e.getMessage());
+            loginLabel.setStyle(textFillError);
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

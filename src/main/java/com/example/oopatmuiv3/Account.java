@@ -45,7 +45,7 @@ public class Account {
         }
     }
 
-    public Account(String name, String holder, String uuid, ArrayList<Transaction> transactions, Bank bank, double balance) {
+    public Account(String name, String holder, String uuid, ArrayList<Transaction> transactions, Bank bank, double balance, User user) {
         this.uuid = uuid;
         this.name = name;
         this.holderUUID = holder;
@@ -56,6 +56,7 @@ public class Account {
         this.overseasTransferLimit = 1000;
         this.localWithdrawLimit = 1000;
         this.overseasWithdrawLimit = 1000;
+        this.user = user;
 
     }
 
@@ -65,7 +66,7 @@ public class Account {
 
     public void setCurrency(Currency c) {
         this.currency = c;
-    } 
+    }
 
     public String getUUID() {
         return this.uuid;
@@ -123,6 +124,25 @@ public class Account {
         this.balance = balance;
     }
 
+    public User getUser() {
+        return this.user;
+    }
+
+    public Account getAccount(String number) {
+        ArrayList<Account> accounts = new ArrayList<>();
+        //System.out.println("Number of accounts" + this.getUser().numOfAccounts());
+        int numOfAcc = this.getUser().numOfAccounts();
+        for (int i = 0; i < numOfAcc; i++) {
+            System.out.println(this.getUser().getAccount(i).getUUID());
+            if (this.getUser().getAccount(i).getUUID().equals(number)) {
+                //System.out.println("SAME!");
+                return this.getUser().getAccount(i);
+            }
+        }
+        return this;
+
+    }
+
     public void deposit(double amount) throws InvalidAmountException {
         if (amount <= 0 || amount == -0 || (BigDecimal.valueOf(amount).scale() > 2)) {
             throw new InvalidAmountException(amount);
@@ -133,16 +153,19 @@ public class Account {
         addTransaction(this, new Transaction(amount, "Deposit", this.getUUID()));
         //this.transactions.add(new Transaction(amount, "Deposit", this.getUUID()));
     }
-    
+    public boolean addTransactionNoDb(Transaction transaction) {
+        this.transactions.add(transaction);
+        return true;
+    }
     public boolean addTransaction(Account account, Transaction transaction) {
         this.transactions.add(transaction);
         try {
             MongoCollection<Document> transactionCollection = this.bank.database.getCollection("transactions");
             Document transactionDocument = new Document()
-            .append("amount", transaction.getAmount())
-            .append("memo", transaction.getMemo())
-            .append("timestamp", transaction.getTimeStamp())
-            .append("holder", account.getUUID());
+                    .append("amount", transaction.getAmount())
+                    .append("memo", transaction.getMemo())
+                    .append("timestamp", transaction.getTimeStamp())
+                    .append("holder", account.getUUID());
             transactionCollection.insertOne(transactionDocument);
             return true;
         } catch(Exception e) {
@@ -175,14 +198,14 @@ public class Account {
 
     public void printTransactionHistory() {
         System.out.printf("\nTransaction History for Account %s\n", this.uuid);
-            for (int t = this.transactions.size()-1; t>0;t--) {
-                try {
-                    System.out.println(this.transactions.get(t).getSummaryLine());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        for (int t = this.transactions.size()-1; t>0;t--) {
+            try {
+                System.out.println(this.transactions.get(t).getSummaryLine());
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            System.out.println();
+        }
+        System.out.println();
     }
     public ArrayList<String> getTransactionHistory() {
         ArrayList<String> transactionLs = new ArrayList<>();
@@ -268,11 +291,15 @@ public class Account {
         if (amount <= 0 || amount == -0 || (BigDecimal.valueOf(amount).scale() > 2) || amount > balance){
             throw new InvalidWithdrawAndTransferAmountException(amount, balance);
         }
-
         balance -= amount;
         this.modifyBalance(balance);
         //addTransaction(this, new Transaction(amount, "Transfer to OTHER " + accountNumber + " - "+memo, this.getUUID()));
-        addTransaction(this, new Transaction(amount, "Transfer to " + accountNumber + " - "+memo, this.getUUID()));
+        if (this.user.getAllAccountsUUID().contains(accountNumber)){
+            addTransaction(this, new Transaction(amount, "Transfer to LOCAL " + accountNumber + " - "+memo, this.getUUID()));
+        }
+        else{
+            addTransaction(this, new Transaction(amount, "Transfer to OTHER " + accountNumber + " - "+memo, this.getUUID()));
+        }
         try {
             MongoCollection<Document> accountCollection = this.bank.database.getCollection("accounts");
             Bson filter = Filters.eq("_id", accountNumber);
@@ -291,12 +318,22 @@ public class Account {
                 try {
                     MongoCollection<Document> transactionCollection = this.bank.database.getCollection("transactions");
                     //Transaction transaction = new Transaction(amount, "Transfer from OTHER " + accountNumber + " - "+memo, this.uuid);
-                    Transaction transaction = new Transaction(amount, "Transfer from " + this.getUUID() + " - "+memo, this.uuid);
+                    Transaction transaction;
+                    if (this.user.getAllAccountsUUID().contains(accountNumber)){
+                        transaction = new Transaction(amount, "Transfer from LOCAL " + this.getUUID() + " - "+memo, this.getUUID());
+                    }
+                    else {
+                        transaction = new Transaction(amount, "Transfer from OTHER " + this.getUUID() + " - "+memo, this.getUUID());
+                    }
+                    Account a = this.getAccount(accountNumber);
+                    if (!a.getUUID().equals(this.getUUID())) {
+                        a.addTransactionNoDb(transaction);
+                    };
                     Document transactionDocument = new Document()
-                    .append("amount", transaction.getAmount())
-                    .append("memo", transaction.getMemo())
-                    .append("timestamp", transaction.getTimeStamp())
-                    .append("holder", accountNumber);
+                            .append("amount", transaction.getAmount())
+                            .append("memo", transaction.getMemo())
+                            .append("timestamp", transaction.getTimeStamp())
+                            .append("holder", accountNumber);
                     transactionCollection.insertOne(transactionDocument);
                     return true;
                 } catch(Exception e) {
@@ -326,5 +363,5 @@ public class Account {
         destination.addTransaction(destination, new Transaction(amount, "Transfer from " + this.getUUID() + " - "+memo, destination.getUUID()));
         return true;
     }
-    
+
 }

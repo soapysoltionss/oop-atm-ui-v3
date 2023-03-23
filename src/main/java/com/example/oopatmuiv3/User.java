@@ -54,7 +54,7 @@ public class User {
     public String getCountry() {
         return this.country;
     }
-    
+
     public String getFirstName() {
         return this.firstName;
     }
@@ -76,13 +76,13 @@ public class User {
         Account account = new Account(name, this.getUUID(), bank, this);
         MongoCollection<Document> accountCollection = this.bank.database.getCollection("accounts");
         Document accountDocument = new Document("_id", account.getUUID())
-        .append("name", name)
-        .append("holderUUID", account.getHolder())
-        .append("balance", (double)0)
-        .append("localTransferLimit", account.getLocalTransferLimit())
-        .append("overseasTransferLimit", account.getOverseasTransferLimit())
-        .append("localWithdrawLimit", account.getLocalWithdrawLimit())
-        .append("overseasWithdrawLimit", account.getOverseasWithdrawLimit());
+                .append("name", name)
+                .append("holderUUID", account.getHolder())
+                .append("balance", (double)0)
+                .append("localTransferLimit", account.getLocalTransferLimit())
+                .append("overseasTransferLimit", account.getOverseasTransferLimit())
+                .append("localWithdrawLimit", account.getLocalWithdrawLimit())
+                .append("overseasWithdrawLimit", account.getOverseasWithdrawLimit());
         accountCollection.insertOne(accountDocument);
         this.accounts.add(account);
         MongoCollection<Document> uuidsCollection = this.bank.database.getCollection("uuids");
@@ -129,7 +129,7 @@ public class User {
 
     public ArrayList<Account> getAllAccounts() {
         return this.accounts;
-        
+
     }
     public ArrayList<String> getAllAccountsUUID(){
         ArrayList<String> ls = new ArrayList<>();
