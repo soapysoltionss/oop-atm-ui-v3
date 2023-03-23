@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
@@ -14,6 +16,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
@@ -67,9 +70,6 @@
                </styleClass>
                 </Button>
                 <Button fx:id="withdrawButton" contentDisplay="GRAPHIC_ONLY" graphicTextGap="5.0" mnemonicParsing="false" onAction="#showWithdrawPane" prefHeight="70.0" prefWidth="156.0" stylesheets="@style.css" text="Withdraw" textAlignment="CENTER" textFill="WHITE">
-                    <VBox.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                    </VBox.margin>
                     <graphic>
                         <ImageView fitHeight="56.0" fitWidth="66.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -87,6 +87,9 @@
                   <String fx:value="dashboard-backgroundColor" />
                   <String fx:value="note-border" />
                </styleClass>
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </VBox.margin>
                 </Button>
                 <Button fx:id="transferButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="5.0" mnemonicParsing="false" onAction="#showTransferPane" prefHeight="75.0" prefWidth="155.0" stylesheets="@style.css" text="Transfer" textAlignment="CENTER" textFill="WHITE">
                     <VBox.margin>
@@ -110,6 +113,28 @@
                   <String fx:value="note-border" />
                </styleClass>
                 </Button>
+            <Button fx:id="settingsButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="5.0" mnemonicParsing="false" onAction="#showSettingsPane" prefHeight="75.0" prefWidth="155.0" stylesheets="@style.css" text="Settings" textAlignment="CENTER" textFill="WHITE">
+               <graphic>
+                  <ImageView fitHeight="79.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons/settings.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <styleClass>
+                  <String fx:value="dashboard-backgroundColor" />
+                  <String fx:value="note-border" />
+               </styleClass>
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </VBox.margin>
+            </Button>
             </children>
             <BorderPane.margin>
                 <Insets />
@@ -309,7 +334,7 @@
                   </Label>
                     </children>
                 </Pane>
-                <Pane fx:id="transferPane" prefHeight="500.0" prefWidth="544.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <Pane fx:id="transferPane" prefHeight="500.0" prefWidth="544.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <children>
                         <Label layoutX="250.0" layoutY="60.0" text="Amount to transfer:">
                             <font>
@@ -371,6 +396,115 @@
                   </Label>
                     </children>
                 </Pane>
+            <Pane fx:id="settingsPane" layoutX="-1.0" layoutY="1.0" prefHeight="500.0" prefWidth="544.0" style="-fx-background-color: white;">
+               <children>
+                  <Button fx:id="confirmTransferButton1" layoutX="224.0" layoutY="393.0" mnemonicParsing="false" onAction="#confirmTransfer" prefHeight="38.0" prefWidth="95.0" style="-fx-background-radius: 15px;" styleClass="dashboard-backgroundColor" stylesheets="@style.css" text="Confirm" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <effect>
+                        <DropShadow blurType="GAUSSIAN" height="12.0" radius="5.5" width="12.0">
+                           <color>
+                              <Color red="0.3686274588108063" green="0.3450980484485626" blue="0.3450980484485626" />
+                           </color>
+                        </DropShadow>
+                     </effect>
+                  </Button>
+                  <Label fx:id="transferConfirmationText1" alignment="CENTER" layoutX="112.0" layoutY="362.0" prefHeight="31.0" prefWidth="322.0" textAlignment="CENTER" />
+                  <Label layoutX="208.0" layoutY="14.0" text="Settings">
+                     <font>
+                        <Font name="Constantia Italic" size="24.0" />
+                     </font>
+                  </Label>
+                  <ListView fx:id="accLsTransfer1" layoutX="25.0" layoutY="90.0" onMouseClicked="#handleAccClick" prefHeight="115.0" prefWidth="200.0" />
+                  <Label layoutX="25.0" layoutY="60.0" text="Choose Account:">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="25.0" layoutY="238.0" text="Account:">
+                     <font>
+                        <Font name="Gill Sans MT" size="20.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="accNumberTransfer1" layoutX="110.0" layoutY="202.0" prefHeight="27.0" prefWidth="118.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <ComboBox fx:id="settingsCombo" layoutX="281.0" layoutY="65.0" onMouseClicked="#settings" prefHeight="44.0" prefWidth="205.0" promptText="Choose Setting:">
+                   <items>
+                       <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="changeLocalWithdrawalLimit" />
+                        <String fx:value="changeLocalDepositLimit" />
+                        <String fx:value="changeOverseasWithdrawalLimit" />
+                        <String fx:value="changeOverseasDepositLimit" />
+                        <String fx:value="currencySetting" />
+                       </FXCollections>
+                   </items>
+                   </ComboBox>
+                  <VBox layoutX="233.0" layoutY="113.0" prefHeight="273.0" prefWidth="300.0">
+                     <children>
+                        <StackPane fx:id="selectedSettingPane" layoutX="10.0" layoutY="10.0" prefHeight="286.0" prefWidth="300.0">
+                           <children>
+                              <Pane fx:id="changeLocalWithdrawalLimit" prefHeight="200.0" prefWidth="200.0" visible="false">
+                                 <children>
+                                    <Label layoutX="10.0" layoutY="14.0" text="Change Local Withdrawal Limit:">
+                                       <font>
+                                          <Font name="System Bold" size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="localWithdrawLimitText" layoutX="10.0" layoutY="41.0" prefHeight="60.0" prefWidth="280.0" promptText="Enter limit">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </TextField>
+                                 </children></Pane>
+                              <Pane fx:id="changeLocalDepositLimit" prefHeight="200.0" prefWidth="200.0" visible="false">
+                                 <children>
+                                    <Label layoutX="10.0" layoutY="14.0" text="Change Local Deposit Limit:">
+                                       <font>
+                                          <Font name="System Bold" size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="localDepositLimitText" layoutX="10.0" layoutY="41.0" prefHeight="60.0" prefWidth="280.0" promptText="Enter limit">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </TextField>
+                                 </children></Pane>
+                              <Pane fx:id="changeOverseasWithdrawalLimit" prefHeight="200.0" prefWidth="200.0" visible="false">
+                                 <children>
+                                    <Label layoutY="14.0" text="Change Overseas Withdrawal Limit:">
+                                       <font>
+                                          <Font name="System Bold" size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="localWithdrawalLimitText" layoutX="10.0" layoutY="41.0" prefHeight="60.0" prefWidth="280.0" promptText="Enter limit">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </TextField>
+                                 </children></Pane>
+                              <Pane fx:id="changeOverseasDepositLimit" prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <Label layoutX="10.0" layoutY="14.0" text="Change Overseas Deposit Limit:">
+                                       <font>
+                                          <Font name="System Bold" size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="overseasDepositLimitText" layoutX="10.0" layoutY="41.0" prefHeight="60.0" prefWidth="280.0" promptText="Enter limit">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </TextField>
+                                 </children></Pane>
+                              <Pane fx:id="currencySetting" prefHeight="200.0" prefWidth="200.0" visible="false" />
+                           </children></StackPane>
+                     </children>
+                  </VBox>
+               </children>
+            </Pane>
             </children>
         </AnchorPane>
     </center>

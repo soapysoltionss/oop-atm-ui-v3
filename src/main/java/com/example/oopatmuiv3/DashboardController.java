@@ -5,6 +5,8 @@ import java.text.DecimalFormat;
 import java.util.Objects;
 
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -29,81 +31,55 @@ public class DashboardController {
     private Label accNumberTransfer;
     @FXML
     private Label usrID;
-
     @FXML
     private Label balance;
-
     @FXML
     private Button confirmDepositButton;
 
     @FXML
     private Button confirmTransferButton;
-
     @FXML
     private Button confirmWithdrawButton;
-
     @FXML
     private TextField depositAmountTextField;
-
     @FXML
     private Button depositButton;
-
     @FXML
     private Label depositConfirmationText;
-
     @FXML
     private Pane depositPane;
-
-
-
-
-
+    @FXML
+    private Pane settingsPane;
     @FXML
     private Button homeButton;
-
     @FXML
     private Pane homePane;
-
     @FXML
     private Label name;
-
     @FXML
     private TextField recieverTextField;
-
     @FXML
     private Button resetButton;
-
     @FXML
     private TextField resultAmount;
-
     @FXML
     private TextField transferAmountTextField;
-
     @FXML
     private Button transferButton;
-
     @FXML
     private Button swapButton;
-
     @FXML
     private Label transferConfirmationText;
-
     @FXML
     private Pane transferPane;
-
     @FXML
     private TextField withdrawAmountTextField;
-
     @FXML
     private Button withdrawButton;
-
     @FXML
     private Label withdrawConfirmationText;
-
     @FXML
     private Pane withdrawPane;
-
-
     @FXML
     private ListView<String> transactionLs;
     @FXML
@@ -114,11 +90,22 @@ public class DashboardController {
     private ListView<String> accLsWithdraw;
     @FXML
     private ListView<String> accLsTransfer;
-
     @FXML
-    private  TextField transferMemoField;
-
-
+    private ListView<String> accLsChangeSetting;
+    @FXML
+    private TextField transferMemoField;
+    @FXML
+    private ComboBox<String> settingsCombo;
+    @FXML
+    private Pane changeLocalWithdrawalLimit;
+    @FXML
+    private Pane changeLocalDepositLimit;
+    @FXML
+    private Pane changeOverseasDepositLimit;
+    @FXML
+    private Pane changeOverseasWithdrawalLimit;
+    @FXML
+    private Pane currencySetting;
     String errorStyle = "-fx-text-fill: RED;";
     String successStyle = "-fx-text-fill: GREEN;";
 
@@ -146,6 +133,7 @@ public class DashboardController {
         accLsDeposit.setItems(items);
         accLsWithdraw.setItems(items);
         accLsTransfer.setItems(items);
+        //accLsChangeSetting.setItems(items);
     }
 
 
@@ -246,6 +234,8 @@ public class DashboardController {
         depositPane.setVisible(false);
         withdrawPane.setVisible(false);
         transferPane.setVisible(false);
+        settingsPane.setVisible(false);
+
     }
 
     public void showDepositPane() {
@@ -253,6 +243,7 @@ public class DashboardController {
         depositPane.setVisible(true);
         withdrawPane.setVisible(false);
         transferPane.setVisible(false);
+        settingsPane.setVisible(false);
     }
 
     public void showWithdrawPane() {
@@ -260,6 +251,7 @@ public class DashboardController {
         depositPane.setVisible(false);
         withdrawPane.setVisible(true);
         transferPane.setVisible(false);
+        settingsPane.setVisible(false);
     }
 
     public void showTransferPane() {
@@ -267,6 +259,14 @@ public class DashboardController {
         depositPane.setVisible(false);
         withdrawPane.setVisible(false);
         transferPane.setVisible(true);
+        settingsPane.setVisible(false);
+    }
+    public void showSettingsPane() {
+        homePane.setVisible(false);
+        depositPane.setVisible(false);
+        withdrawPane.setVisible(false);
+        transferPane.setVisible(false);
+        settingsPane.setVisible(true);
     }
 
     public void logout() throws IOException {
@@ -324,5 +324,65 @@ public class DashboardController {
             d.show();
              */
         });
+        //accLsChangeSetting.setOnMouseClicked(mouseEvent -> {String selectItem = accLsChangeSetting.getSelectionModel().getSelectedItem().toString();
+            //selectedAcc = currentUser.getAllAccountsUUID().indexOf(selectItem);
+
+            //update labels
+            //setLabels();
+            /*
+            Dialog d = new Alert(Alert.AlertType.INFORMATION,selectItem);
+            d.show();
+             */
+        //});
     }
+
+    public void settings(){
+        settingsCombo.getSelectionModel().selectedItemProperty().addListener((selected, oldSetting, newSetting) -> {
+            changeLocalWithdrawalLimit.setVisible(false);
+            changeOverseasDepositLimit.setVisible(false);
+            changeOverseasWithdrawalLimit.setVisible(false);
+            changeLocalDepositLimit.setVisible(false);
+            currencySetting.setVisible(false);
+            if (oldSetting != null){
+                switch (oldSetting){
+                    case "changeLocalWithdrawalLimit":
+                        changeLocalWithdrawalLimit.setVisible(false);
+                        break;
+                    case "changeLocalDepositLimit":
+                        changeLocalDepositLimit.setVisible(false);
+                        break;
+                    case "changeOverseasWithdrawalLimit":
+                        changeOverseasDepositLimit.setVisible(false);
+                        break;
+                    case "changeOverseasDepositLimit":
+                        changeOverseasWithdrawalLimit.setVisible(false);
+                        break;
+                    case "currencySetting":
+                        currencySetting.setVisible(false);
+                        break;
+
+                }
+            }
+            if(newSetting != null){
+                switch(newSetting) {
+                    case "changeLocalWithdrawalLimit":
+                        changeLocalWithdrawalLimit.setVisible(true);
+                        break;
+                    case "changeLocalDepositLimit":
+                        changeLocalDepositLimit.setVisible(true);
+                        break;
+                    case "changeOverseasWithdrawalLimit":
+                        changeOverseasDepositLimit.setVisible(true);
+                        break;
+                    case "changeOverseasDepositLimit":
+                        changeOverseasWithdrawalLimit.setVisible(true);
+                        break;
+                    case "currencySetting":
+                        currencySetting.setVisible(true);
+                        break;
+                }
+            }
+        });
+    }
+
 }
