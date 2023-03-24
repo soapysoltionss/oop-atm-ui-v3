@@ -35,8 +35,9 @@ public class DashboardController {
     @FXML
     private Label balance;
     @FXML
+    private Label countryLabel;
+    @FXML
     private Button confirmDepositButton;
-
     @FXML
     private Button confirmTransferButton;
     @FXML
@@ -60,15 +61,9 @@ public class DashboardController {
     @FXML
     private TextField recieverTextField;
     @FXML
-    private Button resetButton;
-    @FXML
-    private TextField resultAmount;
-    @FXML
     private TextField transferAmountTextField;
     @FXML
     private Button transferButton;
-    @FXML
-    private Button swapButton;
     @FXML
     private Label transferConfirmationText;
     @FXML
@@ -118,6 +113,8 @@ public class DashboardController {
     @FXML
     private Label settingConfirmationText;
     @FXML
+    private Label currencySymbolBefore;
+    @FXML
     private Label currencyLabel;
     @FXML
     private ListView<String> currenciesListView;
@@ -133,12 +130,14 @@ public class DashboardController {
 
 
 
-
-    public void setLabels() {
+    @FXML
+    protected void setLabels() {
         name.setText(currentUser.getFirstName() + " " + currentUser.getLastName());
         usrID.setText(currentUser.getUUID());
         accNumber.setText(currentUser.getAccount(selectedAcc).getUUID());
-        balance.setText(String.format("$" + "%.2f",currentUser.getAccount(selectedAcc).getBalance()));
+        countryLabel.setText(currentUser.getCountry());
+        currencySymbolBefore.setText(currentUser.getAccount(0).getCurrency().getSymbolBefore());
+        balance.setText(String.format("%.2f",currentUser.getAccount(selectedAcc).getBalance()));
         ObservableList<String> transactions = FXCollections.observableArrayList(currentUser.getAccount(selectedAcc).getTransactionHistory());
         transactionLs.setItems(transactions);
 
@@ -157,10 +156,12 @@ public class DashboardController {
         ObservableList<String> currencies = FXCollections.observableArrayList(currentUser.getAvailableCurrencies());
         currenciesListView.setItems(currencies);
         currencyLabel.setText(currentUser.getAccount(selectedAcc).getCurrency().getSymbolAfter());
+
+
     }
 
-
-    public void confirmDeposit() {
+    @FXML
+    protected void confirmDeposit() {
         try{
             double amount = Double.parseDouble(depositAmountTextField.getText());
             currentUser.getAccount(selectedAcc).deposit(amount);
@@ -189,8 +190,8 @@ public class DashboardController {
             depositConfirmationText.setStyle(errorStyle);
         }
     }
-
-    public void confirmWithdraw() {
+    @FXML
+    protected void confirmWithdraw() {
         try {
             double amount = Double.parseDouble(withdrawAmountTextField.getText());
             currentUser.getAccount(selectedAcc).withdraw(amount);
@@ -224,8 +225,8 @@ public class DashboardController {
             withdrawConfirmationText.setStyle(errorStyle);
         }
     }
-
-    public void confirmTransfer() {
+    @FXML
+    protected void confirmTransfer() {
         /*
         //Local transfer
         try{
@@ -242,7 +243,7 @@ public class DashboardController {
             double amount = Double.parseDouble(transferAmountTextField.getText());
             String toAcc = recieverTextField.getText();
             String memo = transferMemoField.getText();
-            currentUser.getAccount(selectedAcc).otherTransfer(toAcc,memo,amount);
+            currentUser.getAccount(selectedAcc).transfer(toAcc,memo,amount);
             transferConfirmationText.setText("Successful transfer from "+currentUser.getAccount(selectedAcc).getUUID()+" to "+toAcc);
             transferConfirmationText.setStyle(successStyle);
 
@@ -261,8 +262,8 @@ public class DashboardController {
             transferConfirmationText.setStyle(errorStyle);
         }
     }
-
-    public void confirmSettings(){
+    @FXML
+    protected void confirmSettings(){
         try{
             double oldLimit;
             if (changeLocalWithdrawalLimit.isVisible()){
@@ -288,7 +289,7 @@ public class DashboardController {
                 currencyLabel.setText(currentUser.getAccount(selectedAcc).getCurrency().getSymbolAfter());
                 ArrayList<String> countryLs = currentUser.getCountries();
                 currentUser.setCountry(countryLs.get(selectedCurr));
-                settingConfirmationText.setText("test "+currentUser.getAccount(selectedAcc).getCurrency().getSymbolAfter());
+                settingConfirmationText.setText("Successfully set Currency to "+currentUser.getAccount(selectedAcc).getCurrency().getSymbolAfter());
                 settingConfirmationText.setStyle(successStyle);
             }
         }
@@ -303,8 +304,8 @@ public class DashboardController {
 
 
 
-
-    public void showHomePane() {
+    @FXML
+    protected void showHomePane() {
         setLabels();
         homePane.setVisible(true);
         depositPane.setVisible(false);
@@ -313,39 +314,40 @@ public class DashboardController {
         settingsPane.setVisible(false);
 
     }
-
-    public void showDepositPane() {
+    @FXML
+    protected void showDepositPane() {
         homePane.setVisible(false);
         depositPane.setVisible(true);
         withdrawPane.setVisible(false);
         transferPane.setVisible(false);
         settingsPane.setVisible(false);
     }
-
-    public void showWithdrawPane() {
+    @FXML
+    protected void showWithdrawPane() {
         homePane.setVisible(false);
         depositPane.setVisible(false);
         withdrawPane.setVisible(true);
         transferPane.setVisible(false);
         settingsPane.setVisible(false);
     }
-
-    public void showTransferPane() {
+    @FXML
+    protected void showTransferPane() {
         homePane.setVisible(false);
         depositPane.setVisible(false);
         withdrawPane.setVisible(false);
         transferPane.setVisible(true);
         settingsPane.setVisible(false);
     }
-    public void showSettingsPane() {
+    @FXML
+    protected void showSettingsPane() {
         homePane.setVisible(false);
         depositPane.setVisible(false);
         withdrawPane.setVisible(false);
         transferPane.setVisible(false);
         settingsPane.setVisible(true);
     }
-
-    public void logout() throws IOException {
+    @FXML
+    protected void logout() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("loginPage.fxml"));
         Parent root1 = fxmlLoader.load();
         Stage stage = new Stage();
@@ -358,51 +360,23 @@ public class DashboardController {
         stage2.close();
     }
 
+    @FXML
+    protected void handleAccClick(){
+        getLsViewClick(accLsOverview);
+        getLsViewClick(accLsDeposit);
+        getLsViewClick(accLsWithdraw);
+        getLsViewClick(accLsTransfer);
+        getLsViewClick(accLsSetting);
 
-    public void handleAccClick(){
-        accLsOverview.setOnMouseClicked(mouseEvent -> {String selectItem = accLsOverview.getSelectionModel().getSelectedItem().toString();
-            selectedAcc = currentUser.getAllAccountsUUID().indexOf(selectItem);
 
-            //update labels
-            setLabels();
-            /*
-            Dialog d = new Alert(Alert.AlertType.INFORMATION,selectItem);
-            d.show();
-             */
-        });
-        accLsDeposit.setOnMouseClicked(mouseEvent -> {String selectItem = accLsDeposit.getSelectionModel().getSelectedItem().toString();
-            selectedAcc = currentUser.getAllAccountsUUID().indexOf(selectItem);
-
-            //update labels
-            setLabels();
-            /*
-            Dialog d = new Alert(Alert.AlertType.INFORMATION,selectItem);
-            d.show();
-             */
-        });
-        accLsWithdraw.setOnMouseClicked(mouseEvent -> {String selectItem = accLsWithdraw.getSelectionModel().getSelectedItem().toString();
-            selectedAcc = currentUser.getAllAccountsUUID().indexOf(selectItem);
-
-            //update labels
-            setLabels();
-            /*
-            Dialog d = new Alert(Alert.AlertType.INFORMATION,selectItem);
-            d.show();
-             */
-        });
-        accLsTransfer.setOnMouseClicked(mouseEvent -> {String selectItem = accLsTransfer.getSelectionModel().getSelectedItem().toString();
-            selectedAcc = currentUser.getAllAccountsUUID().indexOf(selectItem);
-
-            //update labels
-            setLabels();
-            /*
-            Dialog d = new Alert(Alert.AlertType.INFORMATION,selectItem);
-            d.show();
-             */
-        });
-
-        accLsSetting.setOnMouseClicked(mouseEvent -> {String selectItem = accLsSetting.getSelectionModel().getSelectedItem().toString();
-            selectedAcc = currentUser.getAllAccountsUUID().indexOf(selectItem);
+    }
+    @FXML
+    private void getLsViewClick(ListView<String> lsView) throws NullPointerException{
+        lsView.setOnMouseClicked(mouseEvent -> {
+            try{
+                String selectItem = lsView.getSelectionModel().getSelectedItem().toString();
+                selectedAcc = currentUser.getAllAccountsUUID().indexOf(selectItem);
+            }catch (NullPointerException e){} //ignore if click empty option
 
             //update labels
             setLabels();
@@ -412,16 +386,19 @@ public class DashboardController {
              */
         });
     }
-
-    public void handleCurrencyClick(){
-        currenciesListView.setOnMouseClicked(mouseEvent -> {String selectItem = currenciesListView.getSelectionModel().getSelectedItem().toString();
-            selectedCurr = currentUser.getAvailableCurrencies().indexOf(selectItem);
+    @FXML
+    protected void handleCurrencyClick(){
+        currenciesListView.setOnMouseClicked(mouseEvent -> {
+            try{
+                String selectItem = currenciesListView.getSelectionModel().getSelectedItem().toString();
+                selectedCurr = currentUser.getAvailableCurrencies().indexOf(selectItem);
+            }catch (NullPointerException e){} //ignore if click empty option
             //update labels
             setLabels();
         });
     }
-
-    public void settings(){
+    @FXML
+    protected void settings(){
         settingsCombo.getSelectionModel().selectedItemProperty().addListener((selected, oldSetting, newSetting) -> {
             changeLocalWithdrawalLimit.setVisible(false);
             changeOverseasTransferLimit.setVisible(false);

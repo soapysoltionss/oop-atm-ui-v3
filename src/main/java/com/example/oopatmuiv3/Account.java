@@ -21,7 +21,7 @@ public class Account {
     private double localTransferLimit, overseasTransferLimit, localWithdrawLimit, overseasWithdrawLimit;
     private Currency currency;
 
-    public Account(String name, String holder, Bank bank, User user) {
+    protected Account(String name, String holder, Bank bank, User user) {
         this.name = name;
         this.holderUUID = holder;
         this.uuid = bank.getNewAccountUUID();
@@ -36,7 +36,7 @@ public class Account {
         this.currency = null;
     }
 
-    public String getSummaryLine() throws Exception {
+    protected String getSummaryLine() throws Exception {
         double balance = this.getBalance();
         if (balance >= 0) {
             return String.format("%s : %s %.02f %s : %s", this.uuid, this.currency.getSymbolBefore(),this.currency.convert(balance), this.currency.getSymbolAfter(),this.name);
@@ -45,7 +45,7 @@ public class Account {
         }
     }
 
-    public Account(String name, String holder, String uuid, ArrayList<Transaction> transactions, Bank bank, double balance, User user) {
+    protected Account(String name, String holder, String uuid, ArrayList<Transaction> transactions, Bank bank, double balance, User user) {
         this.uuid = uuid;
         this.name = name;
         this.holderUUID = holder;
@@ -60,75 +60,75 @@ public class Account {
 
     }
 
-    public Currency getCurrency() {
+    protected Currency getCurrency() {
         return this.currency;
     }
 
-    public void setCurrency(Currency c) {
+    protected void setCurrency(Currency c) {
         this.currency = c;
     }
 
-    public String getUUID() {
+    protected String getUUID() {
         return this.uuid;
     }
 
-    public double getLocalTransferLimit() {
+    protected double getLocalTransferLimit() {
         return this.localTransferLimit;
     }
 
-    public double getOverseasTransferLimit() {
+    protected double getOverseasTransferLimit() {
         return this.overseasTransferLimit;
     }
 
-    public double getLocalWithdrawLimit() {
+    protected double getLocalWithdrawLimit() {
         return this.localWithdrawLimit;
     }
 
-    public double getOverseasWithdrawLimit() {
+    protected double getOverseasWithdrawLimit() {
         return this.overseasWithdrawLimit;
     }
 
-    public void setLocalTransferLimit(double newLimit) {
+    protected void setLocalTransferLimit(double newLimit) {
         this.localTransferLimit = newLimit;
     }
 
-    public void setOverseasTransferLimit(double newLimit) {
+    protected void setOverseasTransferLimit(double newLimit) {
         this.overseasTransferLimit = newLimit;
     }
 
-    public void setLocalWithdrawLimit(double newLimit) {
+    protected void setLocalWithdrawLimit(double newLimit) {
         this.localWithdrawLimit= newLimit;
     }
 
-    public void setOverseasWithdrawLimit(double newLimit) {
+    protected void setOverseasWithdrawLimit(double newLimit) {
         this.overseasWithdrawLimit = newLimit;
     }
 
-    public void setUUID(String newUUID) {
+    protected void setUUID(String newUUID) {
         this.uuid = newUUID;
     }
 
-    public String getName() {
+    protected String getName() {
         return this.name;
     }
 
-    public String getHolder() {
+    protected String getHolder() {
         return this.holderUUID;
     }
 
-    public double getBalance() {
+    protected double getBalance() {
         return this.balance;
     }
 
-    public void setBalance(double balance) {
+    protected void setBalance(double balance) {
         this.balance = balance;
     }
 
-    public User getUser() {
+    protected User getUser() {
         return this.user;
     }
 
-    public Account getAccount(String number) {
+    protected Account getAccount(String number) {
         ArrayList<Account> accounts = new ArrayList<>();
         //System.out.println("Number of accounts" + this.getUser().numOfAccounts());
         int numOfAcc = this.getUser().numOfAccounts();
@@ -143,7 +143,7 @@ public class Account {
 
     }
 
-    public void deposit(double amount) throws InvalidAmountException, InvalidNoteDepositException {
+    protected void deposit(double amount) throws InvalidAmountException, InvalidNoteDepositException {
         if (amount <= 0 || amount == -0 || (BigDecimal.valueOf(amount).scale() > 2)) {
             throw new InvalidAmountException(amount);
         }
@@ -156,11 +156,11 @@ public class Account {
         addTransaction(this, new Transaction(amount, "Deposit", this.getUUID()));
         //this.transactions.add(new Transaction(amount, "Deposit", this.getUUID()));
     }
-    public boolean addTransactionNoDb(Transaction transaction) {
+    protected boolean addTransactionNoDb(Transaction transaction) {
         this.transactions.add(transaction);
         return true;
     }
-    public boolean addTransaction(Account account, Transaction transaction) {
+    protected boolean addTransaction(Account account, Transaction transaction) {
         this.transactions.add(transaction);
         try {
             MongoCollection<Document> transactionCollection = this.bank.database.getCollection("transactions");
@@ -176,7 +176,7 @@ public class Account {
         }
     }
 
-    public boolean changeTransferLimit(String type, double newLimit) {
+    protected boolean changeTransferLimit(String type, double newLimit) {
         try {
             if (type == "localTransferLimit") {
                 this.setLocalTransferLimit(newLimit);
@@ -199,7 +199,7 @@ public class Account {
         }
     }
 
-    public void printTransactionHistory() {
+    protected void printTransactionHistory() {
         System.out.printf("\nTransaction History for Account %s\n", this.uuid);
         for (int t = this.transactions.size()-1; t>0;t--) {
             try {
@@ -210,7 +210,7 @@ public class Account {
         }
         System.out.println();
     }
-    public ArrayList<String> getTransactionHistory() {
+    protected ArrayList<String> getTransactionHistory() {
         ArrayList<String> transactionLs = new ArrayList<>();
         for (int t = this.transactions.size()-1; t>0;t--) {
             try {
@@ -222,7 +222,7 @@ public class Account {
         return transactionLs;
     }
 
-    public boolean modifyBalance(double balance) {
+    protected boolean modifyBalance(double balance) {
         try {
             MongoCollection<Document> accountCollection = this.bank.database.getCollection("accounts");
             Bson filter = Filters.eq("_id", this.getUUID());
@@ -234,7 +234,7 @@ public class Account {
         }
     }
 
-    public boolean withdraw(double amount) throws InvalidWithdrawAndTransferAmountException, WithdrawLimitException, InvalidNoteWithdrawalException {
+    protected boolean withdraw(double amount) throws InvalidWithdrawAndTransferAmountException, WithdrawLimitException, InvalidNoteWithdrawalException {
         if (amount <= 0 || amount == -0 || (BigDecimal.valueOf(amount).scale() > 2) || amount > balance) {
             throw new InvalidWithdrawAndTransferAmountException(amount, balance);
         }
@@ -252,11 +252,11 @@ public class Account {
         return true;
     }
 
-    public ArrayList<Transaction> getTransactions() {
+    protected ArrayList<Transaction> getTransactions() {
         return transactions;
     }
 
-    public boolean receive(double amount) {
+    protected boolean receive(double amount) {
         try {
             if (amount <= 0) {
                 throw new Exception("Amount must be greater than 0");
@@ -269,7 +269,7 @@ public class Account {
         return true;
     }
 
-    public double getOtherBal(String accountNumber) {
+    protected double getOtherBal(String accountNumber) {
         MongoCollection<Document> accountCollection = this.bank.database.getCollection("accounts");
         Bson filter = Filters.eq("_id", accountNumber);
         double oldInfo = 0;
@@ -283,7 +283,7 @@ public class Account {
         return -1;
     }
 
-    public boolean otherTransfer(String accountNumber, String memo, double amount) throws InvalidWithdrawAndTransferAmountException, TransferLimitException
+    protected boolean transfer(String accountNumber, String memo, double amount) throws InvalidWithdrawAndTransferAmountException, TransferLimitException
     {
         if (amount <= 0 || amount == -0 || (BigDecimal.valueOf(amount).scale() > 2) || amount > this.balance){
             throw new InvalidWithdrawAndTransferAmountException(amount, this.balance);
@@ -346,7 +346,9 @@ public class Account {
 
     }
 
-    public boolean transfer(Account destination, String memo, double amount) {
+    //transfer to local only
+    /*
+    protected boolean transfer(Account destination, String memo, double amount) {
         try {
             if (balance < amount) {
                 throw new Exception("Amount must be greater than 0");
@@ -363,5 +365,6 @@ public class Account {
         destination.addTransaction(destination, new Transaction(amount, "Transfer from " + this.getUUID() + " - "+memo, destination.getUUID()));
         return true;
     }
+     */
 
 }

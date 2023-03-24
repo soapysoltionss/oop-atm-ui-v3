@@ -8,40 +8,40 @@ public class Transaction {
     private String memo;
     private String holder;
     
-    public Transaction(double amount, String holder) {
+    protected Transaction(double amount, String holder) {
         this.amount = amount;
         this.holder = holder;
         this.timestamp = new Date();
         this.memo = "";
     }
 
-    public Transaction(double amount, String memo, String holder) {
+    protected Transaction(double amount, String memo, String holder) {
         this(amount, holder);
         this.memo = memo;
         this.timestamp = new Date();
     }
 
-    public double getAmount() {
+    protected double getAmount() {
         return amount;
     }
 
-    public Date getTimeStamp() {
+    protected Date getTimeStamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Date timestamp) {
+    protected void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
 
-    public String getMemo() {
+    protected String getMemo() {
         return memo;
     }
 
-    public String getHolder() {
+    protected String getHolder() {
         return holder;
     }
 
-    public String getSummaryLine() throws Exception{
+    protected String getSummaryLine() throws Exception{
         try {
             if (this.amount >= 0) {
                 return String.format("%s : $%.02f : %s", this.timestamp.toString(), this.amount, this.memo);

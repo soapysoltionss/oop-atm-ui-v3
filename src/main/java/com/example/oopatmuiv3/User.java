@@ -20,7 +20,7 @@ public class User {
     private Bank bank;
     private String country;
 
-    public User(String firstName, String lastName, String pinHash, Bank bank, String country) {
+    protected User(String firstName, String lastName, String pinHash, Bank bank, String country) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.pinHash = pinHash;
@@ -30,52 +30,52 @@ public class User {
         this.country = country;
     }
 
-    public static String hashPin(String pin) throws NoSuchAlgorithmException {
+    protected static String hashPin(String pin) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("MD5");
         byte[] pinBytes = String.valueOf(pin).getBytes();
         return toHex(md.digest(pinBytes));
     }
 
 
-    public void setUUID(String newUUID) {
+    protected void setUUID(String newUUID) {
         this.uuid = newUUID;
     }
 
-    public static String toHex(byte[] bytes) {
+    protected static String toHex(byte[] bytes) {
         BigInteger bi = new BigInteger(1, bytes);
         return String.format("%0" + (bytes.length << 1) + "X", bi);
     }
 
-    public String getUUID() {
+    protected String getUUID() {
         return this.uuid;
     }
 
-    public String getPinHash() {
+    protected String getPinHash() {
         return this.pinHash;
     }
 
-    public String getCountry() {
+    protected String getCountry() {
         return this.country;
     }
 
-    public String getFirstName() {
+    protected String getFirstName() {
         return this.firstName;
     }
 
-    public String getLastName() {
+    protected String getLastName() {
         return this.lastName;
     }
 
-    public void setAccounts(ArrayList<Account> accounts) {
+    protected void setAccounts(ArrayList<Account> accounts) {
         this.accounts = accounts;
     }
 
-    public void printTransactionHistory(int acctIndex) {
+    protected void printTransactionHistory(int acctIndex) {
         this.accounts.get(acctIndex).printTransactionHistory();
     }
 
 
-    public Account addAccount(String name, Bank bank) {
+    protected Account addAccount(String name, Bank bank) {
         Account account = new Account(name, this.getUUID(), bank, this);
         MongoCollection<Document> accountCollection = this.bank.database.getCollection("accounts");
         Document accountDocument = new Document("_id", account.getUUID())
@@ -95,15 +95,15 @@ public class User {
         return account;
     }
 
-    public int numOfAccounts() {
+    protected int numOfAccounts() {
         return this.accounts.size();
     }
 
-    public Account getAccount(int index) {
+    protected Account getAccount(int index) {
         return this.accounts.get(index);
     }
 
-    public void printAccountSummary() throws Exception {
+    protected void printAccountSummary() throws Exception {
         System.out.printf("\n\n%s 's Accounts Summary", this.firstName);
         for (int a = 0;a<this.accounts.size();a++) {
             System.out.printf("\n%d) %s", a+1, this.getAccount(a).getSummaryLine());
@@ -111,7 +111,7 @@ public class User {
         System.out.println();
     }
 
-    public boolean validatePin(String pin) {
+    protected boolean validatePin(String pin) {
         try {
             String currentPinHash = hashPin(pin);
             //System.out.println(currentPinHash);
@@ -126,15 +126,15 @@ public class User {
         }
     }
 
-    public double getAccountBalance(int acctIndex) {
+    protected double getAccountBalance(int acctIndex) {
         return this.accounts.get(acctIndex).getBalance();
     }
 
-    public ArrayList<Account> getAllAccounts() {
+    protected ArrayList<Account> getAllAccounts() {
         return this.accounts;
 
     }
-    public ArrayList<String> getAllAccountsUUID(){
+    protected ArrayList<String> getAllAccountsUUID(){
         ArrayList<String> ls = new ArrayList<>();
         for(int i = 0; i<accounts.size(); i++){
             ls.add(accounts.get(i).getUUID());
@@ -142,7 +142,7 @@ public class User {
         return ls;
     }
 
-    public ArrayList<String> getAvailableCurrencies(){
+    protected ArrayList<String> getAvailableCurrencies(){
         ArrayList<String> currencyLs = new ArrayList<String>();
         for (int i = 0; i < this.bank.getCurrencies().size(); i++) {
             currencyLs.add(this.bank.getCurrencies().get(i).getCountry()+
@@ -152,7 +152,7 @@ public class User {
         }
         return currencyLs;
     }
-    public ArrayList<String> getCountries(){
+    protected ArrayList<String> getCountries(){
         ArrayList<String> countryLs = new ArrayList<String>();
         for (int i = 0; i < this.bank.getCurrencies().size(); i++) {
             countryLs.add(this.bank.getCurrencies().get(i).getCountry());
@@ -160,7 +160,7 @@ public class User {
         return countryLs;
     }
 
-    public boolean changeCountryNoDb(String country){
+    protected boolean changeCountryNoDb(String country){
         this.country = country;
         Integer noOfAcc = this.accounts.size();
         for (int i = 0; i<noOfAcc; i++){
@@ -174,7 +174,7 @@ public class User {
 
         return true;
     }
-    public boolean setCountry(String country) {
+    protected boolean setCountry(String country) {
         try {
             MongoCollection<Document> userCollection = this.bank.database.getCollection("users");
             Bson filter = Filters.eq("_id", this.getUUID());

@@ -28,7 +28,7 @@ public class Bank {
     private MongoCollection<Document> transactionsCollection;
     private MongoCollection<Document> currencyCollection;
 
-    public Bank(String name) {
+    protected Bank(String name) {
         this.name = name;
         //this.accounts = new ArrayList<>();
         ConnectionString connectionString = new ConnectionString("mongodb+srv://admin:admin@oop.ulsonro.mongodb.net/?retryWrites=true&w=majority");
@@ -49,7 +49,7 @@ public class Bank {
 
     }
 
-    public String getNewUserUUID() {
+    protected String getNewUserUUID() {
         String uuid;
         Random rng = new Random();
         int len = 10;
@@ -75,7 +75,7 @@ public class Bank {
         return uuid;
     }
 
-    public String getNewAccountUUID() {
+    protected String getNewAccountUUID() {
         String uuid;
         Random rng = new Random();
         int len = 10;
@@ -101,29 +101,29 @@ public class Bank {
         return uuid;
     }
 
-    public void refreshUsers() {
+    protected void refreshUsers() {
         this.users = this.getUsers();
     }
 
-    public void addUser(User user) {
+    protected void addUser(User user) {
         users.add(user);
     }
 
-    public int countUsers() {
+    protected int countUsers() {
         return this.users.size();
     }
 
-    public String getName() {
+    protected String getName() {
         return this.name;
     }
 
-    public void printInfo() {
+    protected void printInfo() {
         for (User user : users) {
             System.out.println(user.getFirstName());
         }
     }
 
-    public User userLogin(String uuid, String pin) throws InvalidLoginException {
+    protected User userLogin(String uuid, String pin) throws InvalidLoginException {
         for (User u:this.users) {
             if (u.getUUID().compareTo(uuid) == 0 && u.validatePin(pin)) {
                 return u;
@@ -133,7 +133,7 @@ public class Bank {
     }
 
 
-    public User addUser(String firstName, String lastName, String pin, String country) throws NoSuchAlgorithmException {
+    protected User addUser(String firstName, String lastName, String pin, String country) throws NoSuchAlgorithmException {
         User newUser = new User(firstName, lastName, User.hashPin(pin), this, country);
         this.users.add(newUser);
 
@@ -150,7 +150,7 @@ public class Bank {
         return newUser;
     }
 
-    public ArrayList<Currency> getCurrencies() {
+    protected ArrayList<Currency> getCurrencies() {
         ArrayList<Currency> currencyList = new ArrayList<>();
         for (Document currencyDoc : currencyCollection.find()) {
             String country = currencyDoc.getString("country");
@@ -163,7 +163,7 @@ public class Bank {
         return currencyList;
     }
 
-    public ArrayList<User> getUsers() {
+    protected ArrayList<User> getUsers() {
         ArrayList<User> userList = new ArrayList<>();
         this.currencies = getCurrencies();
         for (Document doc : usersCollection.find()) {

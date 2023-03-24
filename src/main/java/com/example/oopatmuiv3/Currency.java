@@ -6,36 +6,36 @@ public class Currency {
     private String symbolBefore;
     private String country;
 
-    public Currency(String country, String symbolAfter, String symbolBefore, double exchangeRate) {
+    protected Currency(String country, String symbolAfter, String symbolBefore, double exchangeRate) {
         this.country = country;
         this.symbolAfter = symbolAfter;
         this.symbolBefore = symbolBefore;
         this.exchangeRate = exchangeRate;
     }
 
-    public String getCountry() {
+    protected String getCountry() {
         return this.country;
     }
 
-    public String getSymbolAfter() {
+    protected String getSymbolAfter() {
         return this.symbolAfter;
     }
 
-    public String getSymbolBefore() {
+    protected String getSymbolBefore() {
         return this.symbolBefore;
     }
 
-    public double getExchangeRate() {
+    protected double getExchangeRate() {
         return this.exchangeRate;
     }
 
-    public double convert(double amount) {
+    protected double convert(double amount) {
         double theRate = this.getExchangeRate();
         double converted = amount*theRate;
         return converted;
     }
 
-    public double unconvert(double amount) {
+    protected double unconvert(double amount) {
         double theRate = this.getExchangeRate();
         double converted = amount/theRate;
         return converted;
