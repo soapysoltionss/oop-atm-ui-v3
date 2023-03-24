@@ -160,13 +160,29 @@ public class User {
         return countryLs;
     }
 
+    public boolean changeCountryNoDb(String country){
+        this.country = country;
+        Integer noOfAcc = this.accounts.size();
+        for (int i = 0; i<noOfAcc; i++){
+            Account a = this.getAccount(i);
+            for (Currency currency: this.bank.getCurrencies()) {
+                if (country.equalsIgnoreCase(currency.getCountry())) {
+                    a.setCurrency(currency);
+                }
+            }
+        }
+
+        return true;
+    }
     public boolean setCountry(String country) {
         try {
             MongoCollection<Document> userCollection = this.bank.database.getCollection("users");
             Bson filter = Filters.eq("_id", this.getUUID());
             Bson updateOperation = new Document("$set", new Document("country", country));
             userCollection.updateOne(filter, updateOperation);
-            this.bank.refreshUsers();
+
+            User u = this;
+            u.changeCountryNoDb(country);
             return true;
         } catch (MongoException e) {
             return false;
