@@ -8,7 +8,10 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Account {
     private String name;
@@ -20,6 +23,10 @@ public class Account {
     private User user;
     private double localTransferLimit, overseasTransferLimit, localWithdrawLimit, overseasWithdrawLimit;
     private Currency currency;
+
+    private Date lastTransactionTime;
+
+    private double todayAmount;
 
     protected Account(String name, String holder, Bank bank, User user) {
         this.name = name;
@@ -34,6 +41,8 @@ public class Account {
         this.localWithdrawLimit = 1000;
         this.overseasWithdrawLimit = 1000;
         this.currency = null;
+        this.lastTransactionTime = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        this.todayAmount = 0;
     }
 
     protected String getSummaryLine() throws Exception {
@@ -57,6 +66,8 @@ public class Account {
         this.localWithdrawLimit = 1000;
         this.overseasWithdrawLimit = 1000;
         this.user = user;
+        this.lastTransactionTime = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        this.todayAmount = 0;
 
     }
 
@@ -88,6 +99,10 @@ public class Account {
         return this.overseasWithdrawLimit;
     }
 
+    protected double getTodayAmount() { return this.todayAmount;}
+
+    protected Date getLastTransactionTime() { return this.getLastTransactionTime();}
+
     protected void setLocalTransferLimit(double newLimit) {
         this.localTransferLimit = newLimit;
     }
@@ -103,6 +118,10 @@ public class Account {
     protected void setOverseasWithdrawLimit(double newLimit) {
         this.overseasWithdrawLimit = newLimit;
     }
+
+    protected void setLastTransactionTime(Date date) { this.lastTransactionTime = date; }
+
+    protected void setTodayAmount(double amount) { this.todayAmount = amount; }
 
     protected void setUUID(String newUUID) {
         this.uuid = newUUID;
@@ -133,7 +152,7 @@ public class Account {
         //System.out.println("Number of accounts" + this.getUser().numOfAccounts());
         int numOfAcc = this.getUser().numOfAccounts();
         for (int i = 0; i < numOfAcc; i++) {
-            System.out.println(this.getUser().getAccount(i).getUUID());
+            //System.out.println(this.getUser().getAccount(i).getUUID());
             if (this.getUser().getAccount(i).getUUID().equals(number)) {
                 //System.out.println("SAME!");
                 return this.getUser().getAccount(i);
@@ -172,6 +191,20 @@ public class Account {
             transactionCollection.insertOne(transactionDocument);
             return true;
         } catch(Exception e) {
+            return false;
+        }
+    }
+
+    protected boolean updateAccount(Date newDate, double todayAmount) {
+        try {
+            MongoCollection<Document> accountCollection = this.bank.database.getCollection("accounts");
+            Bson filter = Filters.eq("_id", this.getUUID());
+            Bson updateOperation = new Document("$set", new Document()
+                    .append("todayAmount", todayAmount)
+                    .append("lastTransactionTime", newDate));
+            accountCollection.updateOne(filter, updateOperation);
+            return true;
+        } catch (MongoException e) {
             return false;
         }
     }
@@ -288,8 +321,26 @@ public class Account {
         if (amount <= 0 || amount == -0 || (BigDecimal.valueOf(amount).scale() > 2) || amount > this.balance){
             throw new InvalidWithdrawAndTransferAmountException(amount, this.balance);
         }
-        else if (amount > this.getLocalTransferLimit()){
+        LocalDate currentDateLocalDate = LocalDate.now();
+        Date currentDate = Date.from(currentDateLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        // check if day same, if same see is todayAmount + amount > limit
+        //System.out.println(String.valueOf(currentDate.getDay())+ this.lastTransactionTime.getDay());
+        if ((currentDate.getDay() != this.lastTransactionTime.getDay() && currentDate.getMonth() != this.lastTransactionTime.getMonth() && currentDate.getYear() != this.lastTransactionTime.getYear()) && (amount < this.localTransferLimit)) {
+            this.todayAmount = amount;
+            this.lastTransactionTime = currentDate;
+            this.updateAccount(currentDate, amount);
+        } else if ((currentDate.getDay() != this.lastTransactionTime.getDay() && currentDate.getMonth() != this.lastTransactionTime.getMonth() && currentDate.getYear() != this.lastTransactionTime.getYear()) && (amount > this.localTransferLimit)) {
+            this.todayAmount = 0;
+            this.updateAccount(currentDate, 0);
             throw new TransferLimitException(amount, this.getLocalTransferLimit());
+        }
+        else if ((currentDate.getDay() == this.lastTransactionTime.getDay() && currentDate.getMonth() == this.lastTransactionTime.getMonth() && currentDate.getYear() == this.lastTransactionTime.getYear()) && (this.todayAmount+amount > this.localTransferLimit)) {
+            throw new TransferLimitException(amount, this.getLocalTransferLimit());
+        } else {
+            this.lastTransactionTime = currentDate;
+            double newAmount = this.todayAmount+amount;
+            this.todayAmount = newAmount;
+            this.updateAccount(currentDate, newAmount);
         }
         this.balance -= amount;
         this.modifyBalance(this.balance);

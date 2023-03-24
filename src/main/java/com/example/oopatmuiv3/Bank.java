@@ -185,6 +185,9 @@ public class Bank {
                 double overseasTransferLimit = accountDoc.getDouble("overseasTransferLimit");
                 double localWithdrawLimit = accountDoc.getDouble("localWithdrawLimit");
                 double overseasWithdrawLimit = accountDoc.getDouble("overseasWithdrawLimit");
+                double todayAmount = accountDoc.getDouble("todayAmount");
+                Date lastTransactionTime = accountDoc.getDate("lastTransactionTime");
+                System.out.println(lastTransactionTime);
                 ArrayList<Transaction> transactions = new ArrayList<Transaction>();
                 for (Document transactionDoc : transactionsCollection.find(Filters.eq("holder", accountUUID))) {
                     double transactionAmount = transactionDoc.getDouble("amount");
@@ -200,6 +203,8 @@ public class Bank {
                         account.setCurrency(currency);
                     }
                 }
+                account.setTodayAmount(todayAmount);
+                account.setLastTransactionTime(lastTransactionTime);
                 account.setLocalTransferLimit(localTransferLimit);
                 account.setLocalWithdrawLimit(localWithdrawLimit);
                 account.setOverseasTransferLimit(overseasTransferLimit);
