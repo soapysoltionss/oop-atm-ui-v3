@@ -234,18 +234,6 @@ public class Account {
         }
     }
 
-    public boolean setCountry(String country) {
-        try {
-            MongoCollection<Document> userCollection = this.bank.database.getCollection("users");
-            Bson filter = Filters.eq("_id", this.getHolder());
-            Bson updateOperation = new Document("$set", new Document("country", country));
-            userCollection.updateOne(filter, updateOperation);
-            return true;
-        } catch (MongoException e) {
-            return false;
-        }
-    }
-
     public boolean withdraw(double amount) throws InvalidWithdrawAndTransferAmountException, WithdrawLimitException, InvalidNoteWithdrawalException {
         if (amount <= 0 || amount == -0 || (BigDecimal.valueOf(amount).scale() > 2) || amount > balance) {
             throw new InvalidWithdrawAndTransferAmountException(amount, balance);

@@ -1,7 +1,10 @@
 package com.example.oopatmuiv3;
 
+import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -139,9 +142,36 @@ public class User {
         return ls;
     }
 
+    public ArrayList<String> getAvailableCurrencies(){
+        ArrayList<String> currencyLs = new ArrayList<String>();
+        for (int i = 0; i < this.bank.getCurrencies().size(); i++) {
+            currencyLs.add(this.bank.getCurrencies().get(i).getCountry()+
+                    " : "+ this.bank.getCurrencies().get(i).getSymbolAfter()+
+                    " : "+ this.bank.getCurrencies().get(i).getSymbolBefore()+
+                    " : "+ this.bank.getCurrencies().get(i).getExchangeRate());
+        }
+        return currencyLs;
+    }
+    public ArrayList<String> getCountries(){
+        ArrayList<String> countryLs = new ArrayList<String>();
+        for (int i = 0; i < this.bank.getCurrencies().size(); i++) {
+            countryLs.add(this.bank.getCurrencies().get(i).getCountry());
+        }
+        return countryLs;
+    }
 
-
-
+    public boolean setCountry(String country) {
+        try {
+            MongoCollection<Document> userCollection = this.bank.database.getCollection("users");
+            Bson filter = Filters.eq("_id", this.getUUID());
+            Bson updateOperation = new Document("$set", new Document("country", country));
+            userCollection.updateOne(filter, updateOperation);
+            this.bank.refreshUsers();
+            return true;
+        } catch (MongoException e) {
+            return false;
+        }
+    }
 
 
 }

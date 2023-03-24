@@ -499,7 +499,20 @@
                                        </font>
                                     </TextField>
                                  </children></Pane>
-                              <Pane fx:id="currencySetting" prefHeight="200.0" prefWidth="200.0" visible="false" />
+                               <Pane fx:id="currencySetting" prefHeight="200.0" prefWidth="200.0" visible="false">
+                                   <children>
+                                       <Label layoutX="26.0" layoutY="1.0" text="Current Currency:">
+                                           <font>
+                                               <Font name="System Bold" size="18.0" />
+                                           </font>
+                                       </Label>
+                                       <Label fx:id="currencyLabel" layoutX="194.0" layoutY="1.0">
+                                           <font>
+                                               <Font name="System Bold" size="18.0" />
+                                           </font>
+                                       </Label>
+                                       <ListView fx:id="currenciesListView" layoutX="50.0" layoutY="79.0" onMouseClicked="#handleCurrencyClick" prefHeight="115.0" prefWidth="200.0" />
+                                   </children></Pane>
                            </children></StackPane>
                      </children>
                   </VBox>

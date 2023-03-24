@@ -2,6 +2,7 @@ package com.example.oopatmuiv3;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Objects;
 
 
@@ -116,6 +117,10 @@ public class DashboardController {
     private TextField overseasTransferLimitText;
     @FXML
     private Label settingConfirmationText;
+    @FXML
+    private Label currencyLabel;
+    @FXML
+    private ListView<String> currenciesListView;
 
     String errorStyle = "-fx-text-fill: RED;";
     String successStyle = "-fx-text-fill: GREEN;";
@@ -123,7 +128,9 @@ public class DashboardController {
     String bank_name = "kek";
     protected User currentUser;
     private Integer selectedAcc = 0;
+    private Integer selectedCurr = 0;
     DecimalFormat df = new DecimalFormat("0.00");
+
 
 
 
@@ -146,6 +153,10 @@ public class DashboardController {
         accLsWithdraw.setItems(items);
         accLsTransfer.setItems(items);
         accLsSetting.setItems(items);
+
+        ObservableList<String> currencies = FXCollections.observableArrayList(currentUser.getAvailableCurrencies());
+        currenciesListView.setItems(currencies);
+        currencyLabel.setText(currentUser.getAccount(selectedAcc).getCurrency().getSymbolAfter());
     }
 
 
@@ -274,16 +285,18 @@ public class DashboardController {
 
             }
             else if (currencySetting.isVisible()){
-
-
+                currencyLabel.setText(currentUser.getAccount(selectedAcc).getCurrency().getSymbolAfter());
+                ArrayList<String> countryLs = currentUser.getCountries();
+                currentUser.setCountry(countryLs.get(selectedCurr));
+                settingConfirmationText.setText("test "+currentUser.getAccount(selectedAcc).getCurrency().getSymbolAfter());
+                settingConfirmationText.setStyle(successStyle);
             }
         }
         catch (NumberFormatException e){
             settingConfirmationText.setText("Please Enter a Numeric Value");
             settingConfirmationText.setStyle(errorStyle);
         }
-
-
+        setLabels();
     }
 
 
@@ -397,6 +410,14 @@ public class DashboardController {
             Dialog d = new Alert(Alert.AlertType.INFORMATION,selectItem);
             d.show();
              */
+        });
+    }
+
+    public void handleCurrencyClick(){
+        currenciesListView.setOnMouseClicked(mouseEvent -> {String selectItem = currenciesListView.getSelectionModel().getSelectedItem().toString();
+            selectedCurr = currentUser.getAvailableCurrencies().indexOf(selectItem);
+            //update labels
+            setLabels();
         });
     }
 
