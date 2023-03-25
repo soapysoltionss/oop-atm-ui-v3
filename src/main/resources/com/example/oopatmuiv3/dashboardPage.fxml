@@ -177,7 +177,7 @@
     <center>
         <AnchorPane minHeight="500.0" prefWidth="545.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
             <children>
-                <Pane fx:id="homePane" layoutX="-1.0" layoutY="1.0" prefHeight="500.0" prefWidth="546.0" style="-fx-background-color: white;">
+                <Pane fx:id="homePane" layoutX="-1.0" layoutY="1.0" prefHeight="500.0" prefWidth="546.0" style="-fx-background-color: white;" visible="false">
                     <children>
                         <Label fx:id="balance" layoutX="46.0" layoutY="415.0" prefHeight="27.0" prefWidth="147.0" textAlignment="CENTER">
                             <font>
@@ -241,7 +241,7 @@
                   </Label>
                     </children>
                 </Pane>
-                <Pane fx:id="depositPane" prefHeight="500.0" prefWidth="544.0" style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <Pane fx:id="depositPane" prefHeight="500.0" prefWidth="544.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <children>
                         <Label layoutX="70.0" layoutY="290.0" text="Please Enter The Deposit Amount Below : ">
                             <font>
@@ -267,7 +267,7 @@
                                     </color>
                                 </DropShadow>
                             </effect></Button>
-                        <Label fx:id="depositConfirmationText" alignment="CENTER" layoutX="14.0" layoutY="225.0" prefHeight="35.0" prefWidth="478.0" textAlignment="CENTER">
+                        <Label fx:id="depositConfirmationText" alignment="CENTER" layoutX="9.0" layoutY="225.0" prefHeight="60.0" prefWidth="530.0" textAlignment="CENTER" wrapText="true">
                             <font>
                                 <Font size="14.0" />
                             </font></Label>
@@ -321,7 +321,7 @@
                                 </DropShadow>
                             </effect>
                         </Button>
-                        <Label fx:id="withdrawConfirmationText" alignment="CENTER" layoutX="14.0" layoutY="226.0" prefHeight="40.0" prefWidth="473.0" textAlignment="CENTER" />
+                        <Label fx:id="withdrawConfirmationText" alignment="CENTER" layoutX="9.0" layoutY="225.0" prefHeight="60.0" prefWidth="530.0" textAlignment="CENTER" wrapText="true" />
                         <Label layoutX="183.0" layoutY="14.0" text="Withdraw Money">
                             <font>
                                 <Font name="Constantia Italic" size="24.0" />
@@ -378,7 +378,7 @@
                                 <Font size="18.0" />
                             </font>
                         </TextField>
-                        <Label fx:id="transferConfirmationText" alignment="CENTER" layoutX="112.0" layoutY="362.0" prefHeight="31.0" prefWidth="322.0" textAlignment="CENTER" />
+                        <Label fx:id="transferConfirmationText" alignment="CENTER" layoutX="9.0" layoutY="362.0" prefHeight="40.0" prefWidth="530.0" textAlignment="CENTER" wrapText="true" />
                         <Label layoutX="190.0" layoutY="14.0" text="Transfer Money">
                             <font>
                                 <Font name="Constantia Italic" size="24.0" />
@@ -421,7 +421,7 @@
                         </DropShadow>
                      </effect>
                   </Button>
-                  <Label fx:id="settingConfirmationText" alignment="CENTER" layoutX="112.0" layoutY="362.0" prefHeight="31.0" prefWidth="322.0" textAlignment="CENTER" />
+                  <Label fx:id="settingConfirmationText" alignment="CENTER" layoutX="9.0" layoutY="362.0" prefHeight="40.0" prefWidth="530.0" textAlignment="CENTER" wrapText="true" />
                   <Label layoutX="208.0" layoutY="14.0" text="Settings">
                      <font>
                         <Font name="Constantia Italic" size="24.0" />
