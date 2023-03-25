@@ -448,8 +448,8 @@
                        <FXCollections fx:factory="observableArrayList">
                         <String fx:value="changeLocalWithdrawalLimit" />
                         <String fx:value="changeLocalTransferLimit" />
-                        <String fx:value="changeOverseasWithdrawalLimit" />
-                        <String fx:value="changeOverseasTransferLimit" />
+<!--                        <String fx:value="changeOverseasWithdrawalLimit" />-->
+<!--                        <String fx:value="changeOverseasTransferLimit" />-->
                         <String fx:value="currencySetting" />
                        </FXCollections>
                    </items>

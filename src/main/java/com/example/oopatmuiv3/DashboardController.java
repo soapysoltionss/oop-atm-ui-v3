@@ -165,7 +165,7 @@ public class DashboardController {
         try{
             double amount = Double.parseDouble(depositAmountTextField.getText());
             currentUser.getAccount(selectedAcc).deposit(amount);
-            depositConfirmationText.setText("Successfully Deposited: " + " $" + df.format(amount) + "\nCurrent Bal: " + "$" + df.format(currentUser.getAccount(selectedAcc).getBalance()));
+            depositConfirmationText.setText("Successfully Deposited: " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " " +df.format(amount)+  " " +currentUser.getAccount(selectedAcc).getCurrency().getSymbolAfter() +"\nCurrent Bal: " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " " + df.format(currentUser.getAccount(selectedAcc).getCurrency().unconvert(currentUser.getAccount(selectedAcc).getBalance())) + " " +currentUser.getAccount(selectedAcc).getCurrency().getSymbolAfter());
             depositConfirmationText.setStyle(successStyle);
 
 
@@ -195,7 +195,7 @@ public class DashboardController {
         try {
             double amount = Double.parseDouble(withdrawAmountTextField.getText());
             currentUser.getAccount(selectedAcc).withdraw(amount);
-            withdrawConfirmationText.setText("Successfully Withdrawn: " + "$" +df.format(amount)+"\nCurrent Bal: " + "$" + df.format(currentUser.getAccount(selectedAcc).getBalance()));
+            withdrawConfirmationText.setText("Successfully Withdrawn: " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " " +df.format(amount)+  " " +currentUser.getAccount(selectedAcc).getCurrency().getSymbolAfter() +"\nCurrent Bal: " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " " + df.format(currentUser.getAccount(selectedAcc).getCurrency().convert(currentUser.getAccount(selectedAcc).getBalance())) + " " +currentUser.getAccount(selectedAcc).getCurrency().getSymbolAfter());
             withdrawConfirmationText.setStyle(successStyle);
 
 
@@ -268,9 +268,9 @@ public class DashboardController {
             double oldLimit;
             if (changeLocalWithdrawalLimit.isVisible()){
                 oldLimit = currentUser.getAccount(selectedAcc).getLocalWithdrawLimit();
-                double newLimit = Double.parseDouble(localWithdrawLimitText.getText());
+                double newLimit = currentUser.getAccount(selectedAcc).getCurrency().unconvert(Double.parseDouble(localWithdrawLimitText.getText()));;
                 currentUser.getAccount(selectedAcc).changeTransferLimit("localWithdrawLimit", newLimit);
-                settingConfirmationText.setText("Successful change of Withdraw Limit from "+oldLimit+" to "+currentUser.getAccount(selectedAcc).getLocalWithdrawLimit());
+                settingConfirmationText.setText("Successful change of Withdrawal Limit from " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " " + df.format(oldLimit)+" to " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " "  + df.format(currentUser.getAccount(selectedAcc).getLocalWithdrawLimit()));
                 settingConfirmationText.setStyle(successStyle);
             }
             else if (changeOverseasWithdrawalLimit.isVisible()){
@@ -278,9 +278,9 @@ public class DashboardController {
             }
             else if (changeLocalTransferLimit.isVisible()){
                 oldLimit = currentUser.getAccount(selectedAcc).getLocalTransferLimit();
-                double newLimit = Double.parseDouble(localTransferLimitText.getText());
+                double newLimit = currentUser.getAccount(selectedAcc).getCurrency().unconvert(Double.parseDouble(localWithdrawLimitText.getText()));;
                 currentUser.getAccount(selectedAcc).changeTransferLimit("localTransferLimit", newLimit);
-                settingConfirmationText.setText("Successful change of Transfer Limit from "+oldLimit+" to "+currentUser.getAccount(selectedAcc).getLocalTransferLimit());
+                settingConfirmationText.setText("Successful change of Transfer Limit from " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " " + df.format(oldLimit)+" to " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " "  + df.format(currentUser.getAccount(selectedAcc).getLocalTransferLimit()));
             }
             else if (changeOverseasTransferLimit.isVisible()){
 

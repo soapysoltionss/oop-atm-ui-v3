@@ -12,9 +12,7 @@ import com.mongodb.client.model.Filters;
 import org.bson.Document;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Random;
+import java.util.*;
 
 public class Bank {
     private String name;
@@ -157,7 +155,12 @@ public class Bank {
             String symbolAfter = currencyDoc.getString("symbolAfter");
             String symbolBefore = currencyDoc.getString("symbolBefore");
             double exchangeRate = currencyDoc.getDouble("exchangeRate");
-            Currency newCurrency = new Currency(country, symbolAfter, symbolBefore, exchangeRate);
+            List<Integer> bsonDoubles = (List<Integer>) currencyDoc.get("notesArray");
+            //int[] d = bsonDoubles.stream().mapToInt(Integer::intValue).toArray();
+            //System.out.println("HI IM HERE");
+            //System.out.println(bsonDoubles);
+            String error = currencyDoc.getString("error");
+            Currency newCurrency = new Currency(country, symbolAfter, symbolBefore, exchangeRate, bsonDoubles, error);
             currencyList.add(newCurrency);
         }
         return currencyList;
@@ -187,7 +190,9 @@ public class Bank {
                 double overseasWithdrawLimit = accountDoc.getDouble("overseasWithdrawLimit");
                 double todayAmount = accountDoc.getDouble("todayAmount");
                 Date lastTransactionTime = accountDoc.getDate("lastTransactionTime");
-                System.out.println(lastTransactionTime);
+                double withdrawTodayAmt = accountDoc.getDouble("withdrawTodayAmt");
+                Date lastWithdrawalTime = accountDoc.getDate("lastWithdrawalTime");
+                //System.out.println(lastTransactionTime);
                 ArrayList<Transaction> transactions = new ArrayList<Transaction>();
                 for (Document transactionDoc : transactionsCollection.find(Filters.eq("holder", accountUUID))) {
                     double transactionAmount = transactionDoc.getDouble("amount");
@@ -205,6 +210,8 @@ public class Bank {
                 }
                 account.setTodayAmount(todayAmount);
                 account.setLastTransactionTime(lastTransactionTime);
+                account.setWithdrawTodayAmt(withdrawTodayAmt);
+                account.setLastWithdrawalTime(lastWithdrawalTime);
                 account.setLocalTransferLimit(localTransferLimit);
                 account.setLocalWithdrawLimit(localWithdrawLimit);
                 account.setOverseasTransferLimit(overseasTransferLimit);
