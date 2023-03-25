@@ -97,11 +97,15 @@ public class DashboardController {
     @FXML
     private Pane changeLocalTransferLimit;
     @FXML
-    private Pane changeOverseasTransferLimit;
-    @FXML
-    private Pane changeOverseasWithdrawalLimit;
-    @FXML
     private Pane currencySetting;
+    @FXML
+    private Pane changePIN;
+    @FXML
+    private PasswordField oldPin;
+    @FXML
+    private PasswordField newPIN;
+    @FXML
+    private PasswordField newReenterPin;
     @FXML
     private TextField localWithdrawLimitText;
     @FXML
@@ -273,17 +277,11 @@ public class DashboardController {
                 settingConfirmationText.setText("Successful change of Withdrawal Limit from " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " " + df.format(oldLimit)+" to " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " "  + df.format(currentUser.getAccount(selectedAcc).getLocalWithdrawLimit()));
                 settingConfirmationText.setStyle(successStyle);
             }
-            else if (changeOverseasWithdrawalLimit.isVisible()){
-
-            }
             else if (changeLocalTransferLimit.isVisible()){
                 oldLimit = currentUser.getAccount(selectedAcc).getLocalTransferLimit();
                 double newLimit = currentUser.getAccount(selectedAcc).getCurrency().unconvert(Double.parseDouble(localWithdrawLimitText.getText()));;
                 currentUser.getAccount(selectedAcc).changeTransferLimit("localTransferLimit", newLimit);
                 settingConfirmationText.setText("Successful change of Transfer Limit from " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " " + df.format(oldLimit)+" to " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " "  + df.format(currentUser.getAccount(selectedAcc).getLocalTransferLimit()));
-            }
-            else if (changeOverseasTransferLimit.isVisible()){
-
             }
             else if (currencySetting.isVisible()){
                 currencyLabel.setText(currentUser.getAccount(selectedAcc).getCurrency().getSymbolAfter());
@@ -291,6 +289,17 @@ public class DashboardController {
                 currentUser.setCountry(countryLs.get(selectedCurr));
                 settingConfirmationText.setText("Successfully set Currency to "+currentUser.getAccount(selectedAcc).getCurrency().getSymbolAfter());
                 settingConfirmationText.setStyle(successStyle);
+            }
+            else if (changePIN.isVisible()){
+                oldPin.getText();
+                newPIN.getText();
+                newReenterPin.getText();
+                //function go brrr
+
+                settingConfirmationText.setText("Successfully change PIN.");
+                settingConfirmationText.setText(successStyle);
+                //rmb to catch exception & set text (e.g. oldPin wrong, newPIN & reenterPIN match, oldPIN=newPIN etc.)
+
             }
         }
         catch (NumberFormatException e){
@@ -401,10 +410,9 @@ public class DashboardController {
     protected void settings(){
         settingsCombo.getSelectionModel().selectedItemProperty().addListener((selected, oldSetting, newSetting) -> {
             changeLocalWithdrawalLimit.setVisible(false);
-            changeOverseasTransferLimit.setVisible(false);
-            changeOverseasWithdrawalLimit.setVisible(false);
             changeLocalTransferLimit.setVisible(false);
             currencySetting.setVisible(false);
+            changePIN.setVisible(false);
             if (oldSetting != null){
                 switch (oldSetting){
                     case "changeLocalWithdrawalLimit":
@@ -413,14 +421,11 @@ public class DashboardController {
                     case "changeLocalTransferLimit":
                         changeLocalTransferLimit.setVisible(false);
                         break;
-                    case "changeOverseasWithdrawalLimit":
-                        changeOverseasTransferLimit.setVisible(false);
-                        break;
-                    case "changeOverseasDepositLimit":
-                        changeOverseasWithdrawalLimit.setVisible(false);
-                        break;
                     case "currencySetting":
                         currencySetting.setVisible(false);
+                        break;
+                    case "changePIN":
+                        changePIN.setVisible(false);
                         break;
 
                 }
@@ -433,14 +438,11 @@ public class DashboardController {
                     case "changeLocalTransferLimit":
                         changeLocalTransferLimit.setVisible(true);
                         break;
-                    case "changeOverseasWithdrawalLimit":
-                        changeOverseasTransferLimit.setVisible(true);
-                        break;
-                    case "changeOverseasDepositLimit":
-                        changeOverseasWithdrawalLimit.setVisible(true);
-                        break;
                     case "currencySetting":
                         currencySetting.setVisible(true);
+                        break;
+                    case "changePIN":
+                        changePIN.setVisible(true);
                         break;
                 }
             }
