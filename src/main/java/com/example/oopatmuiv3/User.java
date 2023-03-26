@@ -11,6 +11,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
+import static java.lang.Integer.parseInt;
+
 public class User {
     private String uuid;
     private String firstName;
@@ -35,6 +37,8 @@ public class User {
         byte[] pinBytes = String.valueOf(pin).getBytes();
         return toHex(md.digest(pinBytes));
     }
+
+
 
 
     protected void setUUID(String newUUID) {
@@ -68,6 +72,35 @@ public class User {
 
     protected void setAccounts(ArrayList<Account> accounts) {
         this.accounts = accounts;
+    }
+
+    protected void setPin(String newPinHash) {
+        this.pinHash = newPinHash;
+    }
+
+    protected boolean changePin(String oldPin, String newPin, String newPin2) throws NoSuchAlgorithmException, InvalidOldPinException, InvalidNewPinException {
+        if (validatePin(oldPin)) {
+            //System.out.println("Old pin correct");
+            if ((newPin.matches("\\d{4}")) && (newPin.equals(newPin2))) {
+                //System.out.println("hello new pin");
+                String newPinHash = hashPin(newPin);
+                setPin(newPinHash);
+                try {
+                    MongoCollection<Document> userCollection = this.bank.database.getCollection("users");
+                    Bson filter = Filters.eq("_id", this.getUUID());
+                    Bson updateOperation = new Document("$set", new Document("pinHash", newPinHash));
+                    userCollection.updateOne(filter, updateOperation);
+                    return true;
+                } catch (MongoException e) {
+                    return false;
+                }
+            } else {
+                throw new InvalidNewPinException();
+            }
+//
+        } else {
+            throw new InvalidOldPinException();
+        }
     }
 
     protected void printTransactionHistory(int acctIndex) {

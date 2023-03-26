@@ -187,17 +187,34 @@ public class Account {
 //            throw new InvalidNoteDepositException();
 //        }
         boolean checker = false;
-        for (int i = 0;i < this.getCurrency().getNotesArray().size(); i++) {
-            System.out.println(this.getCurrency().getNotesArray().get(i));
-            if (amount % this.getCurrency().getNotesArray().get(i) == 0) {
+        double checkingAmt = amount;
+        for (int i = this.getCurrency().getNotesArray().size()-1; i == 0; i--) {
+            checkingAmt = checkingAmt % this.getCurrency().getNotesArray().get(i);
+            if (checkingAmt == 0) {
                 checker = true;
             }
         }
         if (!checker) {
-            //System.out.println("cant deposit this amt!");
+            checkingAmt = amount;
+            for (int i = 0;i < this.getCurrency().getNotesArray().size(); i++) {
+                checkingAmt = checkingAmt % this.getCurrency().getNotesArray().get(i);
+                if (checkingAmt == 0) {
+                    checker = true;
+                }
+            }
+        }
+//        for (int i = 0;i < this.getCurrency().getNotesArray().size(); i++) {
+//            System.out.println(this.getCurrency().getNotesArray().get(i));
+//            if (amount % this.getCurrency().getNotesArray().get(i) == 0) {
+//                checker = true;
+//            }
+//        }
+        if (!checker) {
+            System.out.println("cant deposit this amt!");
             throw new InvalidNoteDepositException(this.getCurrency().getNotesArray(), this.getCurrency().getSymbolBefore());
         }
         amount = this.getCurrency().unconvert(amount);
+        System.out.println("Amount: " + amount);
         System.out.println(amount);
         balance += amount;
         this.modifyBalance(balance);
@@ -312,14 +329,24 @@ public class Account {
     }
 
     protected boolean withdraw(double amount) throws InvalidWithdrawAndTransferAmountException, WithdrawLimitException, InvalidNoteWithdrawalException {
-        if (amount <= 0 || amount == -0 || (BigDecimal.valueOf(amount).scale() > 2) || this.getCurrency().unconvert(amount) > balance) {
-            throw new InvalidWithdrawAndTransferAmountException(amount, balance);
+        if (amount <= 0 || amount == -0 || (BigDecimal.valueOf(amount).scale() > 2) || this.getCurrency().unconvert(amount) > this.balance) {
+            throw new InvalidWithdrawAndTransferAmountException(amount, balance, this.getCurrency());
         }
         boolean checker = false;
-        for (int i = 0;i < this.getCurrency().getNotesArray().size(); i++) {
-            //System.out.println(this.getCurrency().getNotesArray().get(i));
-            if (amount % this.getCurrency().getNotesArray().get(i) == 0) {
+        double checkingAmt = amount;
+        for (int i = this.getCurrency().getNotesArray().size()-1; i == 0; i--) {
+            checkingAmt = checkingAmt % this.getCurrency().getNotesArray().get(i);
+            if (checkingAmt == 0) {
                 checker = true;
+            }
+        }
+        if (!checker) {
+            checkingAmt = amount;
+            for (int i = 0;i < this.getCurrency().getNotesArray().size(); i++) {
+                checkingAmt = checkingAmt % this.getCurrency().getNotesArray().get(i);
+                if (checkingAmt == 0) {
+                    checker = true;
+                }
             }
         }
         if (!checker) {
@@ -329,8 +356,8 @@ public class Account {
         LocalDate currentDateLocalDate = LocalDate.now();
         Date currentDate = Date.from(currentDateLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         amount = this.getCurrency().unconvert(amount);
-        System.out.println("HERE");
-        System.out.println(amount);
+        //System.out.println("HERE");
+        //System.out.println(amount);
         if ((currentDate.getDay() != this.lastWithdrawalTime.getDay() && currentDate.getMonth() != this.lastWithdrawalTime.getMonth() && currentDate.getYear() != this.lastWithdrawalTime.getYear()) && (amount < this.localWithdrawLimit)) {
             this.withdrawTodayAmt = amount;
             this.lastWithdrawalTime = currentDate;
@@ -338,11 +365,20 @@ public class Account {
         } else if ((currentDate.getDay() != this.lastWithdrawalTime.getDay() && currentDate.getMonth() != this.lastWithdrawalTime.getMonth() && currentDate.getYear() != this.lastWithdrawalTime.getYear()) && (amount > this.localWithdrawLimit)) {
             this.withdrawTodayAmt = 0;
             this.updateAccountWithdrawal(currentDate, 0);
-            throw new WithdrawLimitException(amount, this.getLocalTransferLimit());
+            if (this.user.getCountry().equals("Japan")) {
+                //System.out.println("this");
+                throw new WithdrawLimitException(amount, Math.floor(this.getCurrency().convert(this.getLocalWithdrawLimit())), this.getCurrency());
+            } else {
+                throw new WithdrawLimitException(amount, this.getCurrency().convert(this.getLocalWithdrawLimit()), this.getCurrency());
+            }
         }
         else if ((currentDate.getDay() == this.lastWithdrawalTime.getDay() && currentDate.getMonth() == this.lastWithdrawalTime.getMonth() && currentDate.getYear() == this.lastWithdrawalTime.getYear()) && (this.withdrawTodayAmt+amount > this.localWithdrawLimit)) {
-            throw new WithdrawLimitException(amount, this.getLocalTransferLimit());
-        } else {
+            if (this.user.getCountry().equals("Japan")) {
+                //System.out.println("this");
+                throw new WithdrawLimitException(amount, Math.floor(this.getCurrency().convert(this.getLocalWithdrawLimit())), this.getCurrency());
+            } else {
+                throw new WithdrawLimitException(amount, this.getCurrency().convert(this.getLocalWithdrawLimit()), this.getCurrency());
+            }        } else {
             this.lastWithdrawalTime = currentDate;
             double newAmount = this.withdrawTodayAmt+amount;
             this.withdrawTodayAmt = newAmount;
@@ -395,13 +431,14 @@ public class Account {
 
     protected boolean transfer(String accountNumber, String memo, double amount) throws InvalidWithdrawAndTransferAmountException, TransferLimitException
     {
-        if (amount <= 0 || amount == -0 || (BigDecimal.valueOf(amount).scale() > 2) || amount > this.balance){
-            throw new InvalidWithdrawAndTransferAmountException(amount, this.balance);
+        if (amount <= 0 || amount == -0 || (BigDecimal.valueOf(amount).scale() > 2) || this.getCurrency().unconvert(amount) > this.balance){
+            throw new InvalidWithdrawAndTransferAmountException(amount, this.balance, this.getCurrency());
         }
         LocalDate currentDateLocalDate = LocalDate.now();
         Date currentDate = Date.from(currentDateLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         // check if day same, if same see is todayAmount + amount > limit
         //System.out.println(String.valueOf(currentDate.getDay())+ this.lastTransactionTime.getDay());
+        amount = this.getCurrency().unconvert(amount);
         if ((currentDate.getDay() != this.lastTransactionTime.getDay() && currentDate.getMonth() != this.lastTransactionTime.getMonth() && currentDate.getYear() != this.lastTransactionTime.getYear()) && (amount < this.localTransferLimit)) {
             this.todayAmount = amount;
             this.lastTransactionTime = currentDate;
@@ -409,10 +446,20 @@ public class Account {
         } else if ((currentDate.getDay() != this.lastTransactionTime.getDay() && currentDate.getMonth() != this.lastTransactionTime.getMonth() && currentDate.getYear() != this.lastTransactionTime.getYear()) && (amount > this.localTransferLimit)) {
             this.todayAmount = 0;
             this.updateAccount(currentDate, 0);
-            throw new TransferLimitException(amount, this.getLocalTransferLimit());
+            if (this.user.getCountry().equals("Japan")) {
+                System.out.println("this");
+                throw new TransferLimitException(amount, Math.floor(this.getCurrency().convert(this.getLocalTransferLimit())), this.getCurrency());
+            } else {
+                throw new TransferLimitException(amount, this.getLocalTransferLimit(), this.getCurrency());
+            }
         }
         else if ((currentDate.getDay() == this.lastTransactionTime.getDay() && currentDate.getMonth() == this.lastTransactionTime.getMonth() && currentDate.getYear() == this.lastTransactionTime.getYear()) && (this.todayAmount+amount > this.localTransferLimit)) {
-            throw new TransferLimitException(amount, this.getLocalTransferLimit());
+            if (this.user.getCountry().equals("Japan")) {
+                System.out.println("this");
+                throw new TransferLimitException(amount, Math.floor(this.getCurrency().convert(this.getLocalTransferLimit())), this.getCurrency());
+            } else {
+                throw new TransferLimitException(amount, this.getLocalTransferLimit(), this.getCurrency());
+            }
         } else {
             this.lastTransactionTime = currentDate;
             double newAmount = this.todayAmount+amount;

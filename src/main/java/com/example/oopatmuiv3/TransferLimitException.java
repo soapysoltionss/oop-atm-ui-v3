@@ -6,12 +6,17 @@ public class TransferLimitException extends Exception {
     private double amount;
     private double limit;
 
-    public TransferLimitException(double amount, double limit) {
+    private Currency currency;
+
+
+
+    public TransferLimitException(double amount, double limit, Currency currency) {
         this.amount = amount; 
         this.limit = limit;
+        this.currency = currency;
     }
 
     public String getMessage() {
-        return "Transfer Limit of "+Double.toString(this.limit);
+        return "Transfer Limit of : "+ this.currency.getSymbolBefore() + " " + Double.toString(this.limit);
     }
 }

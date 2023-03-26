@@ -1,6 +1,7 @@
 package com.example.oopatmuiv3;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -101,7 +102,7 @@ public class DashboardController {
     @FXML
     private Pane changePIN;
     @FXML
-    private PasswordField oldPin;
+    private PasswordField oldPIN;
     @FXML
     private PasswordField newPIN;
     @FXML
@@ -141,7 +142,7 @@ public class DashboardController {
         accNumber.setText(currentUser.getAccount(selectedAcc).getUUID());
         countryLabel.setText(currentUser.getCountry());
         currencySymbolBefore.setText(currentUser.getAccount(0).getCurrency().getSymbolBefore());
-        balance.setText(String.format("%.2f",currentUser.getAccount(selectedAcc).getBalance()));
+        balance.setText(String.format("%.2f",currentUser.getAccount(selectedAcc).getCurrency().convert(currentUser.getAccount(selectedAcc).getBalance())));
         ObservableList<String> transactions = FXCollections.observableArrayList(currentUser.getAccount(selectedAcc).getTransactionHistory());
         transactionLs.setItems(transactions);
 
@@ -169,7 +170,7 @@ public class DashboardController {
         try{
             double amount = Double.parseDouble(depositAmountTextField.getText());
             currentUser.getAccount(selectedAcc).deposit(amount);
-            depositConfirmationText.setText("Successfully Deposited: " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " " +df.format(amount)+  " " +currentUser.getAccount(selectedAcc).getCurrency().getSymbolAfter() +"\nCurrent Bal: " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " " + df.format(currentUser.getAccount(selectedAcc).getCurrency().unconvert(currentUser.getAccount(selectedAcc).getBalance())) + " " +currentUser.getAccount(selectedAcc).getCurrency().getSymbolAfter());
+            depositConfirmationText.setText("Successfully Deposited: " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " " +df.format(amount)+  " " +currentUser.getAccount(selectedAcc).getCurrency().getSymbolAfter() +"\nCurrent Bal: " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " " + df.format(currentUser.getAccount(selectedAcc).getCurrency().convert(currentUser.getAccount(selectedAcc).getBalance())) + " " +currentUser.getAccount(selectedAcc).getCurrency().getSymbolAfter());
             depositConfirmationText.setStyle(successStyle);
 
 
@@ -274,14 +275,14 @@ public class DashboardController {
                 oldLimit = currentUser.getAccount(selectedAcc).getLocalWithdrawLimit();
                 double newLimit = currentUser.getAccount(selectedAcc).getCurrency().unconvert(Double.parseDouble(localWithdrawLimitText.getText()));;
                 currentUser.getAccount(selectedAcc).changeTransferLimit("localWithdrawLimit", newLimit);
-                settingConfirmationText.setText("Successful change of Withdrawal Limit from " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " " + df.format(oldLimit)+" to " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " "  + df.format(currentUser.getAccount(selectedAcc).getLocalWithdrawLimit()));
+                settingConfirmationText.setText("Successful change of Withdrawal Limit from " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " " + df.format(currentUser.getAccount(selectedAcc).getCurrency().convert(oldLimit))+" to " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " "  + df.format(currentUser.getAccount(selectedAcc).getCurrency().convert(currentUser.getAccount(selectedAcc).getLocalWithdrawLimit())));
                 settingConfirmationText.setStyle(successStyle);
             }
             else if (changeLocalTransferLimit.isVisible()){
                 oldLimit = currentUser.getAccount(selectedAcc).getLocalTransferLimit();
                 double newLimit = currentUser.getAccount(selectedAcc).getCurrency().unconvert(Double.parseDouble(localWithdrawLimitText.getText()));;
                 currentUser.getAccount(selectedAcc).changeTransferLimit("localTransferLimit", newLimit);
-                settingConfirmationText.setText("Successful change of Transfer Limit from " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " " + df.format(oldLimit)+" to " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " "  + df.format(currentUser.getAccount(selectedAcc).getLocalTransferLimit()));
+                settingConfirmationText.setText("Successful change of Transfer Limit from " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " " + df.format(currentUser.getAccount(selectedAcc).getCurrency().convert(oldLimit))+" to " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " "  + df.format(currentUser.getAccount(selectedAcc).getCurrency().convert(currentUser.getAccount(selectedAcc).getLocalTransferLimit())));
             }
             else if (currencySetting.isVisible()){
                 currencyLabel.setText(currentUser.getAccount(selectedAcc).getCurrency().getSymbolAfter());
@@ -291,19 +292,27 @@ public class DashboardController {
                 settingConfirmationText.setStyle(successStyle);
             }
             else if (changePIN.isVisible()){
-                oldPin.getText();
-                newPIN.getText();
-                newReenterPin.getText();
+                String old = oldPIN.getText();
+                String newP = newPIN.getText();
+                String newP2 = newReenterPin.getText();
                 //function go brrr
-
+                currentUser.changePin(old, newP, newP2);
                 settingConfirmationText.setText("Successfully change PIN.");
-                settingConfirmationText.setText(successStyle);
+                settingConfirmationText.setStyle(successStyle);
                 //rmb to catch exception & set text (e.g. oldPin wrong, newPIN & reenterPIN match, oldPIN=newPIN etc.)
 
             }
         }
         catch (NumberFormatException e){
             settingConfirmationText.setText("Please Enter a Numeric Value");
+            settingConfirmationText.setStyle(errorStyle);
+        } catch (InvalidNewPinException e) {
+            settingConfirmationText.setText(e.getMessage());
+            settingConfirmationText.setStyle(errorStyle);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidOldPinException e) {
+            settingConfirmationText.setText(e.getMessage());
             settingConfirmationText.setStyle(errorStyle);
         }
         setLabels();
