@@ -50,7 +50,7 @@
                 </Text>
                 <TextField fx:id="userID" layoutX="55.0" layoutY="149.0" prefHeight="44.0" prefWidth="251.0" promptText="UserID" styleClass="textfield" stylesheets="@style.css" />
                 <PasswordField fx:id="loginPIN" layoutX="55.0" layoutY="219.0" prefHeight="44.0" prefWidth="251.0" promptText="PIN" styleClass="textfield" stylesheets="@style.css" />
-                <Button layoutX="105.0" layoutY="306.0" mnemonicParsing="false" onAction="#userLogin" prefHeight="32.0" prefWidth="132.0" style="-fx-background-radius: 20px;" styleClass="login-button" stylesheets="@style.css" text="Login" textFill="WHITE">
+                <Button fx:id="loginButton" layoutX="105.0" layoutY="306.0" mnemonicParsing="false" onAction="#userLogin" prefHeight="32.0" prefWidth="132.0" style="-fx-background-radius: 20px;" styleClass="login-button" stylesheets="@style.css" text="Login" textFill="WHITE">
                     <font>
                         <Font name="System Bold" size="14.0" />
                     </font>

@@ -159,7 +159,7 @@
                 <Label maxWidth="10000.0" prefHeight="140.0" prefWidth="471.0" HBox.hgrow="ALWAYS" />
                 <Button alignment="CENTER_RIGHT" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#logout" prefHeight="75.0" prefWidth="115.0" style="-fx-background-color: transparent;" text="Button" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                     <graphic>
-                        <ImageView fitHeight="64.0" fitWidth="69.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="logout" fitHeight="64.0" fitWidth="69.0" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@icons/logout.png" />
                             </image>
