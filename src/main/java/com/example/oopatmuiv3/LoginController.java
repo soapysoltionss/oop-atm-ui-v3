@@ -65,7 +65,7 @@ public class LoginController {
         dController.showHomePane();
         Stage stage = new Stage();
         stage.setTitle(bank_name);
-        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("icons/kek.jpg"))));
+        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("icons/kek.png"))));
         stage.setScene(new Scene(root1));
         stage.show();
     }

@@ -23,7 +23,7 @@
             <children>
                 <ImageView fitHeight="131.0" fitWidth="245.0" layoutX="53.0" layoutY="53.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@icons/kek.jpg" />
+                        <Image url="@icons/kek.png" />
                     </image>
                     <effect>
                         <ColorAdjust hue="-0.02" saturation="0.07" />
