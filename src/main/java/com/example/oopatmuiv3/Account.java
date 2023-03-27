@@ -11,7 +11,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 public class Account {
     private String name;
@@ -188,16 +190,20 @@ public class Account {
 //        }
         boolean checker = false;
         double checkingAmt = amount;
-        for (int i = this.getCurrency().getNotesArray().size()-1; i == 0; i--) {
-            checkingAmt = checkingAmt % this.getCurrency().getNotesArray().get(i);
+        Collections.reverse(this.getCurrency().getNotesArray());
+        for (int x = 0; x < this.getCurrency().getNotesArray().size(); x++){
+            checkingAmt = checkingAmt % this.getCurrency().getNotesArray().get(x);
             if (checkingAmt == 0) {
                 checker = true;
             }
         }
+        Collections.reverse(this.getCurrency().getNotesArray());
         if (!checker) {
+            //System.out.println("sec");
             checkingAmt = amount;
             for (int i = 0;i < this.getCurrency().getNotesArray().size(); i++) {
                 checkingAmt = checkingAmt % this.getCurrency().getNotesArray().get(i);
+                //System.out.println(this.getCurrency().getNotesArray().get(i));
                 if (checkingAmt == 0) {
                     checker = true;
                 }
@@ -334,16 +340,19 @@ public class Account {
         }
         boolean checker = false;
         double checkingAmt = amount;
-        for (int i = this.getCurrency().getNotesArray().size()-1; i == 0; i--) {
-            checkingAmt = checkingAmt % this.getCurrency().getNotesArray().get(i);
+        Collections.reverse(this.getCurrency().getNotesArray());
+        for (int x = 0; x < this.getCurrency().getNotesArray().size(); x++){
+            checkingAmt = checkingAmt % this.getCurrency().getNotesArray().get(x);
             if (checkingAmt == 0) {
                 checker = true;
             }
         }
+        Collections.reverse(this.getCurrency().getNotesArray());
         if (!checker) {
             checkingAmt = amount;
             for (int i = 0;i < this.getCurrency().getNotesArray().size(); i++) {
                 checkingAmt = checkingAmt % this.getCurrency().getNotesArray().get(i);
+                //System.out.println(this.getCurrency().getNotesArray().get(i));
                 if (checkingAmt == 0) {
                     checker = true;
                 }
