@@ -40,7 +40,7 @@ public class UITest extends ApplicationTest {
         stage.setScene(scene);
         stage.setResizable(false);
         stage.setTitle("Kek Bank");
-        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("icons/kek.jpg"))));
+        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("icons/kek.png"))));
         stage.show();
     }
 
