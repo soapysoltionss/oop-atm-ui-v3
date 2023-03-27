@@ -508,7 +508,7 @@
                                           <Font name="System Bold" size="18.0" />
                                        </font>
                                     </Label>
-                                    <Label fx:id="currentTransferLimit" layoutX="36.0" layoutY="57.0" prefHeight="27.0" prefWidth="260.0">
+                                    <Label fx:id="currentTransferLimit" layoutX="56.0" layoutY="57.0" prefHeight="27.0" prefWidth="240.0">
                                        <font>
                                           <Font name="System Bold" size="18.0" />
                                        </font>
