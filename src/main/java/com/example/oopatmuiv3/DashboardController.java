@@ -123,6 +123,17 @@ public class DashboardController {
     private Label currencyLabel;
     @FXML
     private ListView<String> currenciesListView;
+    @FXML
+    private Label currentWithdrawLimit;
+    @FXML
+    private Label currentTransferLimit;
+    @FXML
+    private Label currentWithdrawLimitCurrency;
+    @FXML
+    private Label currentTransferLimitCurrency;
+
+
+
 
     String errorStyle = "-fx-text-fill: RED;";
     String successStyle = "-fx-text-fill: GREEN;";
@@ -158,11 +169,16 @@ public class DashboardController {
         accLsTransfer.setItems(items);
         accLsSetting.setItems(items);
 
+        settingsCombo.getSelectionModel().selectFirst();
+
         ObservableList<String> currencies = FXCollections.observableArrayList(currentUser.getAvailableCurrencies());
         currenciesListView.setItems(currencies);
         currencyLabel.setText(currentUser.getAccount(selectedAcc).getCurrency().getSymbolAfter());
 
-
+        currentTransferLimit.setText(String.format("%.2f",currentUser.getAccount(selectedAcc).getCurrency().convert(currentUser.getAccount(selectedAcc).getLocalTransferLimit())));
+        currentTransferLimitCurrency.setText(currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore());
+        currentWithdrawLimit.setText(String.format("%.2f",currentUser.getAccount(selectedAcc).getCurrency().convert(currentUser.getAccount(selectedAcc).getLocalWithdrawLimit())));
+        currentWithdrawLimitCurrency.setText(currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore());
     }
 
     @FXML
@@ -280,9 +296,10 @@ public class DashboardController {
             }
             else if (changeLocalTransferLimit.isVisible()){
                 oldLimit = currentUser.getAccount(selectedAcc).getLocalTransferLimit();
-                double newLimit = currentUser.getAccount(selectedAcc).getCurrency().unconvert(Double.parseDouble(localWithdrawLimitText.getText()));;
+                double newLimit = currentUser.getAccount(selectedAcc).getCurrency().unconvert(Double.parseDouble(localTransferLimitText.getText()));;
                 currentUser.getAccount(selectedAcc).changeTransferLimit("localTransferLimit", newLimit);
                 settingConfirmationText.setText("Successful change of Transfer Limit from " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " " + df.format(currentUser.getAccount(selectedAcc).getCurrency().convert(oldLimit))+" to " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " "  + df.format(currentUser.getAccount(selectedAcc).getCurrency().convert(currentUser.getAccount(selectedAcc).getLocalTransferLimit())));
+                settingConfirmationText.setStyle(successStyle);
             }
             else if (currencySetting.isVisible()){
                 currencyLabel.setText(currentUser.getAccount(selectedAcc).getCurrency().getSymbolAfter());
@@ -301,6 +318,10 @@ public class DashboardController {
                 settingConfirmationText.setStyle(successStyle);
                 //rmb to catch exception & set text (e.g. oldPin wrong, newPIN & reenterPIN match, oldPIN=newPIN etc.)
 
+            }
+            else{
+                settingConfirmationText.setText("Please select a setting");
+                settingConfirmationText.setStyle(errorStyle);
             }
         }
         catch (NumberFormatException e){
@@ -370,7 +391,7 @@ public class DashboardController {
         Parent root1 = fxmlLoader.load();
         Stage stage = new Stage();
         stage.setTitle(bank_name);
-        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("icons/kek.jpg"))));
+        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("icons/kek.png"))));
         stage.setScene(new Scene(root1));
         stage.setResizable(false);
         stage.show();

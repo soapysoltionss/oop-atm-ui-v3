@@ -375,9 +375,9 @@ public class Account {
         else if ((currentDate.getDay() == this.lastWithdrawalTime.getDay() && currentDate.getMonth() == this.lastWithdrawalTime.getMonth() && currentDate.getYear() == this.lastWithdrawalTime.getYear()) && (this.withdrawTodayAmt+amount > this.localWithdrawLimit)) {
             if (this.user.getCountry().equals("Japan")) {
                 //System.out.println("this");
-                throw new WithdrawLimitException(amount, Math.floor(this.getCurrency().convert(this.getLocalWithdrawLimit())), this.getCurrency());
+                throw new WithdrawLimitException(amount, Math.floor(this.getCurrency().convert(this.getLocalWithdrawLimit())), this.getCurrency(), Math.floor(this.getCurrency().convert(this.withdrawTodayAmt)));
             } else {
-                throw new WithdrawLimitException(amount, this.getCurrency().convert(this.getLocalWithdrawLimit()), this.getCurrency());
+                throw new WithdrawLimitException(amount, this.getCurrency().convert(this.getLocalWithdrawLimit()), this.getCurrency(), this.getCurrency().convert(this.withdrawTodayAmt));
             }        } else {
             this.lastWithdrawalTime = currentDate;
             double newAmount = this.withdrawTodayAmt+amount;
@@ -450,15 +450,15 @@ public class Account {
                 System.out.println("this");
                 throw new TransferLimitException(amount, Math.floor(this.getCurrency().convert(this.getLocalTransferLimit())), this.getCurrency());
             } else {
-                throw new TransferLimitException(amount, this.getLocalTransferLimit(), this.getCurrency());
+                throw new TransferLimitException(amount, this.getCurrency().convert(this.getLocalTransferLimit()), this.getCurrency());
             }
         }
         else if ((currentDate.getDay() == this.lastTransactionTime.getDay() && currentDate.getMonth() == this.lastTransactionTime.getMonth() && currentDate.getYear() == this.lastTransactionTime.getYear()) && (this.todayAmount+amount > this.localTransferLimit)) {
             if (this.user.getCountry().equals("Japan")) {
                 System.out.println("this");
-                throw new TransferLimitException(amount, Math.floor(this.getCurrency().convert(this.getLocalTransferLimit())), this.getCurrency());
+                throw new TransferLimitException(amount, Math.floor(this.getCurrency().convert(this.getLocalTransferLimit())), this.getCurrency(), Math.floor(this.getCurrency().convert(this.todayAmount)));
             } else {
-                throw new TransferLimitException(amount, this.getLocalTransferLimit(), this.getCurrency());
+                throw new TransferLimitException(amount, this.getCurrency().convert(this.getLocalTransferLimit()), this.getCurrency(), this.getCurrency().convert(this.todayAmount));
             }
         } else {
             this.lastTransactionTime = currentDate;

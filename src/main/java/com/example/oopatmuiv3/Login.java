@@ -19,7 +19,7 @@ public class Login extends Application {
         stage.setScene(scene);
         stage.setResizable(false);
         stage.setTitle("Kek Bank");
-        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("icons/kek.jpg"))));
+        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("icons/kek.png"))));
         stage.show();
     }
     public static void main(String[] args) {
