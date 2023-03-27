@@ -169,7 +169,6 @@ public class DashboardController {
         accLsTransfer.setItems(items);
         accLsSetting.setItems(items);
 
-        settingsCombo.getSelectionModel().selectFirst();
 
         ObservableList<String> currencies = FXCollections.observableArrayList(currentUser.getAvailableCurrencies());
         currenciesListView.setItems(currencies);
@@ -379,6 +378,7 @@ public class DashboardController {
     }
     @FXML
     protected void showSettingsPane() {
+        settingsCombo.getSelectionModel().selectFirst();
         homePane.setVisible(false);
         depositPane.setVisible(false);
         withdrawPane.setVisible(false);
