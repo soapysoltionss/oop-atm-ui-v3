@@ -322,7 +322,10 @@
                                 </DropShadow>
                             </effect>
                         </Button>
-                        <Label fx:id="withdrawConfirmationText" alignment="CENTER" layoutX="9.0" layoutY="225.0" prefHeight="60.0" prefWidth="530.0" textAlignment="CENTER" wrapText="true" />
+                        <Label fx:id="withdrawConfirmationText" alignment="CENTER" layoutX="9.0" layoutY="225.0" prefHeight="60.0" prefWidth="530.0" textAlignment="CENTER" wrapText="true" >
+                            <font>
+                                <Font size="14.0" />
+                            </font></Label>
                         <Label layoutX="183.0" layoutY="14.0" text="Withdraw Money">
                             <font>
                                 <Font name="Constantia Italic" size="24.0" />
@@ -379,7 +382,10 @@
                                 <Font size="18.0" />
                             </font>
                         </TextField>
-                        <Label fx:id="transferConfirmationText" alignment="CENTER" layoutX="9.0" layoutY="362.0" prefHeight="40.0" prefWidth="530.0" textAlignment="CENTER" wrapText="true" />
+                        <Label fx:id="transferConfirmationText" alignment="CENTER" layoutX="9.0" layoutY="362.0" prefHeight="40.0" prefWidth="530.0" textAlignment="CENTER" wrapText="true" >
+                            <font>
+                                <Font size="14.0" />
+                            </font></Label>
                         <Label layoutX="190.0" layoutY="14.0" text="Transfer Money">
                             <font>
                                 <Font name="Constantia Italic" size="24.0" />
@@ -422,7 +428,10 @@
                         </DropShadow>
                      </effect>
                   </Button>
-                  <Label fx:id="settingConfirmationText" alignment="CENTER" layoutX="9.0" layoutY="362.0" prefHeight="40.0" prefWidth="530.0" textAlignment="CENTER" wrapText="true" />
+                  <Label fx:id="settingConfirmationText" alignment="CENTER" layoutX="9.0" layoutY="362.0" prefHeight="40.0" prefWidth="530.0" textAlignment="CENTER" wrapText="true" >
+                      <font>
+                          <Font size="14.0" />
+                      </font></Label>
                   <Label layoutX="208.0" layoutY="14.0" text="Settings">
                      <font>
                         <Font name="Constantia Italic" size="24.0" />

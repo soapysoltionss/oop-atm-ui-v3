@@ -178,6 +178,26 @@ public class DashboardController {
         currentTransferLimitCurrency.setText(currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore());
         currentWithdrawLimit.setText(String.format("%.2f",currentUser.getAccount(selectedAcc).getCurrency().convert(currentUser.getAccount(selectedAcc).getLocalWithdrawLimit())));
         currentWithdrawLimitCurrency.setText(currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore());
+
+
+        //reset input labels & confirmation labels
+        depositAmountTextField.setText("");
+        withdrawAmountTextField.setText("");
+        transferAmountTextField.setText("");
+        recieverTextField.setText("");
+        transferMemoField.setText("");
+        localWithdrawLimitText.setText("");
+        localTransferLimitText.setText("");
+        oldPIN.setText("");
+        newPIN.setText("");
+        newReenterPin.setText("");
+        depositConfirmationText.setText("");
+        withdrawConfirmationText.setText("");
+        transferConfirmationText.setText("");
+
+        if (!settingsPane.isVisible()){
+            settingConfirmationText.setText("");
+        }
     }
 
     @FXML
@@ -335,6 +355,7 @@ public class DashboardController {
             settingConfirmationText.setText(e.getMessage());
             settingConfirmationText.setStyle(errorStyle);
         }
+
         setLabels();
     }
 
@@ -354,6 +375,7 @@ public class DashboardController {
     }
     @FXML
     protected void showDepositPane() {
+        setLabels();
         homePane.setVisible(false);
         depositPane.setVisible(true);
         withdrawPane.setVisible(false);
@@ -362,6 +384,7 @@ public class DashboardController {
     }
     @FXML
     protected void showWithdrawPane() {
+        setLabels();
         homePane.setVisible(false);
         depositPane.setVisible(false);
         withdrawPane.setVisible(true);
@@ -370,6 +393,7 @@ public class DashboardController {
     }
     @FXML
     protected void showTransferPane() {
+        setLabels();
         homePane.setVisible(false);
         depositPane.setVisible(false);
         withdrawPane.setVisible(false);
@@ -378,6 +402,7 @@ public class DashboardController {
     }
     @FXML
     protected void showSettingsPane() {
+        setLabels();
         settingsCombo.getSelectionModel().selectFirst();
         homePane.setVisible(false);
         depositPane.setVisible(false);
