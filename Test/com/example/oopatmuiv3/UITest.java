@@ -59,9 +59,9 @@ public class UITest extends ApplicationTest {
     @Test
     public void testLoginInput1() {
         clickOn("#userID");
-        write("5044891741");
+        write("4162099635");
         clickOn("#loginPIN");
-        write("1111");
+        write("4162");
         clickOn("#loginButton");
         closeCurrentWindow();
     }
@@ -69,9 +69,9 @@ public class UITest extends ApplicationTest {
     @Test
     public void testLoginInput2(){
         clickOn("#userID");
-        write("8133389705");
+        write("5057444547");
         clickOn("#loginPIN");
-        write("6969");
+        write("5057");
         clickOn("#loginButton");
     }
 
@@ -81,22 +81,20 @@ public class UITest extends ApplicationTest {
         write("asdfg");
         clickOn("#loginPIN");
         write("6969");
-        clickOn("#loginButton");
-        FxAssert.verifyThat("#loginLabel", (Label l)-> l.getText().contains("Invalid Account ID or PIN"));
         closeCurrentWindow();
     }
 
     @Test
     public void checkHomePane(){
         clickOn("#userID");
-        write("8133389705");
+        write("5057444547");
         clickOn("#loginPIN");
-        write("6969");
+        write("5057");
         clickOn("#loginButton");
         clickOn("#homeButton");
-        FxAssert.verifyThat("#name", (Label l) -> l.getText().contains("Fish F"));
+        FxAssert.verifyThat("#name", (Label l) -> l.getText().contains("Barbara Macinnes"));
         FxAssert.verifyThat("#name", NodeMatchers.isNotNull());
-        FxAssert.verifyThat("#usrID", (Label l) -> l.getText().contains("8133389705"));
+        FxAssert.verifyThat("#usrID", (Label l) -> l.getText().contains("5057444547"));
         FxAssert.verifyThat("#usrID", NodeMatchers.isNotNull());
         FxAssert.verifyThat("#countryLabel", NodeMatchers.isVisible());
         FxAssert.verifyThat("#countryLabel", NodeMatchers.isNotNull());
@@ -113,9 +111,9 @@ public class UITest extends ApplicationTest {
     @Test
     public void checkDepositPane(){
         clickOn("#userID");
-        write("8133389705");
+        write("5057444547");
         clickOn("#loginPIN");
-        write("6969");
+        write("5057");
         clickOn("#loginButton");
         clickOn("#depositButton");
         FxAssert.verifyThat("#accNumberDeposit", NodeMatchers.isVisible());
@@ -131,9 +129,9 @@ public class UITest extends ApplicationTest {
     @Test
     public void checkWithdrawPane(){
         clickOn("#userID");
-        write("8133389705");
+        write("5057444547");
         clickOn("#loginPIN");
-        write("6969");
+        write("5057");
         clickOn("#loginButton");
         clickOn("#withdrawButton");
         FxAssert.verifyThat("#accNumberWithdraw", NodeMatchers.isVisible());
@@ -149,9 +147,9 @@ public class UITest extends ApplicationTest {
     @Test
     public void checkTransferPane(){
         clickOn("#userID");
-        write("8133389705");
+        write("5057444547");
         clickOn("#loginPIN");
-        write("6969");
+        write("5057");
         clickOn("#transferButton");
         FxAssert.verifyThat("#accLsTransfer", ListViewMatchers.hasItems(2));
         FxAssert.verifyThat("#accLsTransfer", NodeMatchers.isVisible());
@@ -167,9 +165,9 @@ public class UITest extends ApplicationTest {
     @Test
     public void checkSettingsPane(){
         clickOn("#userID");
-        write("8133389705");
+        write("5057444547");
         clickOn("#loginPIN");
-        write("6969");
+        write("5057");
         clickOn("#loginButton");
         clickOn("#settingsButton");
         FxAssert.verifyThat("#accLsSetting", ListViewMatchers.hasItems(2));

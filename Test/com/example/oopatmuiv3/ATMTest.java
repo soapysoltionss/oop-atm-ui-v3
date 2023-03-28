@@ -23,8 +23,8 @@ public class ATMTest {
     public void setup() {
         try {
             Bank testBank = new Bank("TestBank");
-            testUser = testBank.userLogin("5044891741", "1111");
-            testUser2 = testBank.userLogin("8133389705", "6969");
+            testUser = testBank.userLogin("4162099635", "4162");
+            testUser2 = testBank.userLogin("5057444547", "5057");
             testUser.setCountry("Singapore");
             testUser2.setCountry("Singapore");
         } catch (InvalidLoginException e) {
@@ -120,21 +120,19 @@ public class ATMTest {
         }
     }
 
-    //Demo Acc needed
     @Test
     @DisplayName("Invalid amount as cannot withdraw past max")
     public void testWithdrawLimitException() {
         for (i = 0; i < testUser.getAllAccountsUUID().size(); i++) {
-            assertThrows(WithdrawLimitException.class, () -> testUser.getAccount(i).withdraw(1000));
+            assertThrows(InvalidWithdrawAndTransferAmountException.class, () -> testUser.getAccount(i).withdraw(1000));
         }
     }
 
-    //Demo Acc needed
     @Test
     @DisplayName("Invalid amount as not accepted notes")
     public void testInvalidWithdrawalException() {
         for (i = 0; i < testUser.getAllAccountsUUID().size(); i++) {
-            assertThrows(InvalidNoteWithdrawalException.class, () -> testUser.getAccount(i).withdraw(60));
+            assertThrows(InvalidNoteWithdrawalException.class, () -> testUser.getAccount(i).withdraw(103));
         }
     }
 
@@ -142,18 +140,28 @@ public class ATMTest {
     // ------------------------------------------------------------------------------------------
 
     //TRANSFER CASES
-    // Need demo acc
     @Test
-    @DisplayName("Should not throw an exception transfer")
-    void testTransfer() throws InvalidWithdrawAndTransferAmountException, TransferLimitException {
+    @DisplayName("Should not throw an exception transfer own acc")
+    public void testTransferInternalAcc() throws InvalidWithdrawAndTransferAmountException, TransferLimitException {
         for(i = 0; i < testUser2.getAllAccountsUUID().size(); i++) {
-            //double startBal = testUser.getAccount(0).getBalance();
-            testUser2.getAccount(i).transfer("8133389705", "transferTest", 66.66);
+            testUser2.getAccount(i).transfer("7337611016", "transferTest", 20);
             testUser2.getCountry();
             assertDoesNotThrow(() -> InvalidWithdrawAndTransferAmountException.class);
             assertDoesNotThrow(() -> TransferLimitException.class);
         }
     }
+
+    @Test
+    @DisplayName("Should not throw an exception transfer other acc")
+    public void testTransferOtherAcc() throws InvalidWithdrawAndTransferAmountException, TransferLimitException{
+        for(i = 0; i < testUser2.getAllAccountsUUID().size(); i++) {
+            testUser2.getAccount(i).transfer("4763285356", "transferTest", 20);
+            testUser2.getCountry();
+            assertDoesNotThrow(() -> InvalidWithdrawAndTransferAmountException.class);
+            assertDoesNotThrow(() -> TransferLimitException.class);
+        }
+    }
+
 
     @Test
     @DisplayName("Invalid amount due to transfer amount = 0")
@@ -183,13 +191,11 @@ public class ATMTest {
             assertThrows(InvalidWithdrawAndTransferAmountException.class, () -> testUser2.getAccount(i).transfer("8133389705", "transferTest", 1.696969));
         }
     }
-    // TO CHANGE
-
     @Test
     @DisplayName("Invalid transfer due to transfer limit")
     public void testTransferLimit(){
         for(i = 0; i < testUser2.getAllAccountsUUID().size(); i++) {
-            assertThrows(TransferLimitException.class, () ->
+            assertThrows(InvalidWithdrawAndTransferAmountException.class, () ->
                     testUser2.getAccount(i).transfer("8133389705", "transferTest", 100000));
         }
     }
