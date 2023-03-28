@@ -13,7 +13,6 @@ public class ATMTest {
     private User testUser2;
 
     private int i;
-    private Currency currency;
 
     //Test Objects
     @BeforeEach
