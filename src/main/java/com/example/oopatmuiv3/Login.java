@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 
 import java.util.Objects;
 
-
+// Start javafx application with loginPage
 public class Login extends Application {
     @Override
     public void start(Stage stage) throws Exception {

@@ -5,7 +5,8 @@ import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 import javafx.application.Application;
-  
+
+// Socket Programming
 public class Client {  
     public static void main(String[] args) throws Exception {
         Socket socket = null;  

@@ -16,6 +16,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+// Dashboard controller for java fxml dashboardPage
+// Declaring components in fxml with functions
 public class LoginController {
 
     @FXML
@@ -56,6 +58,7 @@ public class LoginController {
     String successStyle = "-fx-border-color: #A9A9A9;";
     String textFillError = "-fx-text-fill: RED";
 
+    // Launches dashboard controller if user login is successful (change from loginPage.fxml to dashboardPage.fxml)
     private void launchDashboard(User c) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("dashboardPage.fxml"));
         Parent root1 = fxmlLoader.load();
@@ -69,10 +72,12 @@ public class LoginController {
         stage.setScene(new Scene(root1));
         stage.show();
     }
+    // closes the window for login Page for nicer UI :)
     private void closeWindow(){
         Stage stage = (Stage) userID.getScene().getWindow();
         stage.close();}
 
+    // user Login credentials are validated with the database once entered in the textboxes in loginPage.fxml
     @FXML
     public void userLogin() {
         try{
@@ -91,6 +96,7 @@ public class LoginController {
         }
     }
 
+    // Sets the demo accounts for presentation
     public void setDemoAcc1(){
         userID.setText("5044891741");
         loginPIN.setText("1111");

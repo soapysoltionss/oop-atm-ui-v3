@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 
+// Declare variables
 public class Account {
 
     private String name;
@@ -53,7 +54,7 @@ public class Account {
 
     }
 
-    // this function is to get the balance, symbol of the currency and the amount
+    // this function is to get uuid, the balance, symbol of the currency and the amount to display in CLI
     protected String getSummaryLine() throws Exception {
         double balance = this.getBalance();
         if (balance >= 0) {
@@ -63,6 +64,7 @@ public class Account {
         }
     }
 
+    // get each account details for each user
     protected Account(String name, String holder, String uuid, ArrayList<Transaction> transactions, Bank bank, double balance, User user) {
         this.uuid = uuid;
         this.name = name;

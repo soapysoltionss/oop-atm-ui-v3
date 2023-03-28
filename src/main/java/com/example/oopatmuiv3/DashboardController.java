@@ -18,7 +18,8 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-
+// Dashboard controller for java fxml dashboardPage
+// Declaring components in fxml with functions
 public class DashboardController {
 
     @FXML
@@ -128,20 +129,20 @@ public class DashboardController {
     @FXML
     private Label currentTransferLimitCurrency;
 
-
-
-
+    // Strings which hold css elements to easily re-use in the application
     String errorStyle = "-fx-text-fill: RED;";
     String successStyle = "-fx-text-fill: GREEN;";
 
     String bank_name = "kek";
+
+    // Initialise User currentUser, selected Acc, selected Currency and DecimalFormat import
     protected User currentUser;
     private Integer selectedAcc = 0;
     private Integer selectedCurr = 0;
     DecimalFormat df = new DecimalFormat("0.00");
 
 
-
+    // Set to display label component in fxml with database values
     @FXML
     protected void setLabels() {
         name.setText(currentUser.getFirstName() + " " + currentUser.getLastName());
@@ -196,6 +197,7 @@ public class DashboardController {
         }
     }
 
+    // deposit successful label component with exceptions for deposit cases, throws red error (elaborated more in test case)
     @FXML
     protected void confirmDeposit() {
         try{
@@ -226,6 +228,7 @@ public class DashboardController {
             depositConfirmationText.setStyle(errorStyle);
         }
     }
+    // withdraw successful label component with exceptions for withdraw cases, throws red error (elaborated more in test case)
     @FXML
     protected void confirmWithdraw() {
         try {
@@ -261,6 +264,7 @@ public class DashboardController {
             withdrawConfirmationText.setStyle(errorStyle);
         }
     }
+    // withdraw successful label component with exceptions for withdraw cases, throws red error (elaborated more in test case)
     @FXML
     protected void confirmTransfer() {
         try{
@@ -286,6 +290,7 @@ public class DashboardController {
             transferConfirmationText.setStyle(errorStyle);
         }
     }
+    // settings successful label component with exceptions for settings cases, throws red errors (elaborated more in test case)
     @FXML
     protected void confirmSettings(){
         try{
@@ -315,7 +320,7 @@ public class DashboardController {
                 String old = oldPIN.getText();
                 String newP = newPIN.getText();
                 String newP2 = newReenterPin.getText();
-                //function go brrr
+                // change pin of uer
                 currentUser.changePin(old, newP, newP2);
                 settingConfirmationText.setText("Successfully change PIN.");
                 settingConfirmationText.setStyle(successStyle);
@@ -343,10 +348,7 @@ public class DashboardController {
         setLabels();
     }
 
-
-
-
-
+    // toggle through buttons to display each pane (home pane visible)
     @FXML
     protected void showHomePane() {
         setLabels();
@@ -357,6 +359,7 @@ public class DashboardController {
         settingsPane.setVisible(false);
 
     }
+    // toggle through buttons to display each pane (deposit pane visible)
     @FXML
     protected void showDepositPane() {
         setLabels();
@@ -366,6 +369,7 @@ public class DashboardController {
         transferPane.setVisible(false);
         settingsPane.setVisible(false);
     }
+    // toggle through buttons to display each pane (withdraw pane visible)
     @FXML
     protected void showWithdrawPane() {
         setLabels();
@@ -375,6 +379,7 @@ public class DashboardController {
         transferPane.setVisible(false);
         settingsPane.setVisible(false);
     }
+    // toggle through buttons to display each pane (transfer pane visible)
     @FXML
     protected void showTransferPane() {
         setLabels();
@@ -384,6 +389,7 @@ public class DashboardController {
         transferPane.setVisible(true);
         settingsPane.setVisible(false);
     }
+    // toggle through buttons to display each pane (settings pane visible)
     @FXML
     protected void showSettingsPane() {
         setLabels();
@@ -394,6 +400,7 @@ public class DashboardController {
         transferPane.setVisible(false);
         settingsPane.setVisible(true);
     }
+    // logout button to return to login page
     @FXML
     protected void logout() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("loginPage.fxml"));
@@ -407,7 +414,7 @@ public class DashboardController {
         Stage stage2 = (Stage) balance.getScene().getWindow();
         stage2.close();
     }
-
+    // get Listview to display accounts per user
     @FXML
     protected void handleAccClick(){
         getLsViewClick(accLsOverview);
@@ -418,6 +425,7 @@ public class DashboardController {
 
 
     }
+    // get Listview to display all accounts user has, that will catch if user has no accounts
     @FXML
     private void getLsViewClick(ListView<String> lsView) throws NullPointerException{
         lsView.setOnMouseClicked(mouseEvent -> {
@@ -434,6 +442,7 @@ public class DashboardController {
              */
         });
     }
+    // changes currency display in home Pane
     @FXML
     protected void handleCurrencyClick(){
         currenciesListView.setOnMouseClicked(mouseEvent -> {
@@ -445,6 +454,7 @@ public class DashboardController {
             setLabels();
         });
     }
+    // settings listener to change Stack Pane to each kind of setting
     @FXML
     protected void settings(){
         settingsCombo.getSelectionModel().selectedItemProperty().addListener((selected, oldSetting, newSetting) -> {

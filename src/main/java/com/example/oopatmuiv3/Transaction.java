@@ -2,19 +2,21 @@ package com.example.oopatmuiv3;
 
 import java.util.Date;
 
+// Declare variables for transaction
 public class Transaction {
     private double amount;
     private Date timestamp;
     private String memo;
     private String holder;
-    
+
+    // constructor for Transaction class that takes in amount, holder, timestamp and memo
     protected Transaction(double amount, String holder) {
         this.amount = amount;
         this.holder = holder;
         this.timestamp = new Date();
         this.memo = "";
     }
-
+    // takes the transaction with amount, holder and memo when a transaction is made
     protected Transaction(double amount, String memo, String holder) {
         this(amount, holder);
         this.memo = memo;

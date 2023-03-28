@@ -44,11 +44,13 @@ public class UITest extends ApplicationTest {
         stage.show();
     }
 
+    // setup to launch login page for automated testing
     @BeforeEach
     public void setUp() throws Exception {
         ApplicationTest.launch(Login.class);
     }
 
+    // to hide stage and release mouse and keycode
     @AfterEach
     public void tearDown() throws Exception {
         FxToolkit.hideStage();
@@ -56,6 +58,7 @@ public class UITest extends ApplicationTest {
         release(new MouseButton[]{});
     }
 
+    // test login input for testing acc 1 for gui
     @Test
     public void testLoginInput1() {
         clickOn("#userID");
@@ -66,6 +69,7 @@ public class UITest extends ApplicationTest {
         closeCurrentWindow();
     }
 
+    // test login input for testing acc 2 for gui
     @Test
     public void testLoginInput2(){
         clickOn("#userID");
@@ -75,6 +79,7 @@ public class UITest extends ApplicationTest {
         clickOn("#loginButton");
     }
 
+    // test failed login input for gui
     @Test
     public void failLoginInput(){
         clickOn("#userID");
@@ -84,6 +89,7 @@ public class UITest extends ApplicationTest {
         closeCurrentWindow();
     }
 
+    // checks home pane and gui elements if it works the way its supposed to be
     @Test
     public void checkHomePane(){
         clickOn("#userID");
@@ -107,7 +113,7 @@ public class UITest extends ApplicationTest {
         clickOn("#accLsOverview");
         FxAssert.verifyThat("#transactionLs", NodeMatchers.isVisible());
     }
-
+    // checks deposit pane and gui elements if it works the way its supposed to be
     @Test
     public void checkDepositPane(){
         clickOn("#userID");
@@ -126,6 +132,7 @@ public class UITest extends ApplicationTest {
         FxAssert.verifyThat("#depositConfirmationText", NodeMatchers.isVisible());
     }
 
+    // checks withdraw pane and gui elements if it works the way its supposed to be
     @Test
     public void checkWithdrawPane(){
         clickOn("#userID");
@@ -144,6 +151,7 @@ public class UITest extends ApplicationTest {
         FxAssert.verifyThat("#withdrawConfirmationText", NodeMatchers.isVisible());
 
     }
+    // checks transfer pane and gui elements if it works the way its supposed to be
     @Test
     public void checkTransferPane(){
         clickOn("#userID");
@@ -162,6 +170,7 @@ public class UITest extends ApplicationTest {
         write("Transfer Test");
         FxAssert.verifyThat("#transferConfirmationText", NodeMatchers.isVisible());
     }
+    // checks settings pane and gui elements if it works the way its supposed to be
     @Test
     public void checkSettingsPane(){
         clickOn("#userID");
@@ -177,7 +186,7 @@ public class UITest extends ApplicationTest {
         FxAssert.verifyThat("#accNumberSetting", NodeMatchers.isNotNull());
         clickOn("#settingsCombo");
     }
-
+    // checks logout pane and gui elements if it works the way its supposed to be
     @Test
     public void checkLogout(){
         clickOn("#userID");

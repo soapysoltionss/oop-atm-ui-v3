@@ -14,6 +14,7 @@ import org.bson.Document;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
+//Declare variables
 public class Bank {
     private String name;
     private ArrayList<User> users;

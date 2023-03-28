@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import static java.lang.Integer.parseInt;
 
+// Declares variables for user class
 public class User {
     private String uuid;
     private String firstName;
@@ -22,7 +23,7 @@ public class User {
     private Bank bank;
     private String country;
 
-    // this user constructur is used for creating a new user object
+    // this user constructor is used for creating a new user object
     protected User(String firstName, String lastName, String pinHash, Bank bank, String country) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -215,6 +216,7 @@ public class User {
         return countryLs;
     }
 
+    // changes the country to change currency
     protected boolean changeCountryNoDb(String country){
         this.country = country;
         Integer noOfAcc = this.accounts.size();
