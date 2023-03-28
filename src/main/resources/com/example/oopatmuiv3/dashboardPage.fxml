@@ -456,8 +456,8 @@
                   <ComboBox fx:id="settingsCombo" layoutX="281.0" layoutY="65.0" onMouseClicked="#settings" prefHeight="44.0" prefWidth="205.0" promptText="Choose Setting:">
                    <items>
                        <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="changeLocalWithdrawalLimit" />
-                        <String fx:value="changeLocalTransferLimit" />
+                        <String fx:value="changeWithdrawalLimit" />
+                        <String fx:value="changeTransferLimit" />
                         <String fx:value="currencySetting" />
                         <String fx:value="changePIN" />
                        </FXCollections>
@@ -467,14 +467,14 @@
                      <children>
                         <StackPane fx:id="selectedSettingPane" layoutX="10.0" layoutY="10.0" prefHeight="286.0" prefWidth="300.0">
                            <children>
-                              <Pane fx:id="changeLocalWithdrawalLimit" prefHeight="200.0" prefWidth="200.0">
+                              <Pane fx:id="changeWithdrawalLimit" prefHeight="200.0" prefWidth="200.0">
                                  <children>
                                     <Label layoutX="16.0" layoutY="92.0" text="Change Withdrawal Limit:">
                                        <font>
                                           <Font name="System Bold" size="18.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="localWithdrawLimitText" layoutX="10.0" layoutY="127.0" prefHeight="60.0" prefWidth="280.0" promptText="Enter limit">
+                                    <TextField fx:id="withdrawLimitText" layoutX="10.0" layoutY="127.0" prefHeight="60.0" prefWidth="280.0" promptText="Enter limit">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
@@ -495,14 +495,14 @@
                                        </font>
                                     </Label>
                                  </children></Pane>
-                              <Pane fx:id="changeLocalTransferLimit" prefHeight="200.0" prefWidth="200.0" visible="false">
+                              <Pane fx:id="changeTransferLimit" prefHeight="200.0" prefWidth="200.0" visible="false">
                                  <children>
-                                    <Label layoutX="16.0" layoutY="92.0" text="Change Local Transfer Limit:">
+                                    <Label layoutX="16.0" layoutY="92.0" text="Change Transfer Limit:">
                                        <font>
                                           <Font name="System Bold" size="18.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="localTransferLimitText" layoutX="10.0" layoutY="127.0" prefHeight="60.0" prefWidth="280.0" promptText="Enter limit">
+                                    <TextField fx:id="transferLimitText" layoutX="10.0" layoutY="127.0" prefHeight="60.0" prefWidth="280.0" promptText="Enter limit">
                                        <font>
                                           <Font size="18.0" />
                                        </font>

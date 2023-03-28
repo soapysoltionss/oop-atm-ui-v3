@@ -94,9 +94,9 @@ public class DashboardController {
     @FXML
     private ComboBox<String> settingsCombo;
     @FXML
-    private Pane changeLocalWithdrawalLimit;
+    private Pane changeWithdrawalLimit;
     @FXML
-    private Pane changeLocalTransferLimit;
+    private Pane changeTransferLimit;
     @FXML
     private Pane currencySetting;
     @FXML
@@ -108,9 +108,9 @@ public class DashboardController {
     @FXML
     private PasswordField newReenterPin;
     @FXML
-    private TextField localWithdrawLimitText;
+    private TextField withdrawLimitText;
     @FXML
-    private TextField localTransferLimitText;
+    private TextField transferLimitText;
     @FXML
     private Label settingConfirmationText;
     @FXML
@@ -182,8 +182,8 @@ public class DashboardController {
         transferAmountTextField.setText("");
         recieverTextField.setText("");
         transferMemoField.setText("");
-        localWithdrawLimitText.setText("");
-        localTransferLimitText.setText("");
+        withdrawLimitText.setText("");
+        transferLimitText.setText("");
         oldPIN.setText("");
         newPIN.setText("");
         newReenterPin.setText("");
@@ -263,18 +263,6 @@ public class DashboardController {
     }
     @FXML
     protected void confirmTransfer() {
-        /*
-        //Local transfer
-        try{
-            double amount = Double.parseDouble(transferAmountTextField.getText());
-            int transferToLocalAccVar = Integer.parseInt(transferToLocalAcc.getText());
-            String memo = transferLocalMemo.getText();
-            currentUser.getAccount(selectedAcc).transfer(currentUser.getAccount(transferToLocalAccVar), memo, amount);}
-        catch(Exception e){
-            transferConfirmationText.setText("Transfer Failed!");
-            transferConfirmationText.setStyle(errorStyle);
-        }
-         */
         try{
             double amount = Double.parseDouble(transferAmountTextField.getText());
             String toAcc = recieverTextField.getText();
@@ -302,17 +290,17 @@ public class DashboardController {
     protected void confirmSettings(){
         try{
             double oldLimit;
-            if (changeLocalWithdrawalLimit.isVisible()){
+            if (changeWithdrawalLimit.isVisible()){
                 oldLimit = currentUser.getAccount(selectedAcc).getWithdrawLimit();
-                double newLimit = currentUser.getAccount(selectedAcc).getCurrency().unconvert(Double.parseDouble(localWithdrawLimitText.getText()));;
-                currentUser.getAccount(selectedAcc).changeTransferLimit("localWithdrawLimit", newLimit);
+                double newLimit = currentUser.getAccount(selectedAcc).getCurrency().unconvert(Double.parseDouble(withdrawLimitText.getText()));;
+                currentUser.getAccount(selectedAcc).changeLimit("localWithdrawLimit", newLimit);
                 settingConfirmationText.setText("Successful change of Withdrawal Limit from " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " " + df.format(currentUser.getAccount(selectedAcc).getCurrency().convert(oldLimit))+" to " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " "  + df.format(currentUser.getAccount(selectedAcc).getCurrency().convert(currentUser.getAccount(selectedAcc).getWithdrawLimit())));
                 settingConfirmationText.setStyle(successStyle);
             }
-            else if (changeLocalTransferLimit.isVisible()){
+            else if (changeTransferLimit.isVisible()){
                 oldLimit = currentUser.getAccount(selectedAcc).getTransferLimit();
-                double newLimit = currentUser.getAccount(selectedAcc).getCurrency().unconvert(Double.parseDouble(localTransferLimitText.getText()));;
-                currentUser.getAccount(selectedAcc).changeTransferLimit("localTransferLimit", newLimit);
+                double newLimit = currentUser.getAccount(selectedAcc).getCurrency().unconvert(Double.parseDouble(transferLimitText.getText()));;
+                currentUser.getAccount(selectedAcc).changeLimit("localTransferLimit", newLimit);
                 settingConfirmationText.setText("Successful change of Transfer Limit from " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " " + df.format(currentUser.getAccount(selectedAcc).getCurrency().convert(oldLimit))+" to " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " "  + df.format(currentUser.getAccount(selectedAcc).getCurrency().convert(currentUser.getAccount(selectedAcc).getTransferLimit())));
                 settingConfirmationText.setStyle(successStyle);
             }
@@ -460,17 +448,17 @@ public class DashboardController {
     @FXML
     protected void settings(){
         settingsCombo.getSelectionModel().selectedItemProperty().addListener((selected, oldSetting, newSetting) -> {
-            changeLocalWithdrawalLimit.setVisible(false);
-            changeLocalTransferLimit.setVisible(false);
+            changeWithdrawalLimit.setVisible(false);
+            changeTransferLimit.setVisible(false);
             currencySetting.setVisible(false);
             changePIN.setVisible(false);
             if (oldSetting != null){
                 switch (oldSetting){
-                    case "changeLocalWithdrawalLimit":
-                        changeLocalWithdrawalLimit.setVisible(false);
+                    case "changeWithdrawalLimit":
+                        changeWithdrawalLimit.setVisible(false);
                         break;
-                    case "changeLocalTransferLimit":
-                        changeLocalTransferLimit.setVisible(false);
+                    case "changeTransferLimit":
+                        changeTransferLimit.setVisible(false);
                         break;
                     case "currencySetting":
                         currencySetting.setVisible(false);
@@ -483,11 +471,11 @@ public class DashboardController {
             }
             if(newSetting != null){
                 switch(newSetting) {
-                    case "changeLocalWithdrawalLimit":
-                        changeLocalWithdrawalLimit.setVisible(true);
+                    case "changeWithdrawalLimit":
+                        changeWithdrawalLimit.setVisible(true);
                         break;
-                    case "changeLocalTransferLimit":
-                        changeLocalTransferLimit.setVisible(true);
+                    case "changeTransferLimit":
+                        changeTransferLimit.setVisible(true);
                         break;
                     case "currencySetting":
                         currencySetting.setVisible(true);

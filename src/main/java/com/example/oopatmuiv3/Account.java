@@ -254,7 +254,7 @@ public class Account {
         }
     }
 
-    protected boolean changeTransferLimit(String type, double newLimit) {
+    protected boolean changeLimit(String type, double newLimit) {
         try {
             if (type == "localTransferLimit") {
                 this.setTransferLimit(newLimit);
