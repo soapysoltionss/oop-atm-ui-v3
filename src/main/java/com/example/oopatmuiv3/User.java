@@ -22,6 +22,7 @@ public class User {
     private Bank bank;
     private String country;
 
+    // this user constructur is used for creating a new user object
     protected User(String firstName, String lastName, String pinHash, Bank bank, String country) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -32,15 +33,14 @@ public class User {
         this.country = country;
     }
 
+    // this hashPin method is used to hash the pin of the user
     protected static String hashPin(String pin) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("MD5");
         byte[] pinBytes = String.valueOf(pin).getBytes();
         return toHex(md.digest(pinBytes));
     }
 
-
-
-
+    // this method is to set a new uuid for the user object
     protected void setUUID(String newUUID) {
         this.uuid = newUUID;
     }
@@ -50,34 +50,45 @@ public class User {
         return String.format("%0" + (bytes.length << 1) + "X", bi);
     }
 
+    // this is to get the user uid from the database
     protected String getUUID() {
         return this.uuid;
     }
 
+    // this is to get the user pin from the database
     protected String getPinHash() {
         return this.pinHash;
     }
 
+    // getCountry is used to get the country of the user from mongoDB
     protected String getCountry() {
         return this.country;
     }
 
+    // this is to get the first name of the user from the database
     protected String getFirstName() {
         return this.firstName;
     }
 
+    // this is to get the last name of the user from the database
     protected String getLastName() {
         return this.lastName;
     }
 
+    // this is to set the bank accounts for the user
     protected void setAccounts(ArrayList<Account> accounts) {
         this.accounts = accounts;
     }
 
+    // setPin is used to set the pin of the user
     protected void setPin(String newPinHash) {
         this.pinHash = newPinHash;
     }
 
+    // this changePin function is to update the pin of the user
+    // check if the old pin is the same as the current pin that the user has entered
+    // if it is currect, then check if the new pin matches the new pin that the user has retyped
+    // it will then update the database
     protected boolean changePin(String oldPin, String newPin, String newPin2) throws NoSuchAlgorithmException, InvalidOldPinException, InvalidNewPinException {
         if (validatePin(oldPin)) {
             //System.out.println("Old pin correct");
@@ -103,11 +114,12 @@ public class User {
         }
     }
 
+    // this is to print the transaction history of the user from the database
     protected void printTransactionHistory(int acctIndex) {
         this.accounts.get(acctIndex).printTransactionHistory();
     }
 
-
+    // this function is to add a new account for the user in the database
     protected Account addAccount(String name, Bank bank) {
         Account account = new Account(name, this.getUUID(), bank, this);
         MongoCollection<Document> accountCollection = this.bank.database.getCollection("accounts");
@@ -126,14 +138,18 @@ public class User {
         return account;
     }
 
+    // this function is to get the number of accounts that the user has
     protected int numOfAccounts() {
         return this.accounts.size();
     }
 
+    // This function takes in the user selection and returns the account based on the index
     protected Account getAccount(int index) {
         return this.accounts.get(index);
     }
 
+    // This function is to print the account summary of the user
+    // for every account, it prints the account number and the account summary
     protected void printAccountSummary() throws Exception {
         System.out.printf("\n\n%s 's Accounts Summary", this.firstName);
         for (int a = 0;a<this.accounts.size();a++) {
@@ -142,6 +158,7 @@ public class User {
         System.out.println();
     }
 
+    // this is to check if the hashing of the pin that the user has entered is the same as the pin that is stored in the database
     protected boolean validatePin(String pin) {
         try {
             String currentPinHash = hashPin(pin);
@@ -157,14 +174,18 @@ public class User {
         }
     }
 
+    // get account balance will return the balance of the account that the user has selected based on their input
     protected double getAccountBalance(int acctIndex) {
         return this.accounts.get(acctIndex).getBalance();
     }
 
+    // this function get all the accounts that the user has in the database
     protected ArrayList<Account> getAllAccounts() {
         return this.accounts;
 
     }
+
+    // this function is to get all the accounts that belongs to the uuid of the user
     protected ArrayList<String> getAllAccountsUUID(){
         ArrayList<String> ls = new ArrayList<>();
         for(int i = 0; i<accounts.size(); i++){
@@ -173,6 +194,7 @@ public class User {
         return ls;
     }
 
+    // this function is to get all the currencies available
     protected ArrayList<String> getAvailableCurrencies(){
         ArrayList<String> currencyLs = new ArrayList<String>();
         for (int i = 0; i < this.bank.getCurrencies().size(); i++) {
@@ -183,6 +205,8 @@ public class User {
         }
         return currencyLs;
     }
+
+    // this function is to get all the countries available
     protected ArrayList<String> getCountries(){
         ArrayList<String> countryLs = new ArrayList<String>();
         for (int i = 0; i < this.bank.getCurrencies().size(); i++) {
@@ -205,6 +229,8 @@ public class User {
 
         return true;
     }
+
+    // this function is to update the country field in the users collection in the database
     protected boolean setCountry(String country) {
         try {
             MongoCollection<Document> userCollection = this.bank.database.getCollection("users");

@@ -26,6 +26,7 @@ public class Bank {
     private MongoCollection<Document> transactionsCollection;
     private MongoCollection<Document> currencyCollection;
 
+    // this bank is to create a new connection to the mongodb database
     protected Bank(String name) {
         this.name = name;
         //this.accounts = new ArrayList<>();
@@ -34,6 +35,7 @@ public class Bank {
                 .builder().applyConnectionString(connectionString)
                 .serverApi(ServerApi.builder().version(ServerApiVersion.V1).build())
                 .build();
+        // these variables are used to allow us to get, insert, update and delete data from the collections in the database
         this.mongoClient = MongoClients.create(settings);
         this.database = mongoClient.getDatabase("bank");
         this.usersCollection = database.getCollection("users");
@@ -47,6 +49,8 @@ public class Bank {
 
     }
 
+    // this get new user uuid is to create a new user id for the user
+    // the user id must be unique and it must be 10 digits long
     protected String getNewUserUUID() {
         String uuid;
         Random rng = new Random();
@@ -73,6 +77,8 @@ public class Bank {
         return uuid;
     }
 
+    // this is to get the new accounts id for the user
+    // the account id must be unique and it must be 10 digits long
     protected String getNewAccountUUID() {
         String uuid;
         Random rng = new Random();
@@ -99,28 +105,36 @@ public class Bank {
         return uuid;
     }
 
+    // this is to get the users in the bank from the database
     protected void refreshUsers() {
         this.users = this.getUsers();
     }
 
+    // add user is to add a new user to the bank
     protected void addUser(User user) {
         users.add(user);
     }
 
+    // this function is used to count the number of users in the bank
     protected int countUsers() {
         return this.users.size();
     }
 
+    // this function is used to get the name of the bank
     protected String getName() {
         return this.name;
     }
 
+    // this is to print the first name of the user
     protected void printInfo() {
         for (User user : users) {
             System.out.println(user.getFirstName());
         }
     }
 
+    // user login function is used to check if the user id and pin is correct
+    // if it is correct, it will return the user
+    // else it will throw the invalid login exception
     protected User userLogin(String uuid, String pin) throws InvalidLoginException {
         for (User u:this.users) {
             if (u.getUUID().compareTo(uuid) == 0 && u.validatePin(pin)) {
@@ -131,6 +145,8 @@ public class Bank {
     }
 
 
+    // this function is to add a new user to the database using:
+    // the first name, last name, pin and country
     protected User addUser(String firstName, String lastName, String pin, String country) throws NoSuchAlgorithmException {
         User newUser = new User(firstName, lastName, User.hashPin(pin), this, country);
         this.users.add(newUser);
@@ -148,6 +164,9 @@ public class Bank {
         return newUser;
     }
 
+    // get currencies is to get the currencies such as
+    // their country code, country, exchange rate and money symbols from the database:
+    // for example SGD, Singapore, 1.0, $
     protected ArrayList<Currency> getCurrencies() {
         ArrayList<Currency> currencyList = new ArrayList<>();
         for (Document currencyDoc : currencyCollection.find()) {
@@ -166,6 +185,12 @@ public class Bank {
         return currencyList;
     }
 
+    // get users method will get the user details from the database
+    // for example, using the first name, last name, pin and country
+    // we will search through the database for that ID
+    // once we find the ID, we will get the user details like
+    // balance, withdrawal limit, transfer limit and deposit limit
+    // and return the user details from the database
     protected ArrayList<User> getUsers() {
         ArrayList<User> userList = new ArrayList<>();
         this.currencies = getCurrencies();

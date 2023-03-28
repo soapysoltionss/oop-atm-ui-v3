@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.Date;
 
 public class Account {
+
     private String name;
     private double balance;
     private String uuid;
@@ -33,6 +34,7 @@ public class Account {
 
     private double withdrawTodayAmt;
 
+    // this is the constructor that will take in string name, holder, bank object and user object
     protected Account(String name, String holder, Bank bank, User user) {
         this.name = name;
         this.holderUUID = holder;
@@ -51,6 +53,7 @@ public class Account {
 
     }
 
+    // this function is to get the balance, symbol of the currency and the amount
     protected String getSummaryLine() throws Exception {
         double balance = this.getBalance();
         if (balance >= 0) {
@@ -77,23 +80,27 @@ public class Account {
 
     }
 
+    // this is to return the currency
     protected Currency getCurrency() {
         return this.currency;
     }
 
+    // this is to set the currency of the account
     protected void setCurrency(Currency c) {
         this.currency = c;
     }
 
+    // this function is used to get the user id of the account
     protected String getUUID() {
         return this.uuid;
     }
 
+    // this funnction is used to get the limit for the transfer for this account
     protected double getTransferLimit() {
         return this.transferLimit;
     }
 
-
+    // this function is used to get the limit for the withdraw for this account
     protected double getWithdrawLimit() {
         return this.withdrawLimit;
     }
@@ -101,29 +108,37 @@ public class Account {
 
     protected double getTodayAmount() { return this.todayAmount;}
 
+    //
     protected double getWithdrawTodayAmt() { return this.withdrawTodayAmt; };
 
+    //
     protected Date getLastTransactionTime() { return this.getLastTransactionTime();}
 
+    //
     protected Date getLastWithdrawalTime() { return this.getLastWithdrawalTime(); }
 
+    // this is to set the new transfer limit in the settings
     protected void setTransferLimit(double newLimit) {
         this.transferLimit = newLimit;
     }
 
+    // this is to set a new withdraw limit in the settings
     protected void setWithdrawLimit(double newLimit) {
         this.withdrawLimit= newLimit;
     }
 
-
+    // this is to add the time of the last transaction made
     protected void setLastTransactionTime(Date date) { this.lastTransactionTime = date; }
 
+    // this is to set the time of the last withdrawal made
     protected void setLastWithdrawalTime(Date date) { this.lastWithdrawalTime = date; }
 
+    //
     protected void setTodayAmount(double amount) { this.todayAmount = amount; }
 
     protected void setWithdrawTodayAmt(double amount) { this.withdrawTodayAmt = amount;}
 
+    // this function is to set the user id of the account
     protected void setUUID(String newUUID) {
         this.uuid = newUUID;
     }
@@ -132,22 +147,27 @@ public class Account {
         return this.name;
     }
 
+    // this function is to get the holder of the account
     protected String getHolder() {
         return this.holderUUID;
     }
 
+    // this will return the balance of the account
     protected double getBalance() {
         return this.balance;
     }
 
+    // this will set a new balance to the account
     protected void setBalance(double balance) {
         this.balance = balance;
     }
 
+    // get user will return the user object
     protected User getUser() {
         return this.user;
     }
 
+    // get account will return all the accounts that belongs to the user
     protected Account getAccount(String number) {
         ArrayList<Account> accounts = new ArrayList<>();
         //System.out.println("Number of accounts" + this.getUser().numOfAccounts());
@@ -163,6 +183,10 @@ public class Account {
 
     }
 
+    // this will take in a data type of double called amount
+    // it will check if the amount is valid
+    // if it is valid, it will add the amount to the balance
+    // if it is not valid, it will throw an exception
     protected boolean deposit(double amount) throws InvalidAmountException, InvalidNoteDepositException {
         if (amount <= 0 || amount == -0 || (BigDecimal.valueOf(amount).scale() > 2)) {
             throw new InvalidAmountException(amount);
@@ -206,10 +230,14 @@ public class Account {
         return true;
         //this.transactions.add(new Transaction(amount, "Deposit", this.getUUID()));
     }
+
+    // this function will add a new transaction into the transaction object
     protected boolean addTransactionNoDb(Transaction transaction) {
         this.transactions.add(transaction);
         return true;
     }
+
+    // this function will add a new transaction of the account to the database
     protected boolean addTransaction(Account account, Transaction transaction) {
         this.transactions.add(transaction);
         try {
@@ -226,6 +254,7 @@ public class Account {
         }
     }
 
+    // this will update the amount and time of transaction to the account of the user in the database
     protected boolean updateAccount(Date newDate, double todayAmount) {
         try {
             MongoCollection<Document> accountCollection = this.bank.database.getCollection("accounts");
@@ -240,6 +269,7 @@ public class Account {
         }
     }
 
+    // this function will update the account withdrawal and time of withdrawal to the account of the user in the database
     protected boolean updateAccountWithdrawal(Date newDate, double withdrawTodayAmt) {
         try {
             MongoCollection<Document> accountCollection = this.bank.database.getCollection("accounts");
@@ -254,6 +284,11 @@ public class Account {
         }
     }
 
+    // change limit will take in the type of limit and the new limit
+    // it will check which type of limit is selected
+    // if it is localTransferLimit, it will update the transfer limit
+    // if it is localWithdrawLimit, it will update the withdraw limit
+    // if it is not either of the two, it will return false
     protected boolean changeLimit(String type, double newLimit) {
         try {
             if (type == "localTransferLimit") {
@@ -273,6 +308,7 @@ public class Account {
         }
     }
 
+    // this will print the transaction history which contains the summary line and the amount
     protected void printTransactionHistory() {
         System.out.printf("\nTransaction History for Account %s\n", this.uuid);
         for (int t = this.transactions.size()-1; t>0;t--) {
@@ -284,6 +320,8 @@ public class Account {
         }
         System.out.println();
     }
+
+    // this will return the transaction history which contains the summary line and the amount
     protected ArrayList<String> getTransactionHistory() {
         ArrayList<String> transactionLs = new ArrayList<>();
         for (int t = this.transactions.size()-1; t>0;t--) {
@@ -296,6 +334,7 @@ public class Account {
         return transactionLs;
     }
 
+    // modify balance will update the balance of the account in the database
     protected boolean modifyBalance(double balance) {
         try {
             MongoCollection<Document> accountCollection = this.bank.database.getCollection("accounts");
@@ -307,6 +346,11 @@ public class Account {
             return false;
         }
     }
+
+    // withdraw function will check if the amount is valid
+    // if it is valid, it will check if the amount is a multiple of the notes
+    // if it is a multiple of the notes, it will withdraw the amount
+    // if it is not a multiple of the notes, it will throw an exception
 
     protected boolean withdraw(double amount) throws InvalidWithdrawAndTransferAmountException, WithdrawLimitException, InvalidNoteWithdrawalException {
         if (amount <= 0 || amount == -0 || (BigDecimal.valueOf(amount).scale() > 2) || this.getCurrency().unconvert(amount) > this.balance) {
@@ -386,10 +430,14 @@ public class Account {
         return true;
     }
 
+    // this will return the list of transactions
     protected ArrayList<Transaction> getTransactions() {
         return transactions;
     }
 
+    // this function will throw exceptions if amount is less than or equal to 0
+    // or if the amount is greater than the balance
+    // if the amount is valid, it will add the amount to the balance
     protected boolean receive(double amount) {
         try {
             if (amount <= 0) {
@@ -403,6 +451,7 @@ public class Account {
         return true;
     }
 
+    // get other balance would return the balance of the other accounts
     protected double getOtherBal(String accountNumber) {
         MongoCollection<Document> accountCollection = this.bank.database.getCollection("accounts");
         Bson filter = Filters.eq("_id", accountNumber);
@@ -417,6 +466,15 @@ public class Account {
         return -1;
     }
 
+    // this function will take in 3 inputs which are the account number, memo and amount.
+    // it will throw exceptions if the amount is less than or equal to 0, if the amount is greater than the balance
+    // or if the amount is greater than the transfer limit
+
+    // if the amount is valid, it will subtract the amount from the balance and add the amount to the other account's balance
+    // it will also add the transaction to the transaction list
+    // it will return true if the transaction is successful
+    // it will return false if the transaction is unsuccessful
+    // it will also update the last transaction time
     protected boolean transfer(String accountNumber, String memo, double amount) throws InvalidWithdrawAndTransferAmountException, TransferLimitException
     {
         if (amount <= 0 || amount == -0 || (BigDecimal.valueOf(amount).scale() > 2) || this.getCurrency().unconvert(amount) > this.balance){

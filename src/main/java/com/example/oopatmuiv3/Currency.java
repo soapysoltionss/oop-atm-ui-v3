@@ -40,12 +40,16 @@ public class Currency {
 
     protected List<Integer> getNotesArray() { return this.notesArray; }
 
+    // this convert function is to convert the current amount the user has by
+    // taking the exchange rate multiply by the amount the user has and return the new value
     protected double convert(double amount) {
         double theRate = this.getExchangeRate();
         double converted = amount*theRate;
         return converted;
     }
 
+    // this unconvert function is to convert the current amount the user has by
+    // taking the amount the user has divided by the exchange rate and return the new value
     protected double unconvert(double amount) {
         double theRate = this.getExchangeRate();
         double converted = amount/theRate;

@@ -8,12 +8,15 @@ public class InvalidWithdrawAndTransferAmountException extends Exception {
 
     private Currency currency;
 
+    // this is the constructor that will be invoked when the exception is thrown using 3 inputs
     public InvalidWithdrawAndTransferAmountException(double amount, double balance, Currency currency) {
         this.amount = amount; 
         this.balance = balance;
         this.currency = currency;
     }
 
+    // getMessage method will be called when the user has input an invalid amount such as
+    // negative amount, amount with more than 2dp, amount greater than balance
     public String getMessage() {
         if (this.amount <= 0 || this.amount == -0) {
             return "Amount must be greater than zero.";

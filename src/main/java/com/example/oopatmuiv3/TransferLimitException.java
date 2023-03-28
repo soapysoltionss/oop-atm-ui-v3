@@ -12,12 +12,14 @@ public class TransferLimitException extends Exception {
     private Currency currency;
     DecimalFormat df = new DecimalFormat("0.00");
 
+    // this is the constructor that will be invoked when the exception is thrown using 3 inputs
     public TransferLimitException(double amount, double limit, Currency currency) {
         this.amount = amount; 
         this.limit = limit;
         this.currency = currency;
     }
 
+    // this is the constructor that will be invoked when the exception is thrown using 4 inputs
     public TransferLimitException(double amount, double limit, Currency currency, double todayAmt) {
         this.amount = amount;
         this.limit = limit;
@@ -25,6 +27,7 @@ public class TransferLimitException extends Exception {
         this.todayAmt = todayAmt;
     }
 
+    // getMessage method will be called when the user has input an invalid amount
     public String getMessage() {
         df.setRoundingMode(RoundingMode.DOWN);
         if (todayAmt!=-1){

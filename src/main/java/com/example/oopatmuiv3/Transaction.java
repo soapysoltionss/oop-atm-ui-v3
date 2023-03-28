@@ -21,26 +21,32 @@ public class Transaction {
         this.timestamp = new Date();
     }
 
+    // get the amount of the transaction
     protected double getAmount() {
         return amount;
     }
 
+    // get the timestamp of the transaction
     protected Date getTimeStamp() {
         return timestamp;
     }
 
+    // set the timestamp of the transaction
     protected void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
 
+    // get the memo of the transaction
     protected String getMemo() {
         return memo;
     }
 
+    // get the holder uuid of the transaction
     protected String getHolder() {
         return holder;
     }
 
+    // get the summary line of the transaction
     protected String getSummaryLine() throws Exception{
         try {
             if (this.amount >= 0) {
