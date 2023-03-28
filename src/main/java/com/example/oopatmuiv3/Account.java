@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
 public class Account {
@@ -21,7 +22,7 @@ public class Account {
     private ArrayList<Transaction> transactions;
     private Bank bank;
     private User user;
-    private double localTransferLimit, overseasTransferLimit, localWithdrawLimit, overseasWithdrawLimit;
+    private double transferLimit,  withdrawLimit;
     private Currency currency;
 
     private Date lastTransactionTime;
@@ -40,10 +41,8 @@ public class Account {
         this.bank = bank;
         this.user = user;
         this.transactions = new ArrayList<>();
-        this.localTransferLimit = 1000;
-        this.overseasTransferLimit = 1000;
-        this.localWithdrawLimit = 1000;
-        this.overseasWithdrawLimit = 1000;
+        this.transferLimit = 1000;
+        this.withdrawLimit = 1000;
         this.currency = null;
         this.lastTransactionTime = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
         this.todayAmount = 0;
@@ -68,10 +67,8 @@ public class Account {
         this.balance = balance;
         this.transactions = transactions;
         this.bank = bank;
-        this.localTransferLimit = 1000;
-        this.overseasTransferLimit = 1000;
-        this.localWithdrawLimit = 1000;
-        this.overseasWithdrawLimit = 1000;
+        this.transferLimit = 1000;
+        this.withdrawLimit = 1000;
         this.user = user;
         this.lastTransactionTime = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
         this.todayAmount = 0;
@@ -92,21 +89,15 @@ public class Account {
         return this.uuid;
     }
 
-    protected double getLocalTransferLimit() {
-        return this.localTransferLimit;
+    protected double getTransferLimit() {
+        return this.transferLimit;
     }
 
-    protected double getOverseasTransferLimit() {
-        return this.overseasTransferLimit;
+
+    protected double getWithdrawLimit() {
+        return this.withdrawLimit;
     }
 
-    protected double getLocalWithdrawLimit() {
-        return this.localWithdrawLimit;
-    }
-
-    protected double getOverseasWithdrawLimit() {
-        return this.overseasWithdrawLimit;
-    }
 
     protected double getTodayAmount() { return this.todayAmount;}
 
@@ -116,21 +107,14 @@ public class Account {
 
     protected Date getLastWithdrawalTime() { return this.getLastWithdrawalTime(); }
 
-    protected void setLocalTransferLimit(double newLimit) {
-        this.localTransferLimit = newLimit;
+    protected void setTransferLimit(double newLimit) {
+        this.transferLimit = newLimit;
     }
 
-    protected void setOverseasTransferLimit(double newLimit) {
-        this.overseasTransferLimit = newLimit;
+    protected void setWithdrawLimit(double newLimit) {
+        this.withdrawLimit= newLimit;
     }
 
-    protected void setLocalWithdrawLimit(double newLimit) {
-        this.localWithdrawLimit= newLimit;
-    }
-
-    protected void setOverseasWithdrawLimit(double newLimit) {
-        this.overseasWithdrawLimit = newLimit;
-    }
 
     protected void setLastTransactionTime(Date date) { this.lastTransactionTime = date; }
 
@@ -273,14 +257,10 @@ public class Account {
     protected boolean changeTransferLimit(String type, double newLimit) {
         try {
             if (type == "localTransferLimit") {
-                this.setLocalTransferLimit(newLimit);
-            } else if (type == "overseasTransferLimit") {
-                this.setOverseasTransferLimit(newLimit);
+                this.setTransferLimit(newLimit);
             } else if (type == "localWithdrawLimit") {
-                this.setLocalWithdrawLimit(newLimit);
-            } else if (type == "overseasWithdrawLimit") {
-                this.setOverseasWithdrawLimit(newLimit);
-            } else {
+                this.setWithdrawLimit(newLimit);
+            }  else {
                 return false;
             }
             MongoCollection <Document> accountCollection = this.bank.database.getCollection("accounts");
@@ -334,7 +314,7 @@ public class Account {
         }
         boolean checker = false;
         double checkingAmt = amount;
-        for (int i = this.getCurrency().getNotesArray().size()-1; i == 0; i--) {
+        for (int i = this.getCurrency().getNotesArray().size()-1; i >= 0; i--) {
             checkingAmt = checkingAmt % this.getCurrency().getNotesArray().get(i);
             if (checkingAmt == 0) {
                 checker = true;
@@ -358,27 +338,35 @@ public class Account {
         amount = this.getCurrency().unconvert(amount);
         //System.out.println("HERE");
         //System.out.println(amount);
-        if ((currentDate.getDay() != this.lastWithdrawalTime.getDay() && currentDate.getMonth() != this.lastWithdrawalTime.getMonth() && currentDate.getYear() != this.lastWithdrawalTime.getYear()) && (amount < this.localWithdrawLimit)) {
+        if ((currentDate.getDay() != this.lastWithdrawalTime.getDay() && currentDate.getMonth() != this.lastWithdrawalTime.getMonth() && currentDate.getYear() != this.lastWithdrawalTime.getYear()) && (amount < this.withdrawLimit)) {
             this.withdrawTodayAmt = amount;
             this.lastWithdrawalTime = currentDate;
             this.updateAccountWithdrawal(currentDate, amount);
-        } else if ((currentDate.getDay() != this.lastWithdrawalTime.getDay() && currentDate.getMonth() != this.lastWithdrawalTime.getMonth() && currentDate.getYear() != this.lastWithdrawalTime.getYear()) && (amount > this.localWithdrawLimit)) {
+        } else if ((currentDate.getDay() != this.lastWithdrawalTime.getDay() && currentDate.getMonth() != this.lastWithdrawalTime.getMonth() && currentDate.getYear() != this.lastWithdrawalTime.getYear()) && (amount > this.withdrawLimit)) {
             this.withdrawTodayAmt = 0;
             this.updateAccountWithdrawal(currentDate, 0);
             if (this.user.getCountry().equals("Japan")) {
                 //System.out.println("this");
-                throw new WithdrawLimitException(amount, Math.floor(this.getCurrency().convert(this.getLocalWithdrawLimit())), this.getCurrency());
+                throw new WithdrawLimitException(amount, Math.floor(this.getCurrency().convert(this.getWithdrawLimit())), this.getCurrency());
             } else {
-                throw new WithdrawLimitException(amount, this.getCurrency().convert(this.getLocalWithdrawLimit()), this.getCurrency());
+                throw new WithdrawLimitException(amount, this.getCurrency().convert(this.getWithdrawLimit()), this.getCurrency());
             }
         }
-        else if ((currentDate.getDay() == this.lastWithdrawalTime.getDay() && currentDate.getMonth() == this.lastWithdrawalTime.getMonth() && currentDate.getYear() == this.lastWithdrawalTime.getYear()) && (this.withdrawTodayAmt+amount > this.localWithdrawLimit)) {
+        else if ((currentDate.getDay() == this.lastWithdrawalTime.getDay() && currentDate.getMonth() == this.lastWithdrawalTime.getMonth() && currentDate.getYear() == this.lastWithdrawalTime.getYear()) && (this.withdrawTodayAmt+amount > this.withdrawLimit)) {
             if (this.user.getCountry().equals("Japan")) {
                 //System.out.println("this");
-                throw new WithdrawLimitException(amount, Math.floor(this.getCurrency().convert(this.getLocalWithdrawLimit())), this.getCurrency(), Math.floor(this.getCurrency().convert(this.withdrawTodayAmt)));
+                throw new WithdrawLimitException(amount, Math.floor(this.getCurrency().convert(this.getWithdrawLimit())), this.getCurrency(), Math.floor(this.getCurrency().convert(this.withdrawTodayAmt)));
             } else {
-                throw new WithdrawLimitException(amount, this.getCurrency().convert(this.getLocalWithdrawLimit()), this.getCurrency(), this.getCurrency().convert(this.withdrawTodayAmt));
-            }        } else {
+                throw new WithdrawLimitException(amount, this.getCurrency().convert(this.getWithdrawLimit()), this.getCurrency(), this.getCurrency().convert(this.withdrawTodayAmt));
+            }
+        } else if (amount > this.withdrawLimit) {
+            if (this.user.getCountry().equals("Japan")) {
+                //System.out.println("this");
+                throw new WithdrawLimitException(amount, Math.floor(this.getCurrency().convert(this.getWithdrawLimit())), this.getCurrency(), Math.floor(this.getCurrency().convert(this.withdrawTodayAmt)));
+            } else {
+                throw new WithdrawLimitException(amount, this.getCurrency().convert(this.getWithdrawLimit()), this.getCurrency(), this.getCurrency().convert(this.withdrawTodayAmt));
+            }
+        } else {
             this.lastWithdrawalTime = currentDate;
             double newAmount = this.withdrawTodayAmt+amount;
             this.withdrawTodayAmt = newAmount;
@@ -439,26 +427,33 @@ public class Account {
         // check if day same, if same see is todayAmount + amount > limit
         //System.out.println(String.valueOf(currentDate.getDay())+ this.lastTransactionTime.getDay());
         amount = this.getCurrency().unconvert(amount);
-        if ((currentDate.getDay() != this.lastTransactionTime.getDay() && currentDate.getMonth() != this.lastTransactionTime.getMonth() && currentDate.getYear() != this.lastTransactionTime.getYear()) && (amount < this.localTransferLimit)) {
+        if ((currentDate.getDay() != this.lastTransactionTime.getDay() && currentDate.getMonth() != this.lastTransactionTime.getMonth() && currentDate.getYear() != this.lastTransactionTime.getYear()) && (amount < this.transferLimit)) {
             this.todayAmount = amount;
             this.lastTransactionTime = currentDate;
             this.updateAccount(currentDate, amount);
-        } else if ((currentDate.getDay() != this.lastTransactionTime.getDay() && currentDate.getMonth() != this.lastTransactionTime.getMonth() && currentDate.getYear() != this.lastTransactionTime.getYear()) && (amount > this.localTransferLimit)) {
+        } else if ((currentDate.getDay() != this.lastTransactionTime.getDay() && currentDate.getMonth() != this.lastTransactionTime.getMonth() && currentDate.getYear() != this.lastTransactionTime.getYear()) && (amount > this.transferLimit)) {
             this.todayAmount = 0;
             this.updateAccount(currentDate, 0);
             if (this.user.getCountry().equals("Japan")) {
-                System.out.println("this");
-                throw new TransferLimitException(amount, Math.floor(this.getCurrency().convert(this.getLocalTransferLimit())), this.getCurrency());
+                //System.out.println("this");
+                throw new TransferLimitException(amount, Math.floor(this.getCurrency().convert(this.getTransferLimit())), this.getCurrency());
             } else {
-                throw new TransferLimitException(amount, this.getCurrency().convert(this.getLocalTransferLimit()), this.getCurrency());
+                throw new TransferLimitException(amount, this.getCurrency().convert(this.getTransferLimit()), this.getCurrency());
             }
         }
-        else if ((currentDate.getDay() == this.lastTransactionTime.getDay() && currentDate.getMonth() == this.lastTransactionTime.getMonth() && currentDate.getYear() == this.lastTransactionTime.getYear()) && (this.todayAmount+amount > this.localTransferLimit)) {
+        else if ((currentDate.getDay() == this.lastTransactionTime.getDay() && currentDate.getMonth() == this.lastTransactionTime.getMonth() && currentDate.getYear() == this.lastTransactionTime.getYear()) && (this.todayAmount+amount > this.transferLimit)) {
             if (this.user.getCountry().equals("Japan")) {
-                System.out.println("this");
-                throw new TransferLimitException(amount, Math.floor(this.getCurrency().convert(this.getLocalTransferLimit())), this.getCurrency(), Math.floor(this.getCurrency().convert(this.todayAmount)));
+                //System.out.println("this");
+                throw new TransferLimitException(amount, Math.floor(this.getCurrency().convert(this.getTransferLimit())), this.getCurrency(), Math.floor(this.getCurrency().convert(this.todayAmount)));
             } else {
-                throw new TransferLimitException(amount, this.getCurrency().convert(this.getLocalTransferLimit()), this.getCurrency(), this.getCurrency().convert(this.todayAmount));
+                throw new TransferLimitException(amount, this.getCurrency().convert(this.getTransferLimit()), this.getCurrency(), this.getCurrency().convert(this.todayAmount));
+            }
+        } else if (amount > this.transferLimit) {
+            if (this.user.getCountry().equals("Japan")) {
+                //System.out.println("this");
+                throw new TransferLimitException(amount, Math.floor(this.getCurrency().convert(this.getTransferLimit())), this.getCurrency(), Math.floor(this.getCurrency().convert(this.todayAmount)));
+            } else {
+                throw new TransferLimitException(amount, this.getCurrency().convert(this.getTransferLimit()), this.getCurrency(), this.getCurrency().convert(this.todayAmount));
             }
         } else {
             this.lastTransactionTime = currentDate;

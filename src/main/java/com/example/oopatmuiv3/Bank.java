@@ -185,9 +185,9 @@ public class Bank {
                 double accountBalance = accountDoc.getDouble("balance");
                 String accountName = accountDoc.getString("name");
                 double localTransferLimit = accountDoc.getDouble("localTransferLimit");
-                double overseasTransferLimit = accountDoc.getDouble("overseasTransferLimit");
+                //double overseasTransferLimit = accountDoc.getDouble("overseasTransferLimit");
                 double localWithdrawLimit = accountDoc.getDouble("localWithdrawLimit");
-                double overseasWithdrawLimit = accountDoc.getDouble("overseasWithdrawLimit");
+                //double overseasWithdrawLimit = accountDoc.getDouble("overseasWithdrawLimit");
                 double todayAmount = accountDoc.getDouble("todayAmount");
                 Date lastTransactionTime = accountDoc.getDate("lastTransactionTime");
                 double withdrawTodayAmt = accountDoc.getDouble("withdrawTodayAmt");
@@ -212,10 +212,10 @@ public class Bank {
                 account.setLastTransactionTime(lastTransactionTime);
                 account.setWithdrawTodayAmt(withdrawTodayAmt);
                 account.setLastWithdrawalTime(lastWithdrawalTime);
-                account.setLocalTransferLimit(localTransferLimit);
-                account.setLocalWithdrawLimit(localWithdrawLimit);
-                account.setOverseasTransferLimit(overseasTransferLimit);
-                account.setOverseasWithdrawLimit(overseasWithdrawLimit);
+                account.setTransferLimit(localTransferLimit);
+                account.setWithdrawLimit(localWithdrawLimit);
+                //account.setOverseasTransferLimit(overseasTransferLimit);
+                //account.setOverseasWithdrawLimit(overseasWithdrawLimit);
                 //System.out.println(account.getName());
                 accounts.add(account);
             }

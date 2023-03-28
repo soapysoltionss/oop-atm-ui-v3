@@ -112,10 +112,6 @@ public class DashboardController {
     @FXML
     private TextField localTransferLimitText;
     @FXML
-    private TextField overseasWithdrawalLimitText;
-    @FXML
-    private TextField overseasTransferLimitText;
-    @FXML
     private Label settingConfirmationText;
     @FXML
     private Label currencySymbolBefore;
@@ -174,9 +170,9 @@ public class DashboardController {
         currenciesListView.setItems(currencies);
         currencyLabel.setText(currentUser.getAccount(selectedAcc).getCurrency().getSymbolAfter());
 
-        currentTransferLimit.setText(String.format("%.2f",currentUser.getAccount(selectedAcc).getCurrency().convert(currentUser.getAccount(selectedAcc).getLocalTransferLimit())));
+        currentTransferLimit.setText(String.format("%.2f",currentUser.getAccount(selectedAcc).getCurrency().convert(currentUser.getAccount(selectedAcc).getTransferLimit())));
         currentTransferLimitCurrency.setText(currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore());
-        currentWithdrawLimit.setText(String.format("%.2f",currentUser.getAccount(selectedAcc).getCurrency().convert(currentUser.getAccount(selectedAcc).getLocalWithdrawLimit())));
+        currentWithdrawLimit.setText(String.format("%.2f",currentUser.getAccount(selectedAcc).getCurrency().convert(currentUser.getAccount(selectedAcc).getWithdrawLimit())));
         currentWithdrawLimitCurrency.setText(currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore());
 
 
@@ -307,17 +303,17 @@ public class DashboardController {
         try{
             double oldLimit;
             if (changeLocalWithdrawalLimit.isVisible()){
-                oldLimit = currentUser.getAccount(selectedAcc).getLocalWithdrawLimit();
+                oldLimit = currentUser.getAccount(selectedAcc).getWithdrawLimit();
                 double newLimit = currentUser.getAccount(selectedAcc).getCurrency().unconvert(Double.parseDouble(localWithdrawLimitText.getText()));;
                 currentUser.getAccount(selectedAcc).changeTransferLimit("localWithdrawLimit", newLimit);
-                settingConfirmationText.setText("Successful change of Withdrawal Limit from " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " " + df.format(currentUser.getAccount(selectedAcc).getCurrency().convert(oldLimit))+" to " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " "  + df.format(currentUser.getAccount(selectedAcc).getCurrency().convert(currentUser.getAccount(selectedAcc).getLocalWithdrawLimit())));
+                settingConfirmationText.setText("Successful change of Withdrawal Limit from " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " " + df.format(currentUser.getAccount(selectedAcc).getCurrency().convert(oldLimit))+" to " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " "  + df.format(currentUser.getAccount(selectedAcc).getCurrency().convert(currentUser.getAccount(selectedAcc).getWithdrawLimit())));
                 settingConfirmationText.setStyle(successStyle);
             }
             else if (changeLocalTransferLimit.isVisible()){
-                oldLimit = currentUser.getAccount(selectedAcc).getLocalTransferLimit();
+                oldLimit = currentUser.getAccount(selectedAcc).getTransferLimit();
                 double newLimit = currentUser.getAccount(selectedAcc).getCurrency().unconvert(Double.parseDouble(localTransferLimitText.getText()));;
                 currentUser.getAccount(selectedAcc).changeTransferLimit("localTransferLimit", newLimit);
-                settingConfirmationText.setText("Successful change of Transfer Limit from " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " " + df.format(currentUser.getAccount(selectedAcc).getCurrency().convert(oldLimit))+" to " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " "  + df.format(currentUser.getAccount(selectedAcc).getCurrency().convert(currentUser.getAccount(selectedAcc).getLocalTransferLimit())));
+                settingConfirmationText.setText("Successful change of Transfer Limit from " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " " + df.format(currentUser.getAccount(selectedAcc).getCurrency().convert(oldLimit))+" to " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " "  + df.format(currentUser.getAccount(selectedAcc).getCurrency().convert(currentUser.getAccount(selectedAcc).getTransferLimit())));
                 settingConfirmationText.setStyle(successStyle);
             }
             else if (currencySetting.isVisible()){
