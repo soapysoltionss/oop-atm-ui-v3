@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 public class InvalidAmountException extends Exception {
     private double amount;
 
-    // this is the constructor that will be invoked when the exception is thrown using 1 input
+    // this is the constructor that will be invoked when the exception is thrown
     public InvalidAmountException(double amount) {
         this.amount = amount; 
     }

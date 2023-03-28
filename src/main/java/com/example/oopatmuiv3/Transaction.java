@@ -2,8 +2,8 @@ package com.example.oopatmuiv3;
 
 import java.util.Date;
 
-// Declare variables for transaction
 public class Transaction {
+    // Declare variables for transaction
     private double amount;
     private Date timestamp;
     private String memo;

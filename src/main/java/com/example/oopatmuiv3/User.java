@@ -13,8 +13,9 @@ import java.util.ArrayList;
 
 import static java.lang.Integer.parseInt;
 
-// Declares variables for user class
+
 public class User {
+    // Declares variables for user class
     private String uuid;
     private String firstName;
     private String lastName;

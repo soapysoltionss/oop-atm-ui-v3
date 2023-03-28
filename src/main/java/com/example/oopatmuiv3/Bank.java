@@ -14,8 +14,9 @@ import org.bson.Document;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
-//Declare variables
+
 public class Bank {
+    //Declare variables
     private String name;
     private ArrayList<User> users;
     private ArrayList<Account> accounts;
@@ -106,17 +107,17 @@ public class Bank {
         return uuid;
     }
 
-    // this is to get the users in the bank from the database
+    // this is update the users in the bank from the database
     protected void refreshUsers() {
         this.users = this.getUsers();
     }
 
-    // add user is to add a new user to the bank
+    // add a new user to the bank
     protected void addUser(User user) {
         users.add(user);
     }
 
-    // this function is used to count the number of users in the bank
+    // number of users in the bank
     protected int countUsers() {
         return this.users.size();
     }
@@ -129,7 +130,7 @@ public class Bank {
     // this is to print the first name of the user
     protected void printInfo() {
         for (User user : users) {
-            System.out.println(user.getFirstName());
+            System.out.println(user.getFirstName() + " " + user.getLastName() + " : " + user.getUUID());
         }
     }
 

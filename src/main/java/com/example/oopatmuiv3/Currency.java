@@ -3,8 +3,9 @@ package com.example.oopatmuiv3;
 import java.util.ArrayList;
 import java.util.List;
 
-//Declare variables
+
 public class Currency {
+    //Declare variables
     private double exchangeRate;
     private String symbolAfter;
     private String symbolBefore;

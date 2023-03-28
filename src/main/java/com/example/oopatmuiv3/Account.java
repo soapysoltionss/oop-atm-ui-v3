@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 
-// Declare variables
-public class Account {
 
+public class Account {
+    // Declare variables
     private String name;
     private double balance;
     private String uuid;

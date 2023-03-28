@@ -21,9 +21,6 @@ import javafx.stage.Stage;
 public class LoginController {
 
     @FXML
-    ImageView eyesImageView;
-
-    @FXML
     private Pane loginPane;
 
 
@@ -36,16 +33,6 @@ public class LoginController {
     @FXML
     private Label loginLabel;
 
-    @FXML
-    private ToggleButton loginToggleButton;
-
-    @FXML
-    private PasswordField loginPassword;
-
-    @FXML
-    private TextField shownPassword;
-    @FXML
-    private TextField shownLoginPassword;
 
 
 
@@ -57,6 +44,7 @@ public class LoginController {
     String errorStyle = "-fx-border-color: RED;";
     String successStyle = "-fx-border-color: #A9A9A9;";
     String textFillError = "-fx-text-fill: RED";
+
 
     // Launches dashboard controller if user login is successful (change from loginPage.fxml to dashboardPage.fxml)
     private void launchDashboard(User c) throws IOException {
@@ -72,12 +60,12 @@ public class LoginController {
         stage.setScene(new Scene(root1));
         stage.show();
     }
-    // closes the window for login Page for nicer UI :)
+    // closes the window for login Page
     private void closeWindow(){
         Stage stage = (Stage) userID.getScene().getWindow();
         stage.close();}
 
-    // user Login credentials are validated with the database once entered in the textboxes in loginPage.fxml
+    // user Login credentials are validated with the database once entered in loginPage.fxml
     @FXML
     public void userLogin() {
         try{
@@ -90,6 +78,10 @@ public class LoginController {
             loginPIN.setStyle(errorStyle);
             loginLabel.setText(e.getMessage());
             loginLabel.setStyle(textFillError);
+
+            //display available accounts if login fail
+            System.out.println("TEST ACCOUNTS AVAILABLE FOR USE:");
+            kekBank.printInfo();
         }
         catch (IOException e) {
             throw new RuntimeException(e);

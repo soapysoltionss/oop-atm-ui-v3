@@ -197,7 +197,7 @@ public class DashboardController {
         }
     }
 
-    // deposit successful label component with exceptions for deposit cases, throws red error (elaborated more in test case)
+    // button callback to deposit. excpetions are caught and display red errors (elaborated more in test case)
     @FXML
     protected void confirmDeposit() {
         try{
@@ -206,14 +206,6 @@ public class DashboardController {
             depositConfirmationText.setText("Successfully Deposited: " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " " +df.format(amount)+  " " +currentUser.getAccount(selectedAcc).getCurrency().getSymbolAfter() +"\nCurrent Bal: " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " " + df.format(currentUser.getAccount(selectedAcc).getCurrency().convert(currentUser.getAccount(selectedAcc).getBalance())) + " " +currentUser.getAccount(selectedAcc).getCurrency().getSymbolAfter());
             depositConfirmationText.setStyle(successStyle);
 
-
-            /*
-            Alert a = new Alert(Alert.AlertType.INFORMATION);
-            a.setTitle("Confirm Deposit");
-            a.setContentText("Successfully Deposited: "+ " $" + df.format(amount)+"\nCurrent Bal: "+ "$" + df.format(currentUser.getAccount(selectedAcc).getBalance()));
-            a.showAndWait();
-            */
-            //showHomePane();
         }
         //set our own exception cases & set alert to the e.getMessage()
         catch(NumberFormatException e){
@@ -228,7 +220,7 @@ public class DashboardController {
             depositConfirmationText.setStyle(errorStyle);
         }
     }
-    // withdraw successful label component with exceptions for withdraw cases, throws red error (elaborated more in test case)
+    // button callback to withdraw. excpetions are caught and display red errors (elaborated more in test case)
     @FXML
     protected void confirmWithdraw() {
         try {
@@ -237,14 +229,6 @@ public class DashboardController {
             withdrawConfirmationText.setText("Successfully Withdrawn: " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " " +df.format(amount)+  " " +currentUser.getAccount(selectedAcc).getCurrency().getSymbolAfter() +"\nCurrent Bal: " + currentUser.getAccount(selectedAcc).getCurrency().getSymbolBefore() + " " + df.format(currentUser.getAccount(selectedAcc).getCurrency().convert(currentUser.getAccount(selectedAcc).getBalance())) + " " +currentUser.getAccount(selectedAcc).getCurrency().getSymbolAfter());
             withdrawConfirmationText.setStyle(successStyle);
 
-
-            /*
-            Alert a = new Alert(Alert.AlertType.INFORMATION);
-            a.setTitle("Confirm Withdraw");
-            a.setContentText("Successfully Withdrawn: " + "$" +df.format(amount)+"\nCurrent Bal: " + "$" + df.format(currentUser.getAccount(selectedAcc).getBalance()));
-            a.showAndWait();
-            */
-            //showHomePane();
         }
         //set our own exception cases & set alert to the e.getMessage()
         catch (NumberFormatException e){
@@ -264,7 +248,7 @@ public class DashboardController {
             withdrawConfirmationText.setStyle(errorStyle);
         }
     }
-    // withdraw successful label component with exceptions for withdraw cases, throws red error (elaborated more in test case)
+    // button callback to transfer. excpetions are caught and display red errors (elaborated more in test case)
     @FXML
     protected void confirmTransfer() {
         try{
@@ -290,7 +274,7 @@ public class DashboardController {
             transferConfirmationText.setStyle(errorStyle);
         }
     }
-    // settings successful label component with exceptions for settings cases, throws red errors (elaborated more in test case)
+    // button callback to update settings based on setting type. excpetions are caught and display red errors (elaborated more in test case)
     @FXML
     protected void confirmSettings(){
         try{
@@ -324,8 +308,6 @@ public class DashboardController {
                 currentUser.changePin(old, newP, newP2);
                 settingConfirmationText.setText("Successfully change PIN.");
                 settingConfirmationText.setStyle(successStyle);
-                //rmb to catch exception & set text (e.g. oldPin wrong, newPIN & reenterPIN match, oldPIN=newPIN etc.)
-
             }
             else{
                 settingConfirmationText.setText("Please select a setting");
@@ -348,7 +330,7 @@ public class DashboardController {
         setLabels();
     }
 
-    // toggle through buttons to display each pane (home pane visible)
+    // button callback to display home pane
     @FXML
     protected void showHomePane() {
         setLabels();
@@ -359,7 +341,7 @@ public class DashboardController {
         settingsPane.setVisible(false);
 
     }
-    // toggle through buttons to display each pane (deposit pane visible)
+    // button callback to display deposit pane
     @FXML
     protected void showDepositPane() {
         setLabels();
@@ -369,7 +351,7 @@ public class DashboardController {
         transferPane.setVisible(false);
         settingsPane.setVisible(false);
     }
-    // toggle through buttons to display each pane (withdraw pane visible)
+    // button callback to display withdraw pane
     @FXML
     protected void showWithdrawPane() {
         setLabels();
@@ -379,7 +361,7 @@ public class DashboardController {
         transferPane.setVisible(false);
         settingsPane.setVisible(false);
     }
-    // toggle through buttons to display each pane (transfer pane visible)
+    // button callback to display transfer pane
     @FXML
     protected void showTransferPane() {
         setLabels();
@@ -389,7 +371,7 @@ public class DashboardController {
         transferPane.setVisible(true);
         settingsPane.setVisible(false);
     }
-    // toggle through buttons to display each pane (settings pane visible)
+    // button callback to display settings pane
     @FXML
     protected void showSettingsPane() {
         setLabels();
@@ -414,7 +396,7 @@ public class DashboardController {
         Stage stage2 = (Stage) balance.getScene().getWindow();
         stage2.close();
     }
-    // get Listview to display accounts per user
+    // callback from fxml to get account selection
     @FXML
     protected void handleAccClick(){
         getLsViewClick(accLsOverview);
@@ -422,10 +404,8 @@ public class DashboardController {
         getLsViewClick(accLsWithdraw);
         getLsViewClick(accLsTransfer);
         getLsViewClick(accLsSetting);
-
-
     }
-    // get Listview to display all accounts user has, that will catch if user has no accounts
+    // getting account selection from listview
     @FXML
     private void getLsViewClick(ListView<String> lsView) throws NullPointerException{
         lsView.setOnMouseClicked(mouseEvent -> {
@@ -436,13 +416,9 @@ public class DashboardController {
 
             //update labels
             setLabels();
-            /*
-            Dialog d = new Alert(Alert.AlertType.INFORMATION,selectItem);
-            d.show();
-             */
         });
     }
-    // changes currency display in home Pane
+    // getting currency selection from listview
     @FXML
     protected void handleCurrencyClick(){
         currenciesListView.setOnMouseClicked(mouseEvent -> {
@@ -454,7 +430,7 @@ public class DashboardController {
             setLabels();
         });
     }
-    // settings listener to change Stack Pane to each kind of setting
+    // settings listener to change Stack Pane to each type of setting
     @FXML
     protected void settings(){
         settingsCombo.getSelectionModel().selectedItemProperty().addListener((selected, oldSetting, newSetting) -> {
