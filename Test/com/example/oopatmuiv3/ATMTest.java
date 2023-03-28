@@ -1,12 +1,9 @@
 package com.example.oopatmuiv3;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.rules.ExpectedException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
