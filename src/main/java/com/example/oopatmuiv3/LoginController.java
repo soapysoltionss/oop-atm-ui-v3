@@ -80,7 +80,7 @@ public class LoginController {
             loginLabel.setStyle(textFillError);
 
             //display available accounts if login fail
-            System.out.println("TEST ACCOUNTS AVAILABLE FOR USE:");
+            System.out.println("TEST ACCOUNTS AVAILABLE FOR USE (DEFAULT PIN IS FIRST 4-DIGIT):");
             kekBank.printInfo();
         }
         catch (IOException e) {
